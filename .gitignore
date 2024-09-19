@@ -1,0 +1,15 @@
+cmake-build-debug/*
+cmake-build-debug
+cmake-build-debug-remote-noctics/*
+cmake-build-debug-remote-noctics
+build/*
+python/PlanViz/*
+python/PlanViz
+tmp_*
+outputs/*
+.idea/*
+map_file/*
+map_file2/*
+map_file_ecbs/*
+test_results2/*
+.DS_Store
