@@ -1,0 +1,7 @@
+PyYAML
+matplotlib
+numpy
+argparse
+jsonlib-python3
+faker
+tqdm

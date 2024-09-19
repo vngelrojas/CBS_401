@@ -9,13 +9,17 @@ Build:
 mkdir build
 cd build
 cmake ..
-cmake --build . --target ITACBS_remake
-cmake --build . --target CBSTA_remake
+cmake --build . --target CBS
+cmake --build . --target CBS_parallel
+cmake --build . --target ECBS
 ```
 
-Run:
+Run (In build dir):
 ```bash
-./ITACBS_remake -i ../map_file/debug_data.yaml -o ../outputs/output.yaml
+./CBS -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+./CBS_parallel -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+./ECBS -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+
 ```
 
 Generate test case:

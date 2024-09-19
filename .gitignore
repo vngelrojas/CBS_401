@@ -13,3 +13,5 @@ map_file2/*
 map_file_ecbs/*
 test_results2/*
 .DS_Store
+
+python/myenv/*
