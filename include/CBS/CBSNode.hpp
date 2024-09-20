@@ -21,7 +21,9 @@ public:
     bool update_cost_matrix(CBS* pInstance, int agent_id);
 
     int cost;
-    vector<shared_ptr<Path > > cost_matrix;
+    // List of all paths for all agents. The i-th path is the path for the i-th agent.
+    vector<shared_ptr<Path >> cost_matrix;
+    // List of all constraints for this node. Includes vertex and edge constraints.
     vector<shared_ptr<Constraints > > constraint_sets;
 };
 

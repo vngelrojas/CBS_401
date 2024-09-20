@@ -8,6 +8,15 @@
 
 CBS::~CBS() = default;
 
+/**
+ * @brief Resets the CBS (Conflict-Based Search) solver state.
+ * 
+ * This function clears the internal state of the CBS solver by resetting
+ * various runtime metrics and counters to their initial values. It sets
+ * the solution_found flag to false and resets the total runtime, low-level
+ * search time, first conflict detection time, number of CBS nodes, number
+ * of low-level expansions, and the number of target assignments.
+ */
 void CBS::clear() {
     solution_found = false;
     this->total_runtime = 0;
@@ -48,10 +57,10 @@ CBS::CBS(int row_number, int col_number, unordered_set<Location>& obstacles,
         this->map2d_obstacle[x][y] = 1;
     }
 
-    this->agent_n = this->start_states.size();
+    this->num_of_agents = this->start_states.size();
 
     printf("Init shortest path\n");
-    for (int i=0;i<this->agent_n;i++)
+    for (int i=0;i<this->num_of_agents;i++)
     {
         vector<vector<int> > prior_map;
         prior_map.resize(this->row_number, vector<int>(this->col_number, INF7f));
@@ -97,6 +106,17 @@ bool CBS::searchNodeIsValid(shared_ptr<Constraints>&  agent_constraint_set, cons
     return true;
 }
 
+/**
+ * @brief Finds a path for a given agent using the A* algorithm considering constraints.
+ * 
+ * This function performs an A* search to find a path for the specified agent while considering
+ * the provided constraints. It uses an open set for nodes to be evaluated and a closed set for
+ * nodes that have already been evaluated. 
+ * 
+ * @param agent_constraint_set A shared pointer to the set of constraints for the agent.
+ * @param agent_idx The index of the agent for which the path is being found.
+ * @return A shared pointer to the found path, or nullptr if no path is found.
+ */
 shared_ptr<Path> CBS::findPath_a_star(shared_ptr<Constraints>& agent_constraint_set, int agent_idx)
 {
     int search_max = 1e5;
@@ -172,9 +192,10 @@ shared_ptr<Path> CBS::findPath_a_star(shared_ptr<Constraints>& agent_constraint_
 
 int CBS::solve() {
     shared_ptr<CBSNode> start_node(new CBSNode());
-
+    // Create intial cost matrix
     start_node->create_cost_matrix(this);
     this->first_cost_matrix = start_node->cost_matrix;
+    // Open heap where CBSNodes can have 2 children
     typename boost::heap::d_ary_heap<shared_ptr<CBSNode>,
                 boost::heap::mutable_<true>,
                 boost::heap::arity<2>,
@@ -193,6 +214,7 @@ int CBS::solve() {
         this->firstconflict_timer.stop();
         this->firstconflict_time += this->firstconflict_timer.elapsedSeconds();
 
+        // If no conflicts in the cost matrix, then we have a solution
         if (done)
         {
             std::cout << "done; cost: " << cur_node->cost << std::endl;
@@ -204,22 +226,36 @@ int CBS::solve() {
             this->constraint_sets = cur_node->constraint_sets;
             return true;
         }
+        
+        unordered_map<size_t, Constraints> agent_to_constraints;
 
-        unordered_map<size_t, Constraints> tmp;
-        createConstraintsFromConflict(conflict, tmp);
+        // Create constraints from the conflict and add them to map
+        createConstraintsFromConflict(conflict, agent_to_constraints);
 
-        for (unsigned short cur_i = 0; auto &[key, value]: tmp)
+        for (unsigned short cur_i = 0; auto &[agent, constraints]: agent_to_constraints)
         {
             shared_ptr<CBSNode> new_node;
-            if (cur_i == 1) new_node = cur_node;
-                else new_node = shared_ptr<CBSNode>(new CBSNode(cur_node));
 
-            assert(!new_node->constraint_sets[key]->overlap(value));
-            new_node->constraint_sets[key] = shared_ptr<Constraints>(new Constraints(*(new_node->constraint_sets[key])));
-            new_node->constraint_sets[key]->add(value);
+            // Idk what the point of this if/else is
+            if (cur_i == 1) // Make new node point to same node as cur_node
+                new_node = cur_node;
+            else  // make a deep copy of the current node
+                new_node = shared_ptr<CBSNode>(new CBSNode(cur_node));
+            // Check that no overlap between the new constraints and the agent's constraint set
+            assert(!new_node->constraint_sets[agent]->overlap(constraints));
+            // Ensure a deep copy of the origianl constraints? idk
+            new_node->constraint_sets[agent] = shared_ptr<Constraints>(new Constraints(*(new_node->constraint_sets[agent])));
+            // Add the new constraints to the agent's constraint set
+            new_node->constraint_sets[agent]->add(constraints);
+            // idk
             cur_i ++;
-            bool b = new_node->update_cost_matrix(this, key);
-            if (!b) continue;
+
+            bool b = new_node->update_cost_matrix(this, agent);
+
+            // if the path is not found, then skip adding this node to the open heap
+            if (!b) 
+                continue;
+            
             open.push(new_node);
         }
     }

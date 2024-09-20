@@ -110,10 +110,6 @@ struct Location {
         return std::tie(x, y) < std::tie(other.x, other.y);
     }
 
-//    bool operator>(const Location &other) const {
-//        return std::tie(x, y) > std::tie(other.x, other.y);
-//    }
-
     bool operator==(const Location &other) const {
         return std::tie(x, y) == std::tie(other.x, other.y);
     }
@@ -257,6 +253,13 @@ namespace std {
     };
 }  // namespace std
 
+
+/**
+ * @brief The Constraints struct represents a set of constraints for vertices and edges.
+ * 
+ * This struct is used to manage constraints in a graph, where constraints can be added,
+ * checked for overlap, and validated against states and transitions.
+ */
 struct Constraints {
     std::unordered_set<VertexConstraint> vertexConstraints;
     std::unordered_set<EdgeConstraint> edgeConstraints;
@@ -267,7 +270,17 @@ struct Constraints {
         edgeConstraints.insert(other.edgeConstraints.begin(),
                                other.edgeConstraints.end());
     }
-
+    
+    /**
+     * @brief Checks if there is any overlap between the current constraints and another set of constraints.
+     *
+     * This function iterates through the vertex and edge constraints of the current object and checks if any of them
+     * are present in the provided `other` constraints. If any overlap is found, the function returns true.
+     *
+     * @param other The set of constraints to check against.
+     * @return true if there is any overlap between the current constraints and the provided `other` constraints.
+     * @return false if there is no overlap.
+     */
     bool overlap(const Constraints &other) const {
         for (const auto &vc: vertexConstraints) {
             if (other.vertexConstraints.count(vc) > 0) {
@@ -348,6 +361,20 @@ struct PathEntryCompare2 {
 typedef vector<PathEntry> Path;
 
 
+/**
+ * @class Timer
+ * @brief A simple timer class for measuring elapsed time.
+ *
+ * This class provides functionality to measure the time elapsed between
+ * the start and stop points. 
+ *
+ * Example usage:
+ * @code
+ * Timer timer;
+ * timer.stop();
+ * double elapsed = timer.elapsedSeconds();
+ * @endcode
+ */
 class Timer {
 public:
     Timer()

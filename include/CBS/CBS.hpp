@@ -13,7 +13,7 @@ class CBS
 public:
 
     bool solution_found;
-    int agent_n;
+    int num_of_agents;
 
     vector<State> start_states;
     unordered_set<Location> obstacles;

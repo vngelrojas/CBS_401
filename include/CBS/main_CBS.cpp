@@ -11,7 +11,7 @@ namespace po = boost::program_options;
 unordered_set<Location> obstacles;
 vector<Location> goals;
 vector<State> start_states;
-po::variables_map vm;
+po::variables_map vm; // usedd to store the values of command-line options after they have been parsed.
 int row_number,col_number;
 string outputFile;
 
