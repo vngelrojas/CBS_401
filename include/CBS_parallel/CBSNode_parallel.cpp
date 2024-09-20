@@ -89,6 +89,16 @@ bool CBSNode::get_first_conflict(Conflict &result) {
     return false;
 }
 
+/**
+ * @brief Calculates the total number of conflicts in the cost matrix.
+ *
+ * This function iterates through the cost matrix to count the number of conflicts
+ * between agents. It checks for both vertex collisions (where two agents occupy
+ * the same state at the same time) and edge collisions (where two agents swap
+ * states at the same time).
+ *
+ * @return The total number of conflicts detected in the cost matrix.
+ */
 int CBSNode::get_all_conflict_number()
 {
     int ans = 0;

@@ -92,10 +92,33 @@ CBS::CBS(int row_number, int col_number, unordered_set<Location>& obstacles,
 
 
 
+/**
+ * @brief Computes the heuristic value for a given position and agent.
+ *
+ * This function retrieves the precomputed heuristic value from the prior_hmap
+ * for the specified agent at the given coordinates (x1, y1).
+ *
+ * @param x1 The x-coordinate of the position.
+ * @param y1 The y-coordinate of the position.
+ * @param agent_idx The index of the agent for which the heuristic is being computed.
+ * @return The heuristic value for the specified position and agent.
+ */
 int CBS::heuristic(int x1, int y1, int agent_idx) {
     return this->prior_hmap[agent_idx][x1][y1];
 }
-
+/**
+ * @brief Checks if a given state is valid for the search node.
+ *
+ * This function validates a new state based on several criteria including
+ * boundary conditions, time constraints, obstacle presence, closed set membership,
+ * and agent-specific constraints.
+ *
+ * @param closedSet A set of states that have already been evaluated.
+ * @param agent_constraint_set A shared pointer to the constraints specific to the agent.
+ * @param new_state The new state to be validated.
+ * @param org_state The original state from which the transition is being made.
+ * @return true if the new state is valid, false otherwise.
+ */
 bool CBS::searchNodeIsValid(shared_ptr<Constraints>&  agent_constraint_set, const State& new_state, const State& org_state) {
     if (new_state.x < 0 || new_state.x >= this->row_number || new_state.y < 0 || new_state.y >= this->col_number) return false;
     if (new_state.time >= MAX_TIMESTEP) return false;
@@ -231,7 +254,7 @@ int CBS::solve() {
 
         // Create constraints from the conflict and add them to map
         createConstraintsFromConflict(conflict, agent_to_constraints);
-
+       
         for (unsigned short cur_i = 0; auto &[agent, constraints]: agent_to_constraints)
         {
             shared_ptr<CBSNode> new_node;

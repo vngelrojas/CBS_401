@@ -93,6 +93,19 @@ int CBS::heuristic(int x1, int y1, int agent_idx) {
     return this->prior_hmap[agent_idx][x1][y1];
 }
 
+/**
+ * @brief Checks if a given state is valid for the search node.
+ *
+ * This function validates a new state based on several criteria including
+ * boundary conditions, time constraints, obstacle presence, closed set membership,
+ * and agent-specific constraints.
+ *
+ * @param closedSet A set of states that have already been evaluated.
+ * @param agent_constraint_set A shared pointer to the constraints specific to the agent.
+ * @param new_state The new state to be validated.
+ * @param org_state The original state from which the transition is being made.
+ * @return true if the new state is valid, false otherwise.
+ */
 bool CBS::searchNodeIsValid(unordered_set<State, boost::hash<State> >& closedSet, shared_ptr<Constraints>&  agent_constraint_set, const State& new_state, const State& org_state) {
     if (new_state.x < 0 || new_state.x >= this->row_number || new_state.y < 0 || new_state.y >= this->col_number) return false;
     if (new_state.time >= MAX_TIMESTEP) return false;
@@ -103,6 +116,17 @@ bool CBS::searchNodeIsValid(unordered_set<State, boost::hash<State> >& closedSet
     return true;
 }
 
+/**
+ * @brief Finds a path for a given agent using the A* algorithm considering constraints.
+ * 
+ * This function performs an A* search to find a path for the specified agent while considering
+ * the provided constraints. It uses an open set for nodes to be evaluated and a closed set for
+ * nodes that have already been evaluated. 
+ * 
+ * @param agent_constraint_set A shared pointer to the set of constraints for the agent.
+ * @param agent_idx The index of the agent for which the path is being found.
+ * @return A shared pointer to the found path, or nullptr if no path is found.
+ */
 shared_ptr<Path> CBS::findPath_a_star(shared_ptr<Constraints>& agent_constraint_set, int agent_idx)
 {
     int search_max = 1e5;
@@ -177,6 +201,18 @@ shared_ptr<Path> CBS::findPath_a_star(shared_ptr<Constraints>& agent_constraint_
 }
 
 
+/**
+ * @brief Processes a node in the CBS (Conflict-Based Search) algorithm.
+ *
+ * This function processes a given node in the CBS algorithm, handling conflicts and generating new nodes
+ * based on constraints derived from conflicts. It updates the solution if a valid solution is found.
+ *
+ * @param deal_idx The index of the node to be processed.
+ * @param pInstance Pointer to the CBS instance.
+ * @param in_node Shared pointer to the input CBS node to be processed.
+ * @param out_node_queue Reference to a sequence of shared pointers to CBS nodes, where the output nodes will be stored.
+ * @return True if a solution is found, otherwise false.
+ */
 bool deal_with_node(size_t deal_idx, CBS* pInstance, shared_ptr<CBSNode> in_node, parlay::sequence<shared_ptr<CBSNode> >& out_node_queue) {
     openlist open_deal;
     int begin_cost = in_node->cost;
@@ -238,12 +274,19 @@ int CBS::solve() {
         parlay::sequence<shared_ptr<CBSNode> > cur_node_queue;
         shared_ptr<CBSNode> cur_node = open.top(); open.pop();
         cur_node_queue.push_back(cur_node);
+
+        // 1000 size constraint based on number of cores or some shit
+        // We only want to process the nodes in parallel when they have the same cost. it helps ensure that the algorithm explores nodes with similar priority 
         while (!open.empty() && open.top()->cost == cur_node_queue[0]->cost && cur_node_queue.size() < 1000)
         {
             cur_node = open.top(); open.pop();
             cur_node_queue.push_back(cur_node);
         }
+
         this->cbsnode_num += cur_node_queue.size();
+
+        // Queue to hold the output nodes of cur_node_queue above
+        // The max amount that can be generated is probably cur_node_queue.size()*MAX_SUB_QUEUE_SIZE+1 thats why reserve that size?
         parlay::sequence<shared_ptr<CBSNode> > out_node_queue(cur_node_queue.size()*MAX_SUB_QUEUE_SIZE+1, nullptr);
         parlay::parallel_for(0, cur_node_queue.size(), [&](size_t i){
             auto cur_node = cur_node_queue[i];
