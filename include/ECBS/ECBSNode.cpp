@@ -48,6 +48,18 @@ int ECBSNode::get_LB()
     return fmin_val;
 }
 
+/**
+ * @brief Updates the cost matrix for a given agent in the ECBSNode.
+ *
+ * This function resets the low-level search timer, updates the cost matrix for the specified agent
+ * using the A* epsilon search algorithm, and then stops the timer. It also accumulates the total 
+ * low-level search time. If the updated cost matrix for the agent is null, the function returns false.
+ * Otherwise, it calculates the total cost for all agents and updates the lower bound (LB) of the node.
+ *
+ * @param pInstance Pointer to the ECBS instance.
+ * @param agent_id The ID of the agent for which the cost matrix is being updated.
+ * @return True if the cost matrix was successfully updated, false otherwise.
+ */
 bool ECBSNode::update_cost_matrix(ECBS* pInstance, int agent_id) {
     pInstance->lowlevel_search_timer.reset();
     this->cost_matrix[agent_id] = pInstance->findPath_a_star_eps(this->cost_matrix, this->constraint_sets[agent_id], agent_id, this->fmin);

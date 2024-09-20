@@ -181,6 +181,22 @@ int high_focal_score_v3(const vector<shared_ptr<Path > >& out_solution, Conflict
     return numConflicts;
 }
 
+/**
+ * @brief Populates conflict maps for points and edges in paths, excluding the path of a specified agent.
+ *
+ * This function updates three conflict maps for the agents' paths:
+ * - `pointCheckMap`: Tracks the number of agents at each (x, y, time) location.
+ * - `lastPointCheckMap`: Records the latest time an agent occupies a particular (x, y) position.
+ * - `edgeCheckMap`: Tracks the number of agents traversing the same edge defined by movement from one position to another over time.
+ *
+ * The function skips the path of the agent specified by `agent_idx` and processes all other agents' paths.
+ *
+ * @param[out] pointCheckMap A map to store the number of agents at each (x, y, time) location.
+ * @param[out] lastPointCheckMap A map to store the latest time an agent occupies each (x, y) position.
+ * @param[out] edgeCheckMap A map to store the number of agents traversing each edge, defined by a transition between two consecutive positions (x, y, time).
+ * @param[in] out_solution A vector of shared pointers to paths representing the agents' paths. Each path is a sequence of states.
+ * @param[in] agent_idx The index of the agent whose path should be skipped during the conflict detection process.
+ */
 void get_block_map(unordered_map<tuple<int, int, int>, int, tuple_hash, tuple_equal>& pointCheckMap,
                    unordered_map<tuple<int, int>, int, tuple_hash, tuple_equal>& lastPointCheckMap,
                    unordered_map<tuple<int, int, int, int, int>, int, tuple_hash, tuple_equal>& edgeCheckMap,
@@ -213,7 +229,21 @@ void get_block_map(unordered_map<tuple<int, int, int>, int, tuple_hash, tuple_eq
     return ;
 }
 
-
+/**
+ * @brief Populates point and edge conflict maps for the given solution paths and returns the earliest time of conflict.
+ *
+ * This function processes each agent's path to populate two conflict maps:
+ * - `pointCheckMap`: Tracks the number of agents occupying a specific position (x, y) at a given time.
+ * - `edgeCheckMap`: Tracks the number of agents crossing the same edge (movement from one position to another at the same time).
+ *
+ * The function also determines the earliest time at which any conflict (either point or edge) occurs and returns it.
+ *
+ * @param[out] pointCheckMap A map to store the number of agents at each (x, y, time) location.
+ * @param[out] edgeCheckMap A map to store the number of agents traversing each edge defined by two consecutive states.
+ * @param[in] out_solution A vector of shared pointers to paths representing the agents' paths. Each path is a sequence of states.
+ *
+ * @return The earliest time step at which a conflict occurs (either a point or an edge conflict).
+ */
 int get_block_map(unordered_map<tuple<int, int, int>, int, tuple_hash, tuple_equal>& pointCheckMap,
                    unordered_map<tuple<int, int, int>, int, tuple_hash, tuple_equal>& edgeCheckMap,
                    const vector<shared_ptr<Path > >& out_solution)
@@ -320,7 +350,19 @@ int high_focal_score_v4(const vector<shared_ptr<Path > >& out_solution, Conflict
     return numConflicts;
 }
 
-
+/**
+ * @brief Computes the focal score by detecting conflicts between agents in the solution.
+ *
+ * This function identifies both vertex and edge conflicts between agents following their respective paths in the provided solution.
+ * It first searches for vertex conflicts, where two agents occupy the same position at the same time. If a vertex conflict is not found,
+ * the function checks for edge conflicts, where two agents swap positions at the same time (drive-drive edge conflict). 
+ * Additionally, it counts all the conflicts and returns the total number of conflicts found in the solution.
+ *
+ * @param[out_solution] A vector of shared pointers to paths for each agent. Each path represents the sequence of states an agent follows.
+ * @param[out] result A Conflict object to store the first detected conflict, including the type (vertex or edge), time, and agent details.
+ *
+ * @return The total number of conflicts (both vertex and edge conflicts) detected in the solution.
+ */
 int high_focal_score_v4(const vector<shared_ptr<Path > >& out_solution, Conflict& result)
 {
     unordered_map<tuple<int, int, int>, int, tuple_hash, tuple_equal> pointCheckMap;

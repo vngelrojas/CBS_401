@@ -473,6 +473,14 @@ int ECBS::high_focal_score(const vector<shared_ptr<Path > >& cost_matrix, Confli
     return numConflicts;
 }
 
+// Got this from the paper https://arxiv.org/pdf/2404.05223
+// Focal search 
+// Given suboptimality factor w ≥ 1, it finds a solution with cost ≤ w * c_opt, where c_opt is optimal cost. 
+// It uses two queues: OPEN (sorted by f(n) = g(n) + h(n), with g as cost and h an admissible heuristic) and 
+// FOCAL (contains nodes with f(n) ≤ w * f_front, sorted by a secondary heuristic d(n)). 
+// FOCAL helps quickly find a solution. Once a solution with cost c_val is found, f_front is its lower bound (LB). 
+// Outputs: LB value c_g and a solution with cost c. If no solution, c_g and c are ∞.
+
 int ECBS::solve() {
     shared_ptr<ECBSNode> start_node(new ECBSNode());
 
@@ -480,10 +488,19 @@ int ECBS::solve() {
 
     start_node->focal_score = high_focal_score_v4(start_node->cost_matrix, start_node->first_conflict);
 
-
+    /*
+    open: Keeps track of nodes being expanded.
+    focal: A subset of nodes from open with good heuristic values (focal search).
+    LBset: Keeps track of nodes with the best lower bound cost.
+     */
     high_openSet_t open;
     high_focalSet_t focal;
     high_LBSet_t LBset;
+    /*
+    Two hashmaps are created to store the mapping from nodes to their handles in the open and LBset heaps for efficient lookup.
+    "handles" typically refer to objects that act as references or pointers to other objects????? 
+    CT = Constraint Tree
+     */
     unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2open_handle;
     unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2LB_handle;
 
@@ -498,7 +515,10 @@ int ECBS::solve() {
     {
         this->cbsnode_num ++;
         int old_best_LB = best_LB;
+
+        // Best lower bound of all nodes in LBset is at the top of the heap
         best_LB = LBset.top()->LB;
+        //If the best LB improves, the focal set is rebuilt by adding nodes from open that meet a certain heuristic threshold (based on l_weight)
         if (best_LB > old_best_LB)
         {
             for (auto iter = open.ordered_begin(); iter!=open.ordered_end(); iter++)
@@ -513,16 +533,25 @@ int ECBS::solve() {
             }
         }
 
+        //The best node (handler) from the focal set is selected for expansion. The node is removed from both the focal and open sets
         auto current_handler = focal.top();
-        shared_ptr<ECBSNode> cur_node = *current_handler;
+        shared_ptr<ECBSNode> cur_node = *current_handler; // I guess dereferencing the handle gets the ECBSnode
         focal.pop();
+        //Since this node is being expanded, it is also removed from the open heap (where all non-expanded nodes are stored).
         open.erase(current_handler);
+        // The node is also removed from the CTnode2open_handle hashmap, which stores a mapping from the actual node (cur_node) to its handle in the open heap.
         CTnode2open_handle.erase(cur_node);
 
+        /*
+        The LBset (Lower Bound Set) also contains this node. First, the handle for this node in LBset is retrieved from the CTnode2LB_handle hashmap.
+        Then, the node is removed from LBset using its handle (LB_handler).
+        The node is also erased from the CTnode2LB_handle hashmap, which tracks the mapping between the node and its handle in the LBset
+        */
         auto LB_handler = CTnode2LB_handle[cur_node];
         LBset.erase(LB_handler);
         CTnode2LB_handle.erase(cur_node);
 
+        // If conflicts == 0
         bool done = cur_node->focal_score == 0;
         if (done)
         {
@@ -535,6 +564,7 @@ int ECBS::solve() {
             return true;
         }
 
+        // Map of agent index to constraints
         unordered_map<size_t, Constraints> tmp;
         createConstraintsFromConflict(cur_node->first_conflict, tmp);
 
@@ -542,8 +572,11 @@ int ECBS::solve() {
         {
             this->newnode_timer.reset();
             shared_ptr<ECBSNode> new_node;
-            if (cur_i == 1) new_node = cur_node;
-                else new_node = shared_ptr<ECBSNode>(new ECBSNode(cur_node));
+            if (cur_i == 1) 
+                new_node = cur_node;
+            else 
+                new_node = shared_ptr<ECBSNode>(new ECBSNode(cur_node));
+
             this->newnode_timer.stop();
             this->newnode_time += this->newnode_timer.elapsedSeconds();
 
@@ -551,19 +584,25 @@ int ECBS::solve() {
             new_node->constraint_sets[key] = shared_ptr<Constraints>(new Constraints(*(new_node->constraint_sets[key])));
             new_node->constraint_sets[key]->add(value);
             cur_i ++;
+            // Try to find updates path for this agent with the new constraints. if false, then no path was found 
+            // and continue to next iteration
             bool b = new_node->update_cost_matrix(this, key);
-            if (!b) continue;
+            if (!b) 
+                continue;
 
             this->conflict_num_timer.reset();
             new_node->focal_score = high_focal_score_v4(new_node->cost_matrix, new_node->first_conflict);
             this->conflict_num_timer.stop();
             this->conflict_num_time += this->conflict_num_timer.elapsedSeconds();
 
+            // Add node to unexpanded set(open) and heap based off of LB
             auto handle = open.push(new_node);
             auto handle2 = LBset.push(new_node);
+            // Then map the nodes to their handles
             CTnode2open_handle.insert(make_pair(new_node, handle));
             CTnode2LB_handle.insert(make_pair(new_node, handle2));
 
+            // If the new node has a cost less than the best lower bound * some weight, then add it to the focal set
             if (new_node->cost <= best_LB * this->l_weight) {
                 focal.push(handle);
             }
