@@ -5,7 +5,7 @@
 #ifndef ECBS_REMAKE_ECBSNODE_HPP
 #define ECBS_REMAKE_ECBSNODE_HPP
 
-#include "ECBS.hpp"
+#include "ECBS_parallel.hpp"
 #include "../dynamic_hungarian_assignment.hpp"
 
 class ECBSNode{
@@ -33,6 +33,7 @@ struct ECBSNodePtrCmp{
         return a->cost > b->cost;
     }
 };
+
 
 typedef typename boost::heap::d_ary_heap<shared_ptr<ECBSNode>,
         boost::heap::mutable_<true>,

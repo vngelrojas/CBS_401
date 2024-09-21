@@ -2,8 +2,8 @@
 // Created by YIMIN TANG on 3/19/23.
 //
 
-#include "ECBS.hpp"
-#include "ECBSNode.hpp"
+#include "ECBS_parallel.hpp"
+#include "ECBSNode_parallel.hpp"
 
 ECBS::~ECBS() = default;
 

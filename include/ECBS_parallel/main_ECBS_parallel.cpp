@@ -3,7 +3,7 @@
 #include <boost/tokenizer.hpp>
 #include <string>
 #include <yaml-cpp/yaml.h>
-#include "ECBS.hpp"
+#include "ECBS_parallel.hpp"
 #include "../common.hpp"
 
 namespace po = boost::program_options;
