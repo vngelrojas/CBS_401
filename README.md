@@ -12,6 +12,7 @@ cmake ..
 cmake --build . --target CBS
 cmake --build . --target CBS_parallel
 cmake --build . --target ECBS
+cmake --build . --target ECBS_parallel
 ```
 
 Run (In build dir):
@@ -19,7 +20,7 @@ Run (In build dir):
 ./CBS -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ./CBS_parallel -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ./ECBS -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
-
+./ECBS_parallel -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ```
 
 Generate test case:
