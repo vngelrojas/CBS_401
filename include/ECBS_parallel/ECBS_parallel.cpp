@@ -2,8 +2,11 @@
 // Created by YIMIN TANG on 3/19/23.
 //
 
+
 #include "ECBS_parallel.hpp"
 #include "ECBSNode_parallel.hpp"
+
+
 
 ECBS::~ECBS() = default;
 
@@ -87,10 +90,12 @@ int ECBS::heuristic(int x1, int y1, int agent_idx) {
     return this->prior_hmap[agent_idx][x1][y1];
 }
 
-bool ECBS::searchNodeIsValid(shared_ptr<Constraints>&  agent_constraint_set, const State& new_state, const State& org_state) {
+bool ECBS::searchNodeIsValid(shared_ptr<Constraints>&  agent_constraint_set, const State& new_state, const State& org_state, unordered_set<State, boost::hash<State> > *closedSet) {
+    std::unique_lock<std::mutex> lock(this->m);
+
     if (new_state.x < 0 || new_state.x >= this->row_number || new_state.y < 0 || new_state.y >= this->col_number) return false;
     if (this->map2d_obstacle[new_state.x][new_state.y]) return false;
-    if (closedSet.find(new_state) != closedSet.end()) return false;
+    if (closedSet->find(new_state) != closedSet->end()) return false;
     if (new_state.time >= MAX_TIMESTEP) return false;
     if (!agent_constraint_set->stateValid(new_state)) { return false;}
     if (!agent_constraint_set->transitionValid(org_state, new_state)) return false;
@@ -98,7 +103,7 @@ bool ECBS::searchNodeIsValid(shared_ptr<Constraints>&  agent_constraint_set, con
 }
 
 
-
+//is called within threads
 shared_ptr<Path> ECBS::findPath_a_star_eps(vector<shared_ptr<Path > >& cost_matrix, shared_ptr<Constraints>& agent_constraint_set,
                                                int agent_idx,
                                                vector<int>& fmin)
@@ -106,7 +111,7 @@ shared_ptr<Path> ECBS::findPath_a_star_eps(vector<shared_ptr<Path > >& cost_matr
 
     int search_max = 1e5;
     int m_lastGoalConstraint = -1;
-    closedSet.clear();
+    unordered_set<State, boost::hash<State> > closedSet;
     unordered_map<State, PathEntryHandle , boost::hash<State> > stateToHeap;
 
     unordered_map<tuple<int, int, int>, int, tuple_hash, tuple_equal> pointCheckMap;
@@ -118,8 +123,8 @@ shared_ptr<Path> ECBS::findPath_a_star_eps(vector<shared_ptr<Path > >& cost_matr
     low_openSet_t openSet;
     low_focalSet_t focalSet;
 
+    //never changed i think so not race cond
     State start_state = this->start_states[agent_idx];
-
     Location goal_location = this->goals[agent_idx];
 
     for (const auto &vc: agent_constraint_set->vertexConstraints) {
@@ -179,11 +184,13 @@ shared_ptr<Path> ECBS::findPath_a_star_eps(vector<shared_ptr<Path > >& cost_matr
         focalSet.pop();
         openSet.erase(current_handler);
         stateToHeap.erase(current->state);
+        this->m.lock();
         closedSet.insert(current->state);
+        this->m.unlock();
 
         for (int i = 0; i < 5; i++) {
             State new_state(current->state.time + 1, current->state.x + dx[i], current->state.y + dy[i]);
-            if (!this->searchNodeIsValid(agent_constraint_set, new_state, current->state)) continue;
+            if (!this->searchNodeIsValid(agent_constraint_set, new_state, current->state, &closedSet)) continue;
             int tentative_gScore = current->gScore + 1;
             auto iter = stateToHeap.find(new_state);
             if (iter == stateToHeap.end()) {  // Discover a new node
@@ -241,7 +248,7 @@ shared_ptr<Path> ECBS::findPath_a_star_eps2(vector<shared_ptr<Path > >& cost_mat
 {
     int search_max = 1e5;
     int m_lastGoalConstraint = -1;
-    closedSet.clear();
+    unordered_set<State, boost::hash<State> > closedSet;
     unordered_map<State, PathEntryHandle2 , boost::hash<State> > stateToHeap;
 
     unordered_map<tuple<int, int, int>, int, tuple_hash, tuple_equal> pointCheckMap;
@@ -295,7 +302,7 @@ shared_ptr<Path> ECBS::findPath_a_star_eps2(vector<shared_ptr<Path > >& cost_mat
 
         for (int i = 0; i < 5; i++) {
             State new_state(current->state.time + 1, current->state.x + dx[i], current->state.y + dy[i]);
-            if (!this->searchNodeIsValid(agent_constraint_set, new_state, current->state)) continue;
+            if (!this->searchNodeIsValid(agent_constraint_set, new_state, current->state, &closedSet)) continue;
             int tentative_gScore = current->gScore + 1;
             auto iter = stateToHeap.find(new_state);
             if (iter == stateToHeap.end()) {
@@ -347,7 +354,7 @@ shared_ptr<Path> ECBS::findPath_a_star(shared_ptr<Constraints>& agent_constraint
 {
     int search_max = 1e5;
     int m_lastGoalConstraint = -1;
-    closedSet.clear();
+    unordered_set<State, boost::hash<State> > closedSet;
     unordered_map<State, PathEntryHandle , boost::hash<State> > stateToHeap;
     low_openSet_t openSet;
 
@@ -390,7 +397,7 @@ shared_ptr<Path> ECBS::findPath_a_star(shared_ptr<Constraints>& agent_constraint
 
         for (int i = 0; i < 5; i++) {
             State new_state(current->state.time + 1, current->state.x + dx[i], current->state.y + dy[i]);
-            if (!this->searchNodeIsValid(agent_constraint_set, new_state, current->state)) continue;
+            if (!this->searchNodeIsValid(agent_constraint_set, new_state, current->state, &closedSet)) continue;
             int tentative_gScore = current->gScore + 1;
             auto iter = stateToHeap.find(new_state);
             if (iter == stateToHeap.end()) {  // Discover a new node
@@ -416,62 +423,6 @@ shared_ptr<Path> ECBS::findPath_a_star(shared_ptr<Constraints>& agent_constraint
 }
 
 
-int ECBS::high_focal_score(const vector<shared_ptr<Path > >& cost_matrix, Conflict& result)
-{
-    int numConflicts = 0;
-
-    int max_t = 0;
-    for (const auto &sol: cost_matrix) {
-        max_t = std::max<int>(max_t, sol->size());
-    }
-
-    for (int t = 0; t < max_t; ++t) {
-        // check drive-drive vertex collisions
-        for (size_t i = 0; i < cost_matrix.size(); ++i) {
-            State state1 = getState(cost_matrix[i], t);
-            for (size_t j = i + 1; j < cost_matrix.size(); ++j) {
-                State state2 = getState(cost_matrix[j], t);
-                if (state1.equalExceptTime(state2)) {
-                    if (numConflicts == 0)
-                    {
-                        result.time = t;
-                        result.agent1 = i;
-                        result.agent2 = j;
-                        result.type = Conflict::Vertex;
-                        result.x1 = state1.x;
-                        result.y1 = state1.y;
-                    }
-                    ++numConflicts;
-                }
-            }
-        }
-        // drive-drive edge (swap)
-        for (size_t i = 0; i < cost_matrix.size(); ++i) {
-            State state1a = getState(cost_matrix[i], t);
-            State state1b = getState(cost_matrix[i], t + 1);
-            for (size_t j = i + 1; j < cost_matrix.size(); ++j) {
-                State state2a = getState(cost_matrix[j], t);
-                State state2b = getState(cost_matrix[j], t + 1);
-                if (state1a.equalExceptTime(state2b) &&
-                    state1b.equalExceptTime(state2a)) {
-                    if (numConflicts == 0)
-                    {
-                        result.time = t;
-                        result.agent1 = i;
-                        result.agent2 = j;
-                        result.type = Conflict::Edge;
-                        result.x1 = state1a.x;
-                        result.y1 = state1a.y;
-                        result.x2 = state1b.x;
-                        result.y2 = state1b.y;
-                    }
-                    ++numConflicts;
-                }
-            }
-        }
-    }
-    return numConflicts;
-}
 
 
 /*
@@ -511,8 +462,6 @@ def main_solver():
         if open set empty:
             sleep for x time
             #TODO need a way to quit app in no solution case
-            
-        
         get best focal node node
         remove from all 3 sets and handlers
         unlock
@@ -526,116 +475,106 @@ def main_solver():
 */
 
 
-
-
-// Got this from the paper https://arxiv.org/pdf/2404.05223
-// Focal search 
-// Given suboptimality factor w ≥ 1, it finds a solution with cost ≤ w * c_opt, where c_opt is optimal cost. 
-// It uses two queues: OPEN (sorted by f(n) = g(n) + h(n), with g as cost and h an admissible heuristic) and 
-// FOCAL (contains nodes with f(n) ≤ w * f_front, sorted by a secondary heuristic d(n)). 
-// FOCAL helps quickly find a solution. Once a solution with cost c_val is found, f_front is its lower bound (LB). 
-// Outputs: LB value c_g and a solution with cost c. If no solution, c_g and c are ∞.
-
-
-int ECBS::solve() {
-    shared_ptr<ECBSNode> start_node(new ECBSNode());
-
-    start_node->create_cost_matrix(this);
-
-    start_node->focal_score = high_focal_score_v4(start_node->cost_matrix, start_node->first_conflict);
-
-    /*
-    open: Keeps track of nodes being expanded.
-    focal: A subset of nodes from open with good heuristic values (focal search).
-    LBset: Keeps track of nodes with the best lower bound cost.
-     */
-    high_openSet_t open;
-    high_focalSet_t focal;
-    high_LBSet_t LBset;
-    /*
-    Two hashmaps are created to store the mapping from nodes to their handles in the open and LBset heaps for efficient lookup.
-    "handles" typically refer to objects that act as references or pointers to other objects????? 
-    CT = Constraint Tree
-     */
-    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2open_handle;
-    unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2LB_handle;
-
-    auto handle = open.push(start_node);
-    auto handle2 = LBset.push(start_node);
-    focal.push(handle);
-    CTnode2open_handle.insert(make_pair(start_node, handle));
-    CTnode2LB_handle.insert(make_pair(start_node, handle2));
-    int best_LB = start_node->LB;
-
-    while (!open.empty())
+std::mutex b;
+void solver_thread(ECBS *ecbs, 
+                    std::shared_ptr<high_openSet_t> open, 
+                    std::shared_ptr<high_focalSet_t> focal,
+                    std::shared_ptr<high_LBSet_t> LBset, 
+                    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > *CTnode2open_handle, 
+                    unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > *CTnode2LB_handle,
+                    int *best_LB)
+{
+    while (true)
     {
-        this->cbsnode_num ++;
-        int old_best_LB = best_LB;
+        std::unique_lock<std::mutex> asdfas(b);
+        std::unique_lock<std::mutex> l(ecbs->m);
+        std::cout <<"started iter " << std::endl;
+        std::cout << "open len: " << open->size() << std::endl;
+        while (open->empty()) {
+            ecbs->waiting_nodes++;
+            std::cout <<"waiting" << std::endl;
+            ecbs->cv.wait(l);
+            if (ecbs->solution_found){
+                ecbs->m.unlock();
+                return;
+            }
+            if (ecbs->waiting_nodes == 4){
+                ecbs->m.unlock();
+                return;
+            }
+            ecbs->waiting_nodes--;
+        }
+        //ecbs->m.unlock();
+
+        ecbs->cbsnode_num ++;
+        int old_best_LB = *best_LB;
 
         // Best lower bound of all nodes in LBset is at the top of the heap
-        best_LB = LBset.top()->LB;
+        *best_LB = LBset->top()->LB;
         //If the best LB improves, the focal set is rebuilt by adding nodes from open that meet a certain heuristic threshold (based on l_weight)
-        if (best_LB > old_best_LB)
+        if (*best_LB > old_best_LB)
         {
-            for (auto iter = open.ordered_begin(); iter!=open.ordered_end(); iter++)
+            for (auto iter = open->ordered_begin(); iter != open->ordered_end(); iter++)
             {
                 int val = (*iter)->cost;
                 //if val was too big before but is small enough to be inserted into focal
-                if ((double)val > (double) old_best_LB * this->l_weight && (double) val <= (double) best_LB * l_weight)
+                if ((double)val > (double) old_best_LB * ecbs->l_weight && (double) val <= (double) *best_LB * ecbs->l_weight)
                 {
-                    auto handle_iter = CTnode2open_handle.find(*iter);
-                    focal.push(handle_iter->second);
+                    auto handle_iter = CTnode2open_handle->find(*iter);
+                    focal->push(handle_iter->second);
                 }
-                if ((double)val > (double) best_LB * l_weight) break;
+                if ((double)val > (double) *best_LB * ecbs->l_weight) break;
             }
         }
+        
 
         //The best node (handler) from the focal set is selected for expansion. The node is removed from both the focal and open sets
-        auto current_handler = focal.top();
+        auto current_handler = focal->top();
         shared_ptr<ECBSNode> cur_node = *current_handler; // I guess dereferencing the handle gets the ECBSnode
-        focal.pop();
+        focal->pop();
         //Since this node is being expanded, it is also removed from the open heap (where all non-expanded nodes are stored).
-        open.erase(current_handler);
+        open->erase(current_handler);
         // The node is also removed from the CTnode2open_handle hashmap, which stores a mapping from the actual node (cur_node) to its handle in the open heap.
-        CTnode2open_handle.erase(cur_node);
-
+        CTnode2open_handle->erase(cur_node);
         /*
         The LBset (Lower Bound Set) also contains this node. First, the handle for this node in LBset is retrieved from the CTnode2LB_handle hashmap.
         Then, the node is removed from LBset using its handle (LB_handler).
         The node is also erased from the CTnode2LB_handle hashmap, which tracks the mapping between the node and its handle in the LBset
         */
-        auto LB_handler = CTnode2LB_handle[cur_node];
-        LBset.erase(LB_handler);
-        CTnode2LB_handle.erase(cur_node);
+        auto LB_handler = (*CTnode2LB_handle)[cur_node];
+        LBset->erase(LB_handler);
+        CTnode2LB_handle->erase(cur_node);
+        ecbs->m.unlock();
 
         // If conflicts == 0
         bool done = cur_node->focal_score == 0;
         if (done)
         {
+            std::unique_lock<std::mutex> lock(ecbs->m);
             std::cout << "done; cost: " << cur_node->cost << std::endl;
-            this->out_solution = cur_node->cost_matrix;
-            this->cost = cur_node->cost;
-            if (!check_ans_valid(this->out_solution))
+            ecbs->out_solution = cur_node->cost_matrix;
+            ecbs->cost = cur_node->cost;
+            if (!check_ans_valid(ecbs->out_solution))
                 std::cout << "INVALID ANS PATH!!!!" << std::endl;
-            this->solution_found = true;
-            return true;
+            ecbs->solution_found = true;
+            return;
         }
 
         // Map of agent index to constraints
+        //idt there are any race conds here
         unordered_map<size_t, Constraints> tmp;
         createConstraintsFromConflict(cur_node->first_conflict, tmp);
+        
+        Timer newnode_timer; //made timer local bc not needed to be shared across multiple threads
 
         for (unsigned short cur_i = 0; auto &[key, value]: tmp)
         {
-            this->newnode_timer.reset();
-            shared_ptr<ECBSNode> new_node;
-            if (cur_i == 1) 
-                new_node = cur_node;
-            else 
-                new_node = shared_ptr<ECBSNode>(new ECBSNode(cur_node));
-
-            this->newnode_timer.stop();
-            this->newnode_time += this->newnode_timer.elapsedSeconds();
+            ecbs->m.lock();
+            newnode_timer.reset();
+            shared_ptr<ECBSNode> new_node = shared_ptr<ECBSNode>(new ECBSNode(cur_node));
+            newnode_timer.stop();
+            ecbs->newnode_time += newnode_timer.elapsedSeconds();
+            ecbs->m.unlock();
 
             assert(!new_node->constraint_sets[key]->overlap(value));
             new_node->constraint_sets[key] = shared_ptr<Constraints>(new Constraints(*(new_node->constraint_sets[key])));
@@ -643,27 +582,84 @@ int ECBS::solve() {
             cur_i ++;
             // Try to find updates path for this agent with the new constraints. if false, then no path was found 
             // and continue to next iteration
-            bool b = new_node->update_cost_matrix(this, key);
+            bool b = new_node->update_cost_matrix(ecbs, key);
             if (!b) 
                 continue;
 
-            this->conflict_num_timer.reset();
+            Timer conflict_num_timer;
+            conflict_num_timer.reset();
             new_node->focal_score = high_focal_score_v4(new_node->cost_matrix, new_node->first_conflict);
-            this->conflict_num_timer.stop();
-            this->conflict_num_time += this->conflict_num_timer.elapsedSeconds();
-
+            conflict_num_timer.stop();
+            ecbs->conflict_num_time += conflict_num_timer.elapsedSeconds();
+            //so handlers are becoming null in seperate threads but they arent being removed
+            //
             // Add node to unexpanded set(open) and heap based off of LB
-            auto handle = open.push(new_node);
-            auto handle2 = LBset.push(new_node);
+            ecbs->m.lock();
+            auto handle = open->push(new_node);
+            auto handle2 = LBset->push(new_node);
             // Then map the nodes to their handles
-            CTnode2open_handle.insert(make_pair(new_node, handle));
-            CTnode2LB_handle.insert(make_pair(new_node, handle2));
-
+            CTnode2open_handle->insert(make_pair(new_node, handle));
+            CTnode2LB_handle->insert(make_pair(new_node, handle2));
             // If the new node has a cost less than the best lower bound * some weight, then add it to the focal set
-            if (new_node->cost <= best_LB * this->l_weight) {
-                focal.push(handle);
+            if (new_node->cost <= *best_LB * ecbs->l_weight) {
+                focal->push(handle);
             }
+            ecbs->cv.notify_one();
+            ecbs->m.unlock();
+        
         }
+        b.unlock();
     }
-    return false;
+    return;
+
 }
+
+int ECBS::paralized_solver_main(){
+    
+    //make root node for search
+    shared_ptr<ECBSNode> start_node(new ECBSNode());
+    start_node->create_cost_matrix(this);
+    start_node->focal_score = high_focal_score_v4(start_node->cost_matrix, start_node->first_conflict);
+
+    std::shared_ptr<high_openSet_t> open = std::make_shared<high_openSet_t>();
+    std::shared_ptr<high_focalSet_t> focal = std::make_shared<high_focalSet_t>();
+    std::shared_ptr<high_LBSet_t> LBset = std::make_shared<high_LBSet_t>();
+    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2open_handle;
+    unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2LB_handle;
+
+    auto handle = open->push(start_node);
+    auto handle2 = LBset->push(start_node);
+    focal->push(handle);
+    CTnode2open_handle.insert(make_pair(start_node, handle));
+    CTnode2LB_handle.insert(make_pair(start_node, handle2));
+    int best_LB = start_node->LB;
+
+    int numThreads = 2;
+    std::vector<std::thread> threads;
+
+
+    this->m.lock();
+    for (int i=0; i < numThreads; i++){
+        threads.emplace_back(std::thread(solver_thread, this, open, focal, LBset, &CTnode2open_handle, &CTnode2LB_handle, &best_LB));
+    }
+    this->m.unlock();
+
+    //just stall until found a solution or open is empty and all the threads are waiting
+    while(true){
+        if (this->solution_found){
+            std::cout << "done; cost: " << this->cost << std::endl;
+            
+            for (auto& thread : threads){
+                thread.join();  //join with all the threads created
+
+            }
+            
+            return true;
+        }
+        usleep(500);
+    }
+
+}
+
+
+  

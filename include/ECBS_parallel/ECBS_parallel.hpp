@@ -12,6 +12,7 @@ class ECBS
 
 public:
 
+
     bool solution_found;
     int agent_n;
     vector<State> start_states;
@@ -19,7 +20,6 @@ public:
     vector<Location> goals;
     vector<vector<int> > map2d_obstacle;
     unordered_map<int, vector<vector<int> > > prior_hmap;
-    unordered_set<State, boost::hash<State> > closedSet;
     vector<shared_ptr<Path > > out_solution;
     int cost, map_size, cbsnode_num, lowLevelExpanded, num_ta;
     int row_number, col_number;
@@ -35,7 +35,7 @@ public:
     void clear();
     int solve();
     int heuristic(int x1, int y1, int agent_idx);
-    bool searchNodeIsValid(shared_ptr<Constraints>& agent_constraint_set, const State& new_state, const State& org_state);
+    bool searchNodeIsValid(shared_ptr<Constraints>&  agent_constraint_set, const State& new_state, const State& org_state, unordered_set<State, boost::hash<State> > *closedSet);
 
     shared_ptr<Path> findPath_a_star_eps(vector<shared_ptr<Path > >& cost_matrix, shared_ptr<Constraints>& agent_constraint_set, int agent_idx, vector<int >& fmin);
     shared_ptr<Path> findPath_a_star_eps2(vector<shared_ptr<Path > >& cost_matrix, shared_ptr<Constraints>& agent_constraint_set, int agent_idx, vector<int >& fmin);
@@ -67,6 +67,12 @@ public:
             boost::heap::compare<FocalPathEntryCompare> >
             low_focalSet_t;
     using FocalPathEntryHandle = low_focalSet_t::handle_type;
+
+    
+    int paralized_solver_main();
+    std::mutex m;
+    std::condition_variable cv;
+    int waiting_nodes = 0;
 
 };
 

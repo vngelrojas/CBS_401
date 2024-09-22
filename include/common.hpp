@@ -20,6 +20,9 @@
 #include <filesystem>
 #include <unordered_set>
 #include <queue>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 #include <boost/heap/pairing_heap.hpp>
 #include <boost/unordered_set.hpp>
