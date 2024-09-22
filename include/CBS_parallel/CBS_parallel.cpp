@@ -261,6 +261,7 @@ bool deal_with_node(size_t deal_idx, CBS* pInstance, shared_ptr<CBSNode> in_node
 }
 
 
+
 int CBS::solve() {
     shared_ptr<CBSNode> start_node(new CBSNode());
 
@@ -277,14 +278,14 @@ int CBS::solve() {
         cur_node_queue.push_back(cur_node);
 
         // 1000 size constraint based on number of cores or some shit
-        // We only want to process the nodes in parallel when they have the same cost. it helps ensure that the algorithm explores nodes with similar priority 
+        //this forloop is to process nodes in parallel if in same cost on the search
         while (!open.empty() && open.top()->cost == cur_node_queue[0]->cost && cur_node_queue.size() < 1000)
         {
             cur_node = open.top(); open.pop();
             cur_node_queue.push_back(cur_node);
         }
 
-        this->cbsnode_num += cur_node_queue.size();
+        this->cbsnode_num += cur_node_queue.size(); //keep total of nodes search
 
         // Queue to hold the output nodes of cur_node_queue above
         // The max amount that can be generated is probably cur_node_queue.size()*MAX_SUB_QUEUE_SIZE+1 thats why reserve that size?

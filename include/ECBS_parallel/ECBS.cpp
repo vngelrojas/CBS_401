@@ -473,6 +473,61 @@ int ECBS::high_focal_score(const vector<shared_ptr<Path > >& cost_matrix, Confli
     return numConflicts;
 }
 
+
+/*
+def main_solver():
+
+    #init start node
+    shared_ptr<ECBSNode> start_node(new ECBSNode());
+    start_node->create_cost_matrix(this);
+    start_node->focal_score = high_focal_score_v4(start_node->cost_matrix, start_node->first_conflict);
+
+    init node heaps
+    high_openSet_t open;
+    high_focalSet_t focal;
+    high_LBSet_t LBset;
+
+    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2open_handle;
+    unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2LB_handle;
+    auto handle = open.push(start_node);
+    auto handle2 = LBset.push(start_node);
+    focal.push(handle);
+    CTnode2open_handle.insert(make_pair(start_node, handle));
+    CTnode2LB_handle.insert(make_pair(start_node, handle2));
+    int best_LB = start_node->LB;
+
+    int avail_threads = 8
+    while(true):
+        block until avail_threads > 0
+        
+        for i:1 -> avail threads:
+            thread(solve())
+        
+        block until received finished signal
+
+
+    def solve():
+        lock
+        if open set empty:
+            sleep for x time
+            #TODO need a way to quit app in no solution case
+            
+        
+        get best focal node node
+        remove from all 3 sets and handlers
+        unlock
+        check if done by chhecking if ffocal score is 0
+            if done send message to main thread manager to say we found an answer
+            
+        compute conflict and stuff;
+        remember to lock when mod global vars and combine all set operations together
+        to avoid race
+
+*/
+
+
+
+
 // Got this from the paper https://arxiv.org/pdf/2404.05223
 // Focal search 
 // Given suboptimality factor w ≥ 1, it finds a solution with cost ≤ w * c_opt, where c_opt is optimal cost. 
@@ -480,6 +535,7 @@ int ECBS::high_focal_score(const vector<shared_ptr<Path > >& cost_matrix, Confli
 // FOCAL (contains nodes with f(n) ≤ w * f_front, sorted by a secondary heuristic d(n)). 
 // FOCAL helps quickly find a solution. Once a solution with cost c_val is found, f_front is its lower bound (LB). 
 // Outputs: LB value c_g and a solution with cost c. If no solution, c_g and c are ∞.
+
 
 int ECBS::solve() {
     shared_ptr<ECBSNode> start_node(new ECBSNode());
@@ -524,6 +580,7 @@ int ECBS::solve() {
             for (auto iter = open.ordered_begin(); iter!=open.ordered_end(); iter++)
             {
                 int val = (*iter)->cost;
+                //if val was too big before but is small enough to be inserted into focal
                 if ((double)val > (double) old_best_LB * this->l_weight && (double) val <= (double) best_LB * l_weight)
                 {
                     auto handle_iter = CTnode2open_handle.find(*iter);
