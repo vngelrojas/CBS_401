@@ -494,12 +494,12 @@ void solver_thread(ECBS *ecbs,
             ecbs->waiting_nodes++;
             std::cout <<"waiting" << std::endl;
             ecbs->cv.wait(l);
-            if (ecbs->solution_found){
-                ecbs->m.unlock();
+            if (ecbs->solution_found) {
+                // No need to manually unlock, 'l' will unlock automatically
                 return;
             }
-            if (ecbs->waiting_nodes == 4){
-                ecbs->m.unlock();
+            if (ecbs->waiting_nodes == 4) {
+                // No need to manually unlock here either
                 return;
             }
             ecbs->waiting_nodes--;
@@ -608,7 +608,6 @@ void solver_thread(ECBS *ecbs,
             ecbs->m.unlock();
         
         }
-        b.unlock();
     }
     return;
 
