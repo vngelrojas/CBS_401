@@ -1,8 +1,8 @@
 //
 // Created by YIMIN TANG on 3/20/23.
 //
-#include "ECBSNode.hpp"
-#include "ECBS.hpp"
+#include "ECBSNode_parallel.hpp"
+#include "ECBS_parallel.hpp"
 
 
 ECBSNode::ECBSNode(shared_ptr<ECBSNode> curnode) {

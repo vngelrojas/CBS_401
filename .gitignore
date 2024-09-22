@@ -8,7 +8,7 @@ python/PlanViz
 tmp_*
 outputs/*
 .idea/*
-map_file/*
+# map_file/*
 map_file2/*
 map_file_ecbs/*
 test_results2/*

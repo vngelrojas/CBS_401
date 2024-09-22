@@ -34,6 +34,7 @@ struct ECBSNodePtrCmp{
     }
 };
 
+
 typedef typename boost::heap::d_ary_heap<shared_ptr<ECBSNode>,
         boost::heap::mutable_<true>,
         boost::heap::arity<2>,

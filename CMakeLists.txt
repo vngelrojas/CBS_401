@@ -40,7 +40,7 @@ target_link_libraries(ECBS
         yaml-cpp
         )
 
-add_executable(ECBS_parallel include/ECBS_parallel/main_ECBS.cpp include/ECBS_parallel/ECBS.cpp include/ECBS_parallel/ECBSNode.cpp include/common.cpp)
+add_executable(ECBS_parallel include/ECBS_parallel/main_ECBS_parallel.cpp include/ECBS_parallel/ECBS_parallel.cpp include/ECBS_parallel/ECBSNode_parallel.cpp include/common.cpp)
 target_link_libraries(ECBS_parallel
         ${Boost_LIBRARIES}
         yaml-cpp
