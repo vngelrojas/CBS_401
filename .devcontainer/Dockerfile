@@ -64,3 +64,10 @@ RUN git clone https://github.com/google/benchmark.git /tmp/benchmark \
 RUN sudo apt-get update && sudo apt-get install -y python3 python3-pip
 RUN python3 --version && pip3 --version
 RUN sudo apt install -y python3.12-venv
+
+
+# OpenMPI Installation
+RUN sudo apt-get update && sudo apt-get install -y openmpi-bin openmpi-doc libopenmpi-dev
+
+# Verify OpenMPI installation
+RUN mpirun --version

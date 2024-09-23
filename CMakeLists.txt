@@ -46,5 +46,11 @@ target_link_libraries(ECBS_parallel
         yaml-cpp
         )
 
+find_package(MPI REQUIRED)
 
-
+add_executable(CBS_distributed include/CBS_distributed/main_CBS.cpp include/CBS_distributed/CBS.cpp include/CBS_distributed/CBSNode.cpp include/common.cpp)
+target_link_libraries(CBS_distributed
+        ${Boost_LIBRARIES}
+        yaml-cpp
+        MPI::MPI_CXX
+        )
