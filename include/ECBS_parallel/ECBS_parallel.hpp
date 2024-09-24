@@ -73,6 +73,7 @@ public:
     std::mutex m;
     std::condition_variable cv;
     int waiting_nodes = 0;
+    int NUM_THREADS = 4;
 
 };
 

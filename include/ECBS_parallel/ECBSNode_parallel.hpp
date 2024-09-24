@@ -22,6 +22,7 @@ public:
 
 
     int cost, LB, focal_score;
+    bool in_focal = false;
     Conflict first_conflict;
     vector<int > fmin;
     vector<shared_ptr<Path > > cost_matrix;

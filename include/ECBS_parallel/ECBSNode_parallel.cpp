@@ -67,9 +67,9 @@ bool ECBSNode::update_cost_matrix(ECBS* pInstance, int agent_id) {
 //    pInstance->findPath_a_star(this->constraint_sets[agent_id], agent_id, this->fmin);
 //    this->cost_matrix[agent_id] = pInstance->findPath_a_star_eps2(this->cost_matrix, this->constraint_sets[agent_id], agent_id, this->fmin);
     lowlevel_search_timer.stop();
-    pInstance->m.lock();
+    //pInstance->m.lock();
     pInstance->lowlevel_search_time += pInstance->lowlevel_search_timer.elapsedSeconds();
-    pInstance->m.unlock();
+    //pInstance->m.unlock();
     if (this->cost_matrix[agent_id] == nullptr) return 0;
     this->cost = 0;
     for (int i=0;i<pInstance->agent_n;i++) {

@@ -18,6 +18,8 @@ void ECBS::clear() {
     this->cbsnode_num = 0;
     this->lowLevelExpanded = 0;
     this->num_ta = 0;
+    this->waiting_nodes = 0;
+
 }
 
 class PairCompare {
@@ -43,6 +45,7 @@ ECBS::ECBS(int row_number, int col_number, unordered_set<Location>& obstacles,
     this->cbsnode_num = 0;
     this->lowLevelExpanded = 0;
     this->num_ta = 0;
+    this->waiting_nodes = 0;
 
     this->map2d_obstacle.resize(this->row_number, vector<int>(this->col_number, 0));
     for (auto obstacle : obstacles) {
@@ -91,7 +94,7 @@ int ECBS::heuristic(int x1, int y1, int agent_idx) {
 }
 
 bool ECBS::searchNodeIsValid(shared_ptr<Constraints>&  agent_constraint_set, const State& new_state, const State& org_state, unordered_set<State, boost::hash<State> > *closedSet) {
-    std::unique_lock<std::mutex> lock(this->m);
+    //std::unique_lock<std::mutex> lock(this->m); TODO
 
     if (new_state.x < 0 || new_state.x >= this->row_number || new_state.y < 0 || new_state.y >= this->col_number) return false;
     if (this->map2d_obstacle[new_state.x][new_state.y]) return false;
@@ -184,9 +187,7 @@ shared_ptr<Path> ECBS::findPath_a_star_eps(vector<shared_ptr<Path > >& cost_matr
         focalSet.pop();
         openSet.erase(current_handler);
         stateToHeap.erase(current->state);
-        this->m.lock();
         closedSet.insert(current->state);
-        this->m.unlock();
 
         for (int i = 0; i < 5; i++) {
             State new_state(current->state.time + 1, current->state.x + dx[i], current->state.y + dy[i]);
@@ -473,79 +474,148 @@ def main_solver():
         to avoid race
 
 */
+std::mutex open_set_mtx;
 
 
-std::mutex b;
-void solver_thread(ECBS *ecbs, 
-                    std::shared_ptr<high_openSet_t> open, 
-                    std::shared_ptr<high_focalSet_t> focal,
-                    std::shared_ptr<high_LBSet_t> LBset, 
-                    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > *CTnode2open_handle, 
-                    unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > *CTnode2LB_handle,
-                    int *best_LB)
-{
-    while (true)
-    {
-        std::unique_lock<std::mutex> asdfas(b);
-        std::unique_lock<std::mutex> l(ecbs->m);
-        std::cout <<"started iter " << std::endl;
-        std::cout << "open len: " << open->size() << std::endl;
-        while (open->empty()) {
-            ecbs->waiting_nodes++;
-            std::cout <<"waiting" << std::endl;
-            ecbs->cv.wait(l);
-            if (ecbs->solution_found) {
-                // No need to manually unlock, 'l' will unlock automatically
-                return;
+
+
+
+class Solver{
+public: 
+//idk if the type actually is shared_ptr<ecbsnode> but hope it is
+    std::vector<shared_ptr<ECBSNode>> _buffer;
+    high_openSet_t _open;
+    high_focalSet_t _focal;
+    //high_LBSet_t _LBset;
+    //std::shared_ptr<high_LBSet_t> LBset = std::make_shared<high_LBSet_t>();
+
+    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > _CTnode2open_handle;
+    unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > _CTnode2LB_handle;
+
+    int _id;
+    std::shared_ptr<std::thread> _thread;
+    std::mutex _m;
+    std::condition_variable _cv;
+
+    int push_from_buffer(){
+        while (!_buffer.empty()){
+            if (_buffer.back() == nullptr) {
+                std::cout << "dying on command" << std::endl;
+                return 1;
             }
-            if (ecbs->waiting_nodes == 4) {
-                // No need to manually unlock here either
-                return;
-            }
-            ecbs->waiting_nodes--;
+            std::unique_lock<std::mutex> a(open_set_mtx);
+            auto handle = _open.push(_buffer.back());
+            _CTnode2open_handle.insert(make_pair(_buffer.back(), handle));
+            _buffer.pop_back();
         }
-        //ecbs->m.unlock();
+        return 0;
+    }
 
-        ecbs->cbsnode_num ++;
-        int old_best_LB = *best_LB;
-
-        // Best lower bound of all nodes in LBset is at the top of the heap
-        *best_LB = LBset->top()->LB;
-        //If the best LB improves, the focal set is rebuilt by adding nodes from open that meet a certain heuristic threshold (based on l_weight)
-        if (*best_LB > old_best_LB)
-        {
-            for (auto iter = open->ordered_begin(); iter != open->ordered_end(); iter++)
-            {
-                int val = (*iter)->cost;
-                //if val was too big before but is small enough to be inserted into focal
-                if ((double)val > (double) old_best_LB * ecbs->l_weight && (double) val <= (double) *best_LB * ecbs->l_weight)
-                {
-                    auto handle_iter = CTnode2open_handle->find(*iter);
-                    focal->push(handle_iter->second);
-                }
-                if ((double)val > (double) *best_LB * ecbs->l_weight) break;
+    int wait_for_work(){
+        std::unique_lock<std::mutex> l(_m);
+        int isDone = push_from_buffer();
+        if (isDone){
+            return 1;
+        }
+        while (_open.empty() ) {
+            _cv.wait(l);
+            int isDone = push_from_buffer();
+            if (isDone){
+                return 1;
             }
         }
         
+        return 0;
+
+
+    }
+
+    void add_work(shared_ptr<ECBSNode> new_node){
+        std::unique_lock<std::mutex> l(_m);
+        _buffer.push_back(new_node);
+        _cv.notify_all();
+
+    }
+
+
+
+};
+
+int find_best_lb(std::vector<shared_ptr<Solver>> &solvers){
+    std::lock_guard<std::mutex> lock(open_set_mtx); // Lock the mutex to make the function atomic
+
+    
+    int best = INT_MAX;
+    for (shared_ptr<Solver> solver : solvers){
+        if (!solver->_open.empty()){
+            if (solver->_open.top()->LB < best){
+                best = solver->_open.top()->LB;
+            }
+        }
+    }
+    if (best == INT_MAX){
+        cout << "all open sets empty " << std::endl;
+    }
+    return best;
+}
+
+void solver_thread(ECBS *ecbs, 
+                    shared_ptr<Solver> solver,
+                    shared_ptr<std::vector<shared_ptr<Solver>>> solvers)
+{
+    ecbs->m.lock();
+    ecbs->m.unlock();
+    while (true)
+    {
+        //std::cout <<"started iter " << std::endl;
+        
+
+        int status = solver->wait_for_work();
+        if (status == 1){
+            return;
+        }
+
+        ecbs->m.lock();
+        ecbs->cbsnode_num++;
+        ecbs->m.unlock();
+        
+
+
+        // Best lower bound of all nodes in LBset is at the top of the heap
+        int new_best_LB = find_best_lb(*solvers);
+        //If the best LB improves, the focal set is rebuilt by adding nodes from open that meet a certain heuristic threshold (based on l_weight)
+        open_set_mtx.lock();
+        for (auto iter = solver->_open.ordered_begin(); iter != solver->_open.ordered_end(); iter++)
+        {
+            int val = (*iter)->cost;
+            //if val was too big before but is small enough to be inserted into focal
+            if (!(*iter)->in_focal && (double) val <= (double) new_best_LB * ecbs->l_weight)
+            {
+                auto handle_iter = solver->_CTnode2open_handle.find(*iter);
+                solver->_focal.push(handle_iter->second);
+                (*iter)->in_focal = true;
+            }
+            if ((double)val > (double) new_best_LB * ecbs->l_weight) break;
+        }
+
+     
+        std::cout << solver->_id << " open size: " << solver->_open.size() << " buffer size: " << solver->_buffer.size() << " focal size: " << solver->_focal.size() << std::endl;
+
 
         //The best node (handler) from the focal set is selected for expansion. The node is removed from both the focal and open sets
-        auto current_handler = focal->top();
-        shared_ptr<ECBSNode> cur_node = *current_handler; // I guess dereferencing the handle gets the ECBSnode
-        focal->pop();
-        //Since this node is being expanded, it is also removed from the open heap (where all non-expanded nodes are stored).
-        open->erase(current_handler);
-        // The node is also removed from the CTnode2open_handle hashmap, which stores a mapping from the actual node (cur_node) to its handle in the open heap.
-        CTnode2open_handle->erase(cur_node);
-        /*
-        The LBset (Lower Bound Set) also contains this node. First, the handle for this node in LBset is retrieved from the CTnode2LB_handle hashmap.
-        Then, the node is removed from LBset using its handle (LB_handler).
-        The node is also erased from the CTnode2LB_handle hashmap, which tracks the mapping between the node and its handle in the LBset
-        */
-        auto LB_handler = (*CTnode2LB_handle)[cur_node];
-        LBset->erase(LB_handler);
-        CTnode2LB_handle->erase(cur_node);
-        ecbs->m.unlock();
+        if (solver->_focal.empty()){
+            open_set_mtx.unlock();
+            continue;
 
+        }
+        auto current_handler = solver->_focal.top();
+        shared_ptr<ECBSNode> cur_node = *current_handler; // I guess dereferencing the handle gets the ECBSnode
+        solver->_focal.pop();
+        //Since this node is being expanded, it is also removed from the open heap (where all non-expanded nodes are stored).
+        solver->_open.erase(current_handler);
+        // The node is also removed from the CTnode2open_handle hashmap, which stores a mapping from the actual node (cur_node) to its handle in the open heap.
+        solver->_CTnode2open_handle.erase(cur_node);
+        open_set_mtx.unlock();
         // If conflicts == 0
         bool done = cur_node->focal_score == 0;
         if (done)
@@ -559,9 +629,10 @@ void solver_thread(ECBS *ecbs,
             ecbs->solution_found = true;
             return;
         }
+        solver->_m.unlock();
+
 
         // Map of agent index to constraints
-        //idt there are any race conds here
         unordered_map<size_t, Constraints> tmp;
         createConstraintsFromConflict(cur_node->first_conflict, tmp);
         
@@ -569,49 +640,45 @@ void solver_thread(ECBS *ecbs,
 
         for (unsigned short cur_i = 0; auto &[key, value]: tmp)
         {
-            ecbs->m.lock();
-            newnode_timer.reset();
+            //std::unique_lock<std::mutex> locktemp(ecbs->m); //todo
+
+            //newnode_timer.reset();
             shared_ptr<ECBSNode> new_node = shared_ptr<ECBSNode>(new ECBSNode(cur_node));
-            newnode_timer.stop();
+            //newnode_timer.stop();
             ecbs->newnode_time += newnode_timer.elapsedSeconds();
-            ecbs->m.unlock();
+            
 
             assert(!new_node->constraint_sets[key]->overlap(value));
             new_node->constraint_sets[key] = shared_ptr<Constraints>(new Constraints(*(new_node->constraint_sets[key])));
             new_node->constraint_sets[key]->add(value);
-            cur_i ++;
             // Try to find updates path for this agent with the new constraints. if false, then no path was found 
             // and continue to next iteration
+            
             bool b = new_node->update_cost_matrix(ecbs, key);
+            //ecbs->m.unlock();
             if (!b) 
                 continue;
+            //ecbs->m.lock();
 
             Timer conflict_num_timer;
             conflict_num_timer.reset();
             new_node->focal_score = high_focal_score_v4(new_node->cost_matrix, new_node->first_conflict);
             conflict_num_timer.stop();
             ecbs->conflict_num_time += conflict_num_timer.elapsedSeconds();
-            //so handlers are becoming null in seperate threads but they arent being removed
-            //
-            // Add node to unexpanded set(open) and heap based off of LB
-            ecbs->m.lock();
-            auto handle = open->push(new_node);
-            auto handle2 = LBset->push(new_node);
-            // Then map the nodes to their handles
-            CTnode2open_handle->insert(make_pair(new_node, handle));
-            CTnode2LB_handle->insert(make_pair(new_node, handle2));
-            // If the new node has a cost less than the best lower bound * some weight, then add it to the focal set
-            if (new_node->cost <= *best_LB * ecbs->l_weight) {
-                focal->push(handle);
-            }
-            ecbs->cv.notify_one();
-            ecbs->m.unlock();
+            //std::cout << cur_i << std::endl;
+            (*solvers)[(solver->_id + cur_i) % solvers->size()]->add_work(new_node);
+            cur_i ++;
+
+        
+
         
         }
     }
     return;
 
 }
+
+
 
 int ECBS::paralized_solver_main(){
     
@@ -620,45 +687,53 @@ int ECBS::paralized_solver_main(){
     start_node->create_cost_matrix(this);
     start_node->focal_score = high_focal_score_v4(start_node->cost_matrix, start_node->first_conflict);
 
-    std::shared_ptr<high_openSet_t> open = std::make_shared<high_openSet_t>();
-    std::shared_ptr<high_focalSet_t> focal = std::make_shared<high_focalSet_t>();
-    std::shared_ptr<high_LBSet_t> LBset = std::make_shared<high_LBSet_t>();
-    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2open_handle;
-    unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2LB_handle;
+    shared_ptr<Solver> first_solver = shared_ptr<Solver>(new Solver());
+    first_solver->add_work(start_node);
+    shared_ptr<std::vector<shared_ptr<Solver>>> solvers = shared_ptr<std::vector<shared_ptr<Solver>>>(new std::vector<shared_ptr<Solver>>());
+    solvers->push_back(first_solver);
 
-    auto handle = open->push(start_node);
-    auto handle2 = LBset->push(start_node);
-    focal->push(handle);
-    CTnode2open_handle.insert(make_pair(start_node, handle));
-    CTnode2LB_handle.insert(make_pair(start_node, handle2));
-    int best_LB = start_node->LB;
 
-    int numThreads = 2;
-    std::vector<std::thread> threads;
-
+    int numThreads = this->NUM_THREADS;
+    
 
     this->m.lock();
-    for (int i=0; i < numThreads; i++){
-        threads.emplace_back(std::thread(solver_thread, this, open, focal, LBset, &CTnode2open_handle, &CTnode2LB_handle, &best_LB));
+    first_solver->_thread = std::make_shared<std::thread>(std::thread(solver_thread, this, first_solver, solvers));
+    first_solver->_id = 0;
+    for (int i=1; i < numThreads; i++){
+        shared_ptr<Solver> new_solver = shared_ptr<Solver>(new Solver());
+        new_solver->_thread = std::make_shared<std::thread>(std::thread(solver_thread, this, new_solver, solvers));
+        new_solver->_id = i;
+        solvers->push_back(new_solver);
     }
     this->m.unlock();
 
     //just stall until found a solution or open is empty and all the threads are waiting
     while(true){
+        this->m.lock();
         if (this->solution_found){
+            this->m.unlock();
             std::cout << "done; cost: " << this->cost << std::endl;
-            
-            for (auto& thread : threads){
-                thread.join();  //join with all the threads created
+            for (auto& solver : *solvers){
+                solver->add_work(nullptr); // thread dies when sees this
+
+            }
+            for (auto& solver : *solvers){
+                solver->_thread->join();  //join with all the threads created
 
             }
             
             return true;
         }
+        this->m.unlock();
         usleep(500);
     }
 
 }
 
+//replace lb heap with a function that finds the lb based on all open lists
 
-  
+
+
+//create thread class
+//contains open, focal,  CTnode2open_handle, buffer
+
