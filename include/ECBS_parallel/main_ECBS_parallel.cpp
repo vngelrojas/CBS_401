@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
     for (int i = 0; i < runs; i++) {
         ecbs.clear();
         ecbs.total_timer.reset();
-        ecbs.paralized_solver_main();
+        ecbs.solve();
         ecbs.total_timer.stop();
         ecbs.total_runtime = ecbs.total_timer.elapsedSeconds();
         if (ecbs.solution_found) break;

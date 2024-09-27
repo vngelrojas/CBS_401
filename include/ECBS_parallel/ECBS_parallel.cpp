@@ -5,6 +5,7 @@
 
 #include "ECBS_parallel.hpp"
 #include "ECBSNode_parallel.hpp"
+#include <parlay/sequence.h>
 
 
 
@@ -18,7 +19,6 @@ void ECBS::clear() {
     this->cbsnode_num = 0;
     this->lowLevelExpanded = 0;
     this->num_ta = 0;
-    this->waiting_nodes = 0;
 
 }
 
@@ -45,7 +45,6 @@ ECBS::ECBS(int row_number, int col_number, unordered_set<Location>& obstacles,
     this->cbsnode_num = 0;
     this->lowLevelExpanded = 0;
     this->num_ta = 0;
-    this->waiting_nodes = 0;
 
     this->map2d_obstacle.resize(this->row_number, vector<int>(this->col_number, 0));
     for (auto obstacle : obstacles) {
@@ -94,7 +93,6 @@ int ECBS::heuristic(int x1, int y1, int agent_idx) {
 }
 
 bool ECBS::searchNodeIsValid(shared_ptr<Constraints>&  agent_constraint_set, const State& new_state, const State& org_state, unordered_set<State, boost::hash<State> > *closedSet) {
-    //std::unique_lock<std::mutex> lock(this->m); TODO
 
     if (new_state.x < 0 || new_state.x >= this->row_number || new_state.y < 0 || new_state.y >= this->col_number) return false;
     if (this->map2d_obstacle[new_state.x][new_state.y]) return false;
@@ -424,316 +422,158 @@ shared_ptr<Path> ECBS::findPath_a_star(shared_ptr<Constraints>& agent_constraint
 }
 
 
+void deal_with_node(size_t deal_idx,
+                    ECBS *ecbs, 
+                    shared_ptr<ECBSNode> cur_node, parlay::sequence<shared_ptr<ECBSNode> >& out_node_queue)
+{
 
-
-/*
-def main_solver():
-
-    #init start node
-    shared_ptr<ECBSNode> start_node(new ECBSNode());
-    start_node->create_cost_matrix(this);
-    start_node->focal_score = high_focal_score_v4(start_node->cost_matrix, start_node->first_conflict);
-
-    init node heaps
-    high_openSet_t open;
-    high_focalSet_t focal;
-    high_LBSet_t LBset;
-
-    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2open_handle;
-    unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2LB_handle;
-    auto handle = open.push(start_node);
-    auto handle2 = LBset.push(start_node);
-    focal.push(handle);
-    CTnode2open_handle.insert(make_pair(start_node, handle));
-    CTnode2LB_handle.insert(make_pair(start_node, handle2));
-    int best_LB = start_node->LB;
-
-    int avail_threads = 8
-    while(true):
-        block until avail_threads > 0
-        
-        for i:1 -> avail threads:
-            thread(solve())
-        
-        block until received finished signal
-
-
-    def solve():
-        lock
-        if open set empty:
-            sleep for x time
-            #TODO need a way to quit app in no solution case
-        get best focal node node
-        remove from all 3 sets and handlers
-        unlock
-        check if done by chhecking if ffocal score is 0
-            if done send message to main thread manager to say we found an answer
-            
-        compute conflict and stuff;
-        remember to lock when mod global vars and combine all set operations together
-        to avoid race
-
-*/
-std::mutex open_set_mtx;
-
-
-
-
-
-class Solver{
-public: 
-//idk if the type actually is shared_ptr<ecbsnode> but hope it is
-    std::vector<shared_ptr<ECBSNode>> _buffer;
-    high_openSet_t _open;
-    high_focalSet_t _focal;
-    //high_LBSet_t _LBset;
-    //std::shared_ptr<high_LBSet_t> LBset = std::make_shared<high_LBSet_t>();
-
-    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > _CTnode2open_handle;
-    unordered_map<shared_ptr<ECBSNode>, ECBSNodeLBHandle, boost::hash<shared_ptr<ECBSNode> > > _CTnode2LB_handle;
-
-    int _id;
-    std::shared_ptr<std::thread> _thread;
-    std::mutex _m;
-    std::condition_variable _cv;
-
-    int push_from_buffer(){
-        while (!_buffer.empty()){
-            if (_buffer.back() == nullptr) {
-                std::cout << "dying on command" << std::endl;
-                return 1;
-            }
-            std::unique_lock<std::mutex> a(open_set_mtx);
-            auto handle = _open.push(_buffer.back());
-            _CTnode2open_handle.insert(make_pair(_buffer.back(), handle));
-            _buffer.pop_back();
-        }
-        return 0;
-    }
-
-    int wait_for_work(){
-        std::unique_lock<std::mutex> l(_m);
-        int isDone = push_from_buffer();
-        if (isDone){
-            return 1;
-        }
-        while (_open.empty() ) {
-            _cv.wait(l);
-            int isDone = push_from_buffer();
-            if (isDone){
-                return 1;
-            }
-        }
-        
-        return 0;
-
-
-    }
-
-    void add_work(shared_ptr<ECBSNode> new_node){
-        std::unique_lock<std::mutex> l(_m);
-        _buffer.push_back(new_node);
-        _cv.notify_all();
-
+    bool done = cur_node->focal_score == 0;
+    if (done)
+    {
+        std::unique_lock<std::mutex> lock(ecbs->m);
+        ecbs->out_solution = cur_node->cost_matrix;
+        ecbs->cost = cur_node->cost;
+        if (!check_ans_valid(ecbs->out_solution))
+            std::cout << "INVALID ANS PATH!!!!" << std::endl;
+        ecbs->solution_found.store(true);
+        return;
     }
 
 
+    // Map of agent index to constraints
+    unordered_map<size_t, Constraints> tmp;
+    createConstraintsFromConflict(cur_node->first_conflict, tmp);
 
-};
-
-int find_best_lb(std::vector<shared_ptr<Solver>> &solvers){
-    std::lock_guard<std::mutex> lock(open_set_mtx); // Lock the mutex to make the function atomic
+    for (unsigned short cur_i = 0; auto &[key, value]: tmp)
+    {
+        shared_ptr<ECBSNode> new_node = shared_ptr<ECBSNode>(new ECBSNode(cur_node));        
+        assert(!new_node->constraint_sets[key]->overlap(value));
+        new_node->constraint_sets[key] = shared_ptr<Constraints>(new Constraints(*(new_node->constraint_sets[key])));
+        new_node->constraint_sets[key]->add(value);
+        // Try to find updates path for this agent with the new constraints. if false, then no path was found 
+        // and continue to next iteration
+        
+        bool b = new_node->update_cost_matrix(ecbs, key);
+        if (!b) //continue if no valid path found
+            continue;
+      
+        //update focal score for current node
+        new_node->focal_score = high_focal_score_v4(new_node->cost_matrix, new_node->first_conflict);
+        
+        //add to ouutput buffer queue. will be added back into open set in the main fuction
+        out_node_queue[deal_idx*2 + (size_t)cur_i] = new_node;
+        cur_i ++;
 
     
-    int best = INT_MAX;
-    for (shared_ptr<Solver> solver : solvers){
-        if (!solver->_open.empty()){
-            if (solver->_open.top()->LB < best){
-                best = solver->_open.top()->LB;
-            }
-        }
+
+    
     }
-    if (best == INT_MAX){
-        cout << "all open sets empty " << std::endl;
-    }
-    return best;
-}
-
-void solver_thread(ECBS *ecbs, 
-                    shared_ptr<Solver> solver,
-                    shared_ptr<std::vector<shared_ptr<Solver>>> solvers)
-{
-    ecbs->m.lock();
-    ecbs->m.unlock();
-    while (true)
-    {
-        //std::cout <<"started iter " << std::endl;
-        
-
-        int status = solver->wait_for_work();
-        if (status == 1){
-            return;
-        }
-
-        ecbs->m.lock();
-        ecbs->cbsnode_num++;
-        ecbs->m.unlock();
-        
-
-
-        // Best lower bound of all nodes in LBset is at the top of the heap
-        int new_best_LB = find_best_lb(*solvers);
-        //If the best LB improves, the focal set is rebuilt by adding nodes from open that meet a certain heuristic threshold (based on l_weight)
-        open_set_mtx.lock();
-        for (auto iter = solver->_open.ordered_begin(); iter != solver->_open.ordered_end(); iter++)
-        {
-            int val = (*iter)->cost;
-            //if val was too big before but is small enough to be inserted into focal
-            if (!(*iter)->in_focal && (double) val <= (double) new_best_LB * ecbs->l_weight)
-            {
-                auto handle_iter = solver->_CTnode2open_handle.find(*iter);
-                solver->_focal.push(handle_iter->second);
-                (*iter)->in_focal = true;
-            }
-            if ((double)val > (double) new_best_LB * ecbs->l_weight) break;
-        }
-
-     
-        std::cout << solver->_id << " open size: " << solver->_open.size() << " buffer size: " << solver->_buffer.size() << " focal size: " << solver->_focal.size() << std::endl;
-
-
-        //The best node (handler) from the focal set is selected for expansion. The node is removed from both the focal and open sets
-        if (solver->_focal.empty()){
-            open_set_mtx.unlock();
-            continue;
-
-        }
-        auto current_handler = solver->_focal.top();
-        shared_ptr<ECBSNode> cur_node = *current_handler; // I guess dereferencing the handle gets the ECBSnode
-        solver->_focal.pop();
-        //Since this node is being expanded, it is also removed from the open heap (where all non-expanded nodes are stored).
-        solver->_open.erase(current_handler);
-        // The node is also removed from the CTnode2open_handle hashmap, which stores a mapping from the actual node (cur_node) to its handle in the open heap.
-        solver->_CTnode2open_handle.erase(cur_node);
-        open_set_mtx.unlock();
-        // If conflicts == 0
-        bool done = cur_node->focal_score == 0;
-        if (done)
-        {
-            std::unique_lock<std::mutex> lock(ecbs->m);
-            std::cout << "done; cost: " << cur_node->cost << std::endl;
-            ecbs->out_solution = cur_node->cost_matrix;
-            ecbs->cost = cur_node->cost;
-            if (!check_ans_valid(ecbs->out_solution))
-                std::cout << "INVALID ANS PATH!!!!" << std::endl;
-            ecbs->solution_found = true;
-            return;
-        }
-        solver->_m.unlock();
-
-
-        // Map of agent index to constraints
-        unordered_map<size_t, Constraints> tmp;
-        createConstraintsFromConflict(cur_node->first_conflict, tmp);
-        
-        Timer newnode_timer; //made timer local bc not needed to be shared across multiple threads
-
-        for (unsigned short cur_i = 0; auto &[key, value]: tmp)
-        {
-            //std::unique_lock<std::mutex> locktemp(ecbs->m); //todo
-
-            //newnode_timer.reset();
-            shared_ptr<ECBSNode> new_node = shared_ptr<ECBSNode>(new ECBSNode(cur_node));
-            //newnode_timer.stop();
-            ecbs->newnode_time += newnode_timer.elapsedSeconds();
-            
-
-            assert(!new_node->constraint_sets[key]->overlap(value));
-            new_node->constraint_sets[key] = shared_ptr<Constraints>(new Constraints(*(new_node->constraint_sets[key])));
-            new_node->constraint_sets[key]->add(value);
-            // Try to find updates path for this agent with the new constraints. if false, then no path was found 
-            // and continue to next iteration
-            
-            bool b = new_node->update_cost_matrix(ecbs, key);
-            //ecbs->m.unlock();
-            if (!b) 
-                continue;
-            //ecbs->m.lock();
-
-            Timer conflict_num_timer;
-            conflict_num_timer.reset();
-            new_node->focal_score = high_focal_score_v4(new_node->cost_matrix, new_node->first_conflict);
-            conflict_num_timer.stop();
-            ecbs->conflict_num_time += conflict_num_timer.elapsedSeconds();
-            //std::cout << cur_i << std::endl;
-            (*solvers)[(solver->_id + cur_i) % solvers->size()]->add_work(new_node);
-            cur_i ++;
-
-        
-
-        
-        }
-    }
+    
     return;
 
 }
 
+shared_ptr<ECBSNode> pop_node(high_openSet_t& open, high_focalSet_t& focal,     unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > >& CTnode2open_handle){
+    auto current_handler = focal.top();
+    shared_ptr<ECBSNode> cur_node = *current_handler; // I guess dereferencing the handle gets the ECBSnode
+    focal.pop();
+    //Since this node is being expanded, it is also removed from the open heap (where all non-expanded nodes are stored).
+    open.erase(current_handler);
+    // The node is also removed from the CTnode2open_handle hashmap, which stores a mapping from the actual node (cur_node) to its handle in the open heap.
+    CTnode2open_handle.erase(cur_node);
+    return cur_node;
+}
 
 
-int ECBS::paralized_solver_main(){
+
+int ECBS::solve(){
     
-    //make root node for search
+    //make root node to start off the search at the initial state
     shared_ptr<ECBSNode> start_node(new ECBSNode());
     start_node->create_cost_matrix(this);
     start_node->focal_score = high_focal_score_v4(start_node->cost_matrix, start_node->first_conflict);
+    start_node->in_focal = true;
 
-    shared_ptr<Solver> first_solver = shared_ptr<Solver>(new Solver());
-    first_solver->add_work(start_node);
-    shared_ptr<std::vector<shared_ptr<Solver>>> solvers = shared_ptr<std::vector<shared_ptr<Solver>>>(new std::vector<shared_ptr<Solver>>());
-    solvers->push_back(first_solver);
-
-
-    int numThreads = this->NUM_THREADS;
+    //initialize open and focal sets. also initialize ecbs node set for fast node lookup
+    high_openSet_t open;
+    high_focalSet_t focal;
+    unordered_map<shared_ptr<ECBSNode>, ECBSNodeHandle, boost::hash<shared_ptr<ECBSNode> > > CTnode2open_handle;
     
+    //push the starting node into the open and focal sets. 
+    auto handle = open.push(start_node);
+    focal.push(handle);
+    CTnode2open_handle.insert(make_pair(start_node, handle));
+    
+    
+    int iteration_num = 0; //variable just to keep track of # iterations program has done
+    while(!open.empty()){
 
-    this->m.lock();
-    first_solver->_thread = std::make_shared<std::thread>(std::thread(solver_thread, this, first_solver, solvers));
-    first_solver->_id = 0;
-    for (int i=1; i < numThreads; i++){
-        shared_ptr<Solver> new_solver = shared_ptr<Solver>(new Solver());
-        new_solver->_thread = std::make_shared<std::thread>(std::thread(solver_thread, this, new_solver, solvers));
-        new_solver->_id = i;
-        solvers->push_back(new_solver);
-    }
-    this->m.unlock();
+        //create a sequence for nodes to be processed in this iteration and cap the number of nodes processed to be under nodes_per_iteration
+        int nodes_per_iteration = 10000;
+        parlay::sequence<shared_ptr<ECBSNode> > cur_node_queue;
 
-    //just stall until found a solution or open is empty and all the threads are waiting
-    while(true){
-        this->m.lock();
-        if (this->solution_found){
-            this->m.unlock();
+        cout <<"iter num " << iteration_num << " " << "focal len " << focal.size() << endl;
+
+        //add nodes into the cur_node_queue to be processed this iteration until either focal is empty or we hit the limit of # nodes to process this iteration
+        while(!focal.empty() && !cur_node_queue.size() < nodes_per_iteration){
+            shared_ptr<ECBSNode> cur_node = pop_node(open, focal, CTnode2open_handle);
+            cur_node_queue.push_back(cur_node);
+        }
+        //update the total number of nodes seen in algorithm
+        this->cbsnode_num += cur_node_queue.size(); //keep total of nodes search
+
+        //initialize a buffer list for threads to add nodes into as they individually find conflicts
+        parlay::sequence<shared_ptr<ECBSNode> > out_node_queue(cur_node_queue.size()*2+1, nullptr);
+        
+        //use parlay's parallel for to process each node in the cur_node_queue 
+        //in a parallized fashion to utilize multiple cpu cores.
+        //the data has been partitioned such that there will be no race conditions between threads
+        //loops from 0 -> n calling the deal_with_node function on each node in the cur_node_queue
+        parlay::parallel_for(0, cur_node_queue.size(), [&](size_t i){
+            auto cur_node = cur_node_queue[i];
+            deal_with_node(i, this, cur_node, out_node_queue);
+        });
+
+        //if we found a solution, output some values and return
+        if (this->solution_found.load()){
             std::cout << "done; cost: " << this->cost << std::endl;
-            for (auto& solver : *solvers){
-                solver->add_work(nullptr); // thread dies when sees this
-
-            }
-            for (auto& solver : *solvers){
-                solver->_thread->join();  //join with all the threads created
-
-            }
-            
+            std::cout << "nodes searched: " << this->cbsnode_num << std::endl;
             return true;
         }
-        this->m.unlock();
-        usleep(500);
+
+        // move nodes from the output node queue buffer into the open set
+        for (auto& new_node:out_node_queue) {
+            if (new_node != nullptr)
+            {
+                auto handle = open.push(new_node);
+                CTnode2open_handle.insert(make_pair(new_node, handle));
+
+            }
+        }
+        //update the lower bound
+        int best_LB = open.top()->LB;
+        // update the focal set
+        //If the best LB improves, the focal set is rebuilt by adding nodes from open that meet a certain heuristic threshold (based on l_weight)
+        for (auto iter = open.ordered_begin(); iter != open.ordered_end(); iter++)
+        {
+            int val = (*iter)->cost;
+            //if the current node hasn't been added to the focal set yet but is also small enough to be inserted into focal
+            if (!(*iter)->in_focal && (double) val <= (double) best_LB * this->l_weight)
+            {
+                //add node to focal set
+                auto handle_iter = CTnode2open_handle.find(*iter);
+                focal.push(handle_iter->second);
+                (*iter)->in_focal = true;
+            }
+            //break once we see a node with value above the minimum threshold
+            if ((double)val > (double) best_LB * this->l_weight) break;
+        }
+        
+        iteration_num++;//debug variable
+        //cout << "ending focal len" << focal.size() << endl;
     }
 
+    return 0;
+
 }
-
-//replace lb heap with a function that finds the lb based on all open lists
-
-
-
-//create thread class
-//contains open, focal,  CTnode2open_handle, buffer
 

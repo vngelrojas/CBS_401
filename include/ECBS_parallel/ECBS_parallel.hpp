@@ -13,7 +13,7 @@ class ECBS
 public:
 
 
-    bool solution_found;
+    boost::atomic<bool> solution_found;
     int agent_n;
     vector<State> start_states;
     unordered_set<Location> obstacles;
@@ -24,6 +24,7 @@ public:
     int cost, map_size, cbsnode_num, lowLevelExpanded, num_ta;
     int row_number, col_number;
     float l_weight;
+    std::mutex m;
 
 
     Timer total_timer, lowlevel_search_timer, firstconflict_timer, focal_score_timer, newnode_timer, conflict_num_timer;
@@ -69,11 +70,7 @@ public:
     using FocalPathEntryHandle = low_focalSet_t::handle_type;
 
     
-    int paralized_solver_main();
-    std::mutex m;
-    std::condition_variable cv;
-    int waiting_nodes = 0;
-    int NUM_THREADS = 4;
+    
 
 };
 
