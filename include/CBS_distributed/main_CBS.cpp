@@ -16,6 +16,75 @@ po::variables_map vm; // usedd to store the values of command-line options after
 int row_number,col_number;
 string outputFile;
 
+MPI_Datatype MPI_Location;
+
+int init_MPI_Location() {
+    int lengths[2] = {1, 1};
+    MPI_Aint displacements[2];
+    Location loc;
+    MPI_Aint base_address;
+    MPI_Get_address(&loc, &base_address);
+    MPI_Get_address(&loc.x, &displacements[0]);
+    MPI_Get_address(&loc.y, &displacements[1]);
+    displacements[0] -= base_address;
+    displacements[1] -= base_address;
+    MPI_Datatype types[2] = {MPI_INT, MPI_INT};
+    MPI_Type_create_struct(2, lengths, displacements, types, &MPI_Location);
+    MPI_Type_commit(&MPI_Location);
+    return 0;
+}
+
+MPI_Datatype MPI_State;
+
+int init_MPI_State() {
+    int state_lengths[3] = {1, 1, 1};
+    MPI_Aint state_displacements[3];
+    State state;
+    MPI_Aint state_base_address;
+    MPI_Get_address(&state, &state_base_address);
+    MPI_Get_address(&state.time, &state_displacements[0]);
+    MPI_Get_address(&state.x, &state_displacements[1]);
+    MPI_Get_address(&state.y, &state_displacements[2]);
+    state_displacements[0] -= state_base_address;
+    state_displacements[1] -= state_base_address;
+    state_displacements[2] -= state_base_address;
+    MPI_Datatype state_types[3] = {MPI_INT, MPI_INT, MPI_INT};
+    MPI_Type_create_struct(3, state_lengths, state_displacements, state_types, &MPI_State);
+    MPI_Type_commit(&MPI_State);
+    return 0;
+}
+
+void send_data(int row_number, int col_number, std::unordered_set<Location>& obstacles,
+               std::vector<Location>& goals, std::vector<State>& start_states, 
+               int max_nodes, int world_rank, int dest, int tag) {
+    
+    // Send basic integers
+    MPI_Send(&row_number, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+    MPI_Send(&col_number, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+    MPI_Send(&max_nodes, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+    MPI_Send(&world_rank, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+
+    // Send obstacle set
+    std::vector<Location> obstacle_list(obstacles.begin(), obstacles.end());
+    int num_obstacles = obstacle_list.size();
+    MPI_Send(&num_obstacles, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+    MPI_Send(obstacle_list.data(), num_obstacles, MPI_Location, dest, tag, MPI_COMM_WORLD);
+
+    // Send goals vector
+    int num_goals = goals.size();
+    MPI_Send(&num_goals, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+    MPI_Send(goals.data(), num_goals, MPI_Location, dest, tag, MPI_COMM_WORLD);
+
+    // Send start_states vector
+    int num_start_states = start_states.size();
+    MPI_Send(&num_start_states, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+    MPI_Send(start_states.data(), num_start_states, MPI_State, dest, tag, MPI_COMM_WORLD);
+}
+
+
+
+
+
 int init_map(int argc, char** argv)
 {
 

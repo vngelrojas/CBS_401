@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+message CBSNode {
+    message Location{
+        int32 x = 1;
+        int32 y = 2;
+    }   
+    message State{
+        int32 time = 1;
+        int32 x = 2;
+        int32 y = 3;
+    }
+    message Constraints{
+        message VertexConstraint{
+            int32 time = 1;
+            int32 x = 2;
+            int32 y = 3;
+            int32 for_who = 4;
+        }
+        message EdgeConstraint{
+            int32 time = 1;
+            int32 x1 = 2;
+            int32 y1 = 3;
+            int32 x2 = 4;
+            int32 y2 = 5;
+            int32 for_who = 6;
+        }
+        repeated VertexConstraint vertex_constraints = 1;
+        repeated EdgeConstraint edge_constraints = 2;
+    }
+    message PathEntry {
+        State state = 1;
+        int32 fScore = 2;
+        int32 gScore = 3;
+        int32 focalScore = 4;
+        PathEntry parent = 5;
+    }
+    message Path{
+        repeated PathEntry path = 1;
+    }
+    repeated Path cost_matrix = 1;
+    repeated Constraints constraint_sets = 2;
+}
+
