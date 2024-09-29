@@ -5,7 +5,10 @@
 #include <yaml-cpp/yaml.h>
 #include "CBS.hpp"
 #include "../common.hpp"
+#include "CBSNode.hpp"
+#include "protos/cbs_node.pb.h"
 #include <mpi.h>
+#include "protos/cbs.pb.h"
 
 namespace po = boost::program_options;
 
@@ -16,72 +19,278 @@ po::variables_map vm; // usedd to store the values of command-line options after
 int row_number,col_number;
 string outputFile;
 
-MPI_Datatype MPI_Location;
+CBSProto::CBS serializeToProtobuf(CBS& cbs) {
+   CBSProto::CBS proto_cbs;
 
-int init_MPI_Location() {
-    int lengths[2] = {1, 1};
-    MPI_Aint displacements[2];
-    Location loc;
-    MPI_Aint base_address;
-    MPI_Get_address(&loc, &base_address);
-    MPI_Get_address(&loc.x, &displacements[0]);
-    MPI_Get_address(&loc.y, &displacements[1]);
-    displacements[0] -= base_address;
-    displacements[1] -= base_address;
-    MPI_Datatype types[2] = {MPI_INT, MPI_INT};
-    MPI_Type_create_struct(2, lengths, displacements, types, &MPI_Location);
-    MPI_Type_commit(&MPI_Location);
-    return 0;
+    // Set basic fields
+    proto_cbs.set_num_of_rows(cbs.row_number);
+    proto_cbs.set_num_of_cols(cbs.col_number);
+    proto_cbs.set_world_size(cbs.max_nodes);
+    proto_cbs.set_world_rank(cbs.world_rank);
+
+    // Set obstacles
+    for (const auto& loc : cbs.obstacles) {
+        auto* proto_loc = proto_cbs.add_obstacles();
+        proto_loc->set_x(loc.x);
+        proto_loc->set_y(loc.y);
+    }
+
+    // Set goals
+    for (const auto& goal : cbs.goals) {
+        auto* proto_goal = proto_cbs.add_goals();
+        proto_goal->set_x(goal.x);
+        proto_goal->set_y(goal.y);
+    }
+
+    // Set start_states
+    for (const auto& state : cbs.start_states) {
+        auto* proto_state = proto_cbs.add_start_states();
+        proto_state->set_time(state.time);
+        proto_state->set_x(state.x);
+        proto_state->set_y(state.y);
+    }
+
+    return proto_cbs;
 }
 
-MPI_Datatype MPI_State;
-
-int init_MPI_State() {
-    int state_lengths[3] = {1, 1, 1};
-    MPI_Aint state_displacements[3];
-    State state;
-    MPI_Aint state_base_address;
-    MPI_Get_address(&state, &state_base_address);
-    MPI_Get_address(&state.time, &state_displacements[0]);
-    MPI_Get_address(&state.x, &state_displacements[1]);
-    MPI_Get_address(&state.y, &state_displacements[2]);
-    state_displacements[0] -= state_base_address;
-    state_displacements[1] -= state_base_address;
-    state_displacements[2] -= state_base_address;
-    MPI_Datatype state_types[3] = {MPI_INT, MPI_INT, MPI_INT};
-    MPI_Type_create_struct(3, state_lengths, state_displacements, state_types, &MPI_State);
-    MPI_Type_commit(&MPI_State);
-    return 0;
-}
-
-void send_data(int row_number, int col_number, std::unordered_set<Location>& obstacles,
-               std::vector<Location>& goals, std::vector<State>& start_states, 
-               int max_nodes, int world_rank, int dest, int tag) {
+void sendCbsToWorkers(CBS& cbs, int world_size) {
+    CBSProto::CBS proto_cbs = serializeToProtobuf(cbs);
     
-    // Send basic integers
-    MPI_Send(&row_number, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-    MPI_Send(&col_number, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-    MPI_Send(&max_nodes, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-    MPI_Send(&world_rank, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+    // Serialize the protobuf message to a string
+    std::string serialized_cbs;
+    proto_cbs.SerializeToString(&serialized_cbs);
 
-    // Send obstacle set
-    std::vector<Location> obstacle_list(obstacles.begin(), obstacles.end());
-    int num_obstacles = obstacle_list.size();
-    MPI_Send(&num_obstacles, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-    MPI_Send(obstacle_list.data(), num_obstacles, MPI_Location, dest, tag, MPI_COMM_WORLD);
+    // Send the serialized string to all workers
+    for (int target_rank = 1; target_rank < world_size; ++target_rank) {
+        // Send the size of the serialized data first
+        int size = serialized_cbs.size();
+        MPI_Send(&size, 1, MPI_INT, target_rank, 0, MPI_COMM_WORLD);
+        
+        // Then send the serialized protobuf data
+        MPI_Send(serialized_cbs.c_str(), size, MPI_CHAR, target_rank, 0, MPI_COMM_WORLD);
+    }
+}
 
-    // Send goals vector
-    int num_goals = goals.size();
-    MPI_Send(&num_goals, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-    MPI_Send(goals.data(), num_goals, MPI_Location, dest, tag, MPI_COMM_WORLD);
+CBS receiveCbsFromMaster() {
+    CBS cbs(0, 0, obstacles, goals, start_states, 0, 0);
+    // 1. Receive the size of the serialized protobuf data
+    int size;
+    MPI_Recv(&size, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-    // Send start_states vector
-    int num_start_states = start_states.size();
-    MPI_Send(&num_start_states, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-    MPI_Send(start_states.data(), num_start_states, MPI_State, dest, tag, MPI_COMM_WORLD);
+    // 2. Receive the serialized protobuf data
+    std::vector<char> buffer(size);
+    MPI_Recv(buffer.data(), size, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+    // 3. Deserialize the protobuf message
+    CBSProto::CBS proto_cbs;
+    if (!proto_cbs.ParseFromArray(buffer.data(), size)) {
+        std::cerr << "Failed to parse CBS protobuf message." << std::endl;
+        return;
+    }
+
+    // 4. Convert the protobuf message to the CBS object
+
+    // Set basic fields
+    cbs.row_number = proto_cbs.num_of_rows();
+    cbs.col_number = proto_cbs.num_of_cols();
+    cbs.max_nodes = proto_cbs.world_size();
+    cbs.world_rank = proto_cbs.world_rank();
+
+    // Clear the existing data in the CBS object to prevent duplication
+    cbs.obstacles.clear();
+    cbs.goals.clear();
+    cbs.start_states.clear();
+
+    // Set obstacles
+    for (int i = 0; i < proto_cbs.obstacles_size(); ++i) {
+        const CBSProto::CBS::Location& proto_loc = proto_cbs.obstacles(i);
+        cbs.obstacles.insert(Location(proto_loc.x(), proto_loc.y()));
+    }
+
+    // Set goals
+    for (int i = 0; i < proto_cbs.goals_size(); ++i) {
+        const CBSProto::CBS::Location& proto_goal = proto_cbs.goals(i);
+        cbs.goals.push_back(Location(proto_goal.x(), proto_goal.y()));
+    }
+
+    // Set start states
+    for (int i = 0; i < proto_cbs.start_states_size(); ++i) {
+        const CBSProto::CBS::State& proto_state = proto_cbs.start_states(i);
+        cbs.start_states.push_back(State(proto_state.time(), proto_state.x(), proto_state.y()));
+    }
+
+    std::cout << "Successfully received and deserialized CBS object from master." << std::endl;
+}
+
+CBSProto::CBSNode serializeCbsNodeToProtobuf(const CBSNode& node) {
+    CBSProto::CBSNode proto_node;
+
+    // Serialize the cost matrix (paths)
+    for (const auto& path_ptr : node.cost_matrix) {
+        CBSProto::CBSNode::Path* proto_path = proto_node.add_cost_matrix();
+        for (const auto& path_entry : *path_ptr) {
+            CBSProto::CBSNode::PathEntry* proto_entry = proto_path->add_path();
+            // Convert each PathEntry state to protobuf
+            proto_entry->mutable_state()->set_time(path_entry.state.time);
+            proto_entry->mutable_state()->set_x(path_entry.state.x);
+            proto_entry->mutable_state()->set_y(path_entry.state.y);
+            proto_entry->set_fscore(path_entry.fScore);
+            proto_entry->set_gscore(path_entry.gScore);
+            proto_entry->set_focalscore(path_entry.focalScore);
+
+            // Parent is a shared pointer, convert recursively (if not null)
+            if (path_entry.parent) {
+                auto* proto_parent = new CBSProto::CBSNode::PathEntry();
+                proto_parent->mutable_state()->set_time(path_entry.parent->state.time);
+                proto_parent->mutable_state()->set_x(path_entry.parent->state.x);
+                proto_parent->mutable_state()->set_y(path_entry.parent->state.y);
+                proto_entry->set_allocated_parent(proto_parent);
+            }
+        }
+    }
+
+    // Serialize the constraint sets (vertex and edge constraints)
+    for (const auto& constraints_ptr : node.constraint_sets) {
+        CBSProto::CBSNode::Constraints* proto_constraints = proto_node.add_constraint_sets();
+
+        // Vertex constraints
+        for (const auto& vertex_constraint : constraints_ptr->vertexConstraints) {
+            CBSProto::CBSNode::Constraints::VertexConstraint* proto_vc = proto_constraints->add_vertex_constraints();
+            proto_vc->set_time(vertex_constraint.time);
+            proto_vc->set_x(vertex_constraint.x);
+            proto_vc->set_y(vertex_constraint.y);
+            proto_vc->set_for_who(vertex_constraint.for_who);
+        }
+
+        // Edge constraints
+        for (const auto& edge_constraint : constraints_ptr->edgeConstraints) {
+            CBSProto::CBSNode::Constraints::EdgeConstraint* proto_ec = proto_constraints->add_edge_constraints();
+            proto_ec->set_time(edge_constraint.time);
+            proto_ec->set_x1(edge_constraint.x1);
+            proto_ec->set_y1(edge_constraint.y1);
+            proto_ec->set_x2(edge_constraint.x2);
+            proto_ec->set_y2(edge_constraint.y2);
+            proto_ec->set_for_who(edge_constraint.for_who);
+        }
+    }
+
+    return proto_node;
+}
+
+void sendCbsNodeToWorkers(CBSNode& node, int target_rank) {
+    // Serialize the CBSNode to a protobuf message
+    CBSProto::CBSNode proto_node = serializeCbsNodeToProtobuf(node);
+    
+    // Serialize the protobuf message to a string
+    std::string serialized_node;
+    proto_node.SerializeToString(&serialized_node);
+
+    // Send the serialized string 
+    // Send the size of the serialized data first
+    int size = serialized_node.size();
+    MPI_Send(&size, 1, MPI_INT, target_rank, 0, MPI_COMM_WORLD);
+    
+    // Then send the serialized protobuf data
+    MPI_Send(serialized_node.c_str(), size, MPI_CHAR, target_rank, 0, MPI_COMM_WORLD);
+    
+}
+
+CBSNode deserializeCbsNodeFromProtobuf(const CBSProto::CBSNode& proto_node) {
+    CBSNode node;
+
+    // Deserialize cost matrix (paths)
+    for (const auto& proto_path : proto_node.cost_matrix()) {
+        boost::shared_ptr<Path> path = boost::make_shared<Path>();
+        
+        // Deserialize each PathEntry
+        for (const auto& proto_entry : proto_path.path()) {
+            shared_ptr<PathEntry> entry = boost::make_shared<PathEntry>();
+            entry->state.time = proto_entry.state().time();
+            entry->state.x = proto_entry.state().x();
+            entry->state.y = proto_entry.state().y();
+            entry->fScore = proto_entry.fscore();
+            entry->gScore = proto_entry.gscore();
+            entry->focalScore = proto_entry.focalscore();
+
+            // Handle parent pointer (recursively)
+            if (proto_entry.has_parent()) {
+                entry->parent = boost::make_shared<PathEntry>(deserializePathEntry(proto_entry.parent()));
+            }
+
+            path->push_back(*entry);
+        }
+        node.cost_matrix.push_back(path);
+    }
+
+    // Deserialize constraint sets
+    for (const auto& proto_constraints : proto_node.constraint_sets()) {
+        shared_ptr<Constraints> constraints = boost::make_shared<Constraints>();
+
+        // Deserialize VertexConstraints
+        for (const auto& proto_vertex_constraint : proto_constraints.vertex_constraints()) {
+            VertexConstraint vc(
+                proto_vertex_constraint.time(),
+                proto_vertex_constraint.x(),
+                proto_vertex_constraint.y(),
+                proto_vertex_constraint.for_who()
+            );
+            constraints->vertexConstraints.insert(vc);
+        }
+
+        // Deserialize EdgeConstraints
+        for (const auto& proto_edge_constraint : proto_constraints.edge_constraints()) {
+            EdgeConstraint ec(
+                proto_edge_constraint.time(),
+                proto_edge_constraint.x1(),
+                proto_edge_constraint.y1(),
+                proto_edge_constraint.x2(),
+                proto_edge_constraint.y2(),
+                proto_edge_constraint.for_who()
+            );
+            constraints->edgeConstraints.insert(ec);
+        }
+
+        node.constraint_sets.push_back(constraints);
+    }
+
+    
+
+    return node;
+}
+
+// Helper function to deserialize a single PathEntry
+PathEntry deserializePathEntry(const CBSProto::CBSNode::PathEntry& proto_entry) {
+    State state(proto_entry.state().time(), proto_entry.state().x(), proto_entry.state().y());
+    shared_ptr<PathEntry> parent;
+
+    if (proto_entry.has_parent()) {
+        parent = make_shared<PathEntry>(deserializePathEntry(proto_entry.parent()));
+    }
+
+    PathEntry entry(state, proto_entry.fscore(), proto_entry.gscore(), proto_entry.focalscore(), parent);
+    return entry;
 }
 
 
+void receiveCbsNodeFromMaster(CBSNode& node) {
+    // Receive the size of the serialized protobuf message
+    int size;
+    MPI_Recv(&size, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+    // Receive the serialized protobuf message
+    std::vector<char> buffer(size);
+    MPI_Recv(buffer.data(), size, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+    // Deserialize the protobuf message
+    CBSProto::CBSNode proto_node;
+    if (!proto_node.ParseFromArray(buffer.data(), size)) {
+        std::cerr << "Failed to parse CBSNode protobuf message." << std::endl;
+        return;
+    }
+
+    // Convert the protobuf message to a CBSNode object
+    node = deserializeCbsNodeFromProtobuf(proto_node);
+}
 
 
 
