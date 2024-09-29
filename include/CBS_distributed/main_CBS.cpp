@@ -373,100 +373,114 @@ int init_map(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-   // MPI_Init(&argc, &argv);
+    MPI_Init(0,nullptr);
 
-    int world_rank, world_size;
-    // MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-    // MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-    if (init_map(argc, argv) < 0)
-    {
-        std::cout<< "Error Map" <<std::endl;
-        return 0;
-    }
-    std::cout<< "Load Map Done" <<std::endl;
-    // if(world_rank == 0)
-    // {
-        CBS cbs(row_number, col_number, obstacles, goals, start_states,world_size-1,world_rank);
-        std::cout << "solution_found: " << cbs.solution_found << std::endl;
-        std::cout << "num_of_agents: " << cbs.num_of_agents << std::endl;
-        std::cout << "max_nodes: " << cbs.max_nodes << std::endl;
-        std::cout << "world_rank: " << cbs.world_rank << std::endl;
-        std::cout << "cost: " << cbs.cost << std::endl;
-        std::cout << "map_size: " << cbs.map_size << std::endl;
-        std::cout << "cbsnode_num: " << cbs.cbsnode_num << std::endl;
-        std::cout << "lowLevelExpanded: " << cbs.lowLevelExpanded << std::endl;
-        std::cout << "num_ta: " << cbs.num_ta << std::endl;
-        std::cout << "row_number: " << cbs.row_number << std::endl;
-        std::cout << "col_number: " << cbs.col_number << std::endl;
-        std::cout << "total_runtime: " << cbs.total_runtime << std::endl;
-        std::cout << "lowlevel_search_time: " << cbs.lowlevel_search_time << std::endl;
-        std::cout << "firstconflict_time: " << cbs.firstconflict_time << std::endl;
-        auto proto_cbs = serializeToProtobuf(cbs);
-        std::string serialized_cbs;
-        proto_cbs.SerializeToString(&serialized_cbs);
-        cout << "Serialized CBS size: " << serialized_cbs.size() << endl;
-        int size = serialized_cbs.size();
-        // for (int target_rank = 1; target_rank < world_size; ++target_rank) {
-        //     MPI_Send(&size, 1, MPI_INT, target_rank, 0, MPI_COMM_WORLD);
-        //     MPI_Send(serialized_cbs.c_str(), size, MPI_CHAR, target_rank, 0, MPI_COMM_WORLD);
-        // }
-        CBSProto::CBS received_proto_cbs;
-        if (!received_proto_cbs.ParseFromString(serialized_cbs)) {
-            std::cerr << "Failed to parse received CBS protobuf message." << std::endl;
-            return -1;
-        }
+     int world_rank, world_size;
+     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+     if (init_map(argc, argv) < 0)
+     {
+          std::cout<< "Error Map" <<std::endl;
+          MPI_Finalize();
+          return 0;
+     }
+     std::cout<< "Load Map Done" <<std::endl;
+     if(world_rank == 0)
+     {
+          CBS cbs(row_number, col_number, obstacles, goals, start_states,world_size-1,world_rank);
+          std::cout << "solution_found: " << cbs.solution_found << std::endl;
+          std::cout << "num_of_agents: " << cbs.num_of_agents << std::endl;
+          std::cout << "max_nodes: " << cbs.max_nodes << std::endl;
+          std::cout << "world_rank: " << cbs.world_rank << std::endl;
+          std::cout << "cost: " << cbs.cost << std::endl;
+          std::cout << "map_size: " << cbs.map_size << std::endl;
+          std::cout << "cbsnode_num: " << cbs.cbsnode_num << std::endl;
+          std::cout << "lowLevelExpanded: " << cbs.lowLevelExpanded << std::endl;
+          std::cout << "num_ta: " << cbs.num_ta << std::endl;
+          std::cout << "row_number: " << cbs.row_number << std::endl;
+          std::cout << "col_number: " << cbs.col_number << std::endl;
+          std::cout << "total_runtime: " << cbs.total_runtime << std::endl;
+          std::cout << "lowlevel_search_time: " << cbs.lowlevel_search_time << std::endl;
+          std::cout << "firstconflict_time: " << cbs.firstconflict_time << std::endl;
+          auto proto_cbs = serializeToProtobuf(cbs);
+          std::string serialized_cbs;
+          proto_cbs.SerializeToString(&serialized_cbs);
+          cout << "Serialized CBS size: " << serialized_cbs.size() << endl;
+          int size = serialized_cbs.size();
+          for (int target_rank = 1; target_rank < world_size; ++target_rank) {
+                MPI_Send(&size, 1, MPI_INT, target_rank, 0, MPI_COMM_WORLD);
+                MPI_Send(serialized_cbs.c_str(), size, MPI_CHAR, target_rank, 0, MPI_COMM_WORLD);
+          }
+     }
+     else
+     {
+          // Receive the size of the serialized protobuf message
+          int size;
+          MPI_Recv(&size, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        CBS received_cbs(row_number, col_number, obstacles, goals, start_states, world_size - 1, world_rank);
-        received_cbs.row_number = received_proto_cbs.num_of_rows();
-        received_cbs.col_number = received_proto_cbs.num_of_cols();
-        received_cbs.max_nodes = received_proto_cbs.world_size();
-        received_cbs.world_rank = received_proto_cbs.world_rank();
+          // Receive the serialized protobuf message
+          std::vector<char> buffer(size);
+          MPI_Recv(buffer.data(), size, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        received_cbs.obstacles.clear();
-        for (int i = 0; i < received_proto_cbs.obstacles_size(); ++i) {
-            const CBSProto::CBS::Location& proto_loc = received_proto_cbs.obstacles(i);
-            received_cbs.obstacles.insert(Location(proto_loc.x(), proto_loc.y()));
-        }
+          // Deserialize the protobuf message
+          CBSProto::CBS proto_cbs;
+          if (!proto_cbs.ParseFromArray(buffer.data(), size)) {
+                std::cerr << "Failed to parse CBS protobuf message." << std::endl;
+                MPI_Finalize();
+                return -1;
+          }
 
-        received_cbs.goals.clear();
-        for (int i = 0; i < received_proto_cbs.goals_size(); ++i) {
-            const CBSProto::CBS::Location& proto_goal = received_proto_cbs.goals(i);
-            received_cbs.goals.push_back(Location(proto_goal.x(), proto_goal.y()));
-        }
+          // Convert the protobuf message to a CBS object
+        cout << "!!!!!!!!!!!!!Received CBS object from master.!!!!!!!!!!!!!!!!!!" << endl;
+          CBS cbs(row_number, col_number, obstacles, goals, start_states, world_size - 1, world_rank);
+          cbs.row_number = proto_cbs.num_of_rows();
+          cbs.col_number = proto_cbs.num_of_cols();
+          cbs.max_nodes = proto_cbs.world_size();
+          cbs.world_rank = proto_cbs.world_rank();
 
-        received_cbs.start_states.clear();
-        for (int i = 0; i < received_proto_cbs.start_states_size(); ++i) {
-            const CBSProto::CBS::State& proto_state = received_proto_cbs.start_states(i);
-            received_cbs.start_states.push_back(State(proto_state.time(), proto_state.x(), proto_state.y()));
-        }
+          cbs.obstacles.clear();
+          for (int i = 0; i < proto_cbs.obstacles_size(); ++i) {
+                const CBSProto::CBS::Location& proto_loc = proto_cbs.obstacles(i);
+                cbs.obstacles.insert(Location(proto_loc.x(), proto_loc.y()));
+          }
 
-        std::cout << "Successfully deserialized CBS object." << std::endl;
-        std::cout << "solution_found: " << received_cbs.solution_found << std::endl;
-        std::cout << "num_of_agents: " << received_cbs.num_of_agents << std::endl;
-        std::cout << "max_nodes: " << received_cbs.max_nodes << std::endl;
-        std::cout << "world_rank: " << received_cbs.world_rank << std::endl;
-        std::cout << "cost: " << received_cbs.cost << std::endl;
-        std::cout << "map_size: " << received_cbs.map_size << std::endl;
-        std::cout << "cbsnode_num: " << received_cbs.cbsnode_num << std::endl;
-        std::cout << "lowLevelExpanded: " << received_cbs.lowLevelExpanded << std::endl;
-        std::cout << "num_ta: " << received_cbs.num_ta << std::endl;
-        std::cout << "row_number: " << received_cbs.row_number << std::endl;
-        std::cout << "col_number: " << received_cbs.col_number << std::endl;
-        std::cout << "total_runtime: " << received_cbs.total_runtime << std::endl;
-        std::cout << "lowlevel_search_time: " << received_cbs.lowlevel_search_time << std::endl;
-        std::cout << "firstconflict_time: " << received_cbs.firstconflict_time << std::endl;
+          cbs.goals.clear();
+          for (int i = 0; i < proto_cbs.goals_size(); ++i) {
+                const CBSProto::CBS::Location& proto_goal = proto_cbs.goals(i);
+                cbs.goals.push_back(Location(proto_goal.x(), proto_goal.y()));
+          }
 
+          cbs.start_states.clear();
+          for (int i = 0; i < proto_cbs.start_states_size(); ++i) {
+                const CBSProto::CBS::State& proto_state = proto_cbs.start_states(i);
+                cbs.start_states.push_back(State(proto_state.time(), proto_state.x(), proto_state.y()));
+          }
 
-    // }
-    // else
-    // {
+          std::cout << "Successfully received and deserialized CBS object from master." << std::endl;
+          std::cout << "solution_found: " << cbs.solution_found << std::endl;
+          std::cout << "num_of_agents: " << cbs.num_of_agents << std::endl;
+          std::cout << "max_nodes: " << cbs.max_nodes << std::endl;
+          std::cout << "world_rank: " << cbs.world_rank << std::endl;
+          std::cout << "cost: " << cbs.cost << std::endl;
+          std::cout << "map_size: " << cbs.map_size << std::endl;
+          std::cout << "cbsnode_num: " << cbs.cbsnode_num << std::endl;
+          std::cout << "lowLevelExpanded: " << cbs.lowLevelExpanded << std::endl;
+          std::cout << "num_ta: " << cbs.num_ta << std::endl;
+          std::cout << "row_number: " << cbs.row_number << std::endl;
+          std::cout << "col_number: " << cbs.col_number << std::endl;
+          std::cout << "total_runtime: " << cbs.total_runtime << std::endl;
+          std::cout << "lowlevel_search_time: " << cbs.lowlevel_search_time << std::endl;
+          std::cout << "firstconflict_time: " << cbs.firstconflict_time << std::endl;
+     }
 
-    // }
-
-    return 0;
+     MPI_Finalize();
+     return 0;
 }
 
-
+/*
+ ./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+ mpirun -np 2 ./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+ */
 /*
 int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
