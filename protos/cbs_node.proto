@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package CBSProto;
+
 message CBSNode {
     message Location{
         int32 x = 1;
