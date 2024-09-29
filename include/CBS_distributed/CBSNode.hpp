@@ -5,8 +5,9 @@
 #ifndef CBS_REMAKE_CBSNODE_HPP
 #define CBS_REMAKE_CBSNODE_HPP
 
-#include "CBS.hpp"
+
 #include "../dynamic_hungarian_assignment.hpp"
+class CBS;
 
 class CBSNode{
 

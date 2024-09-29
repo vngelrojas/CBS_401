@@ -22,7 +22,9 @@ Run (In build dir):
 ./CBS_parallel -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ./ECBS -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ./ECBS_parallel -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ```
+
 
 Generate test case:
 

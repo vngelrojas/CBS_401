@@ -6,13 +6,14 @@
 #define CBS_REMAKE_CBS_HPP
 
 #include "../common.hpp"
+#include "CBSNode.hpp"
 
 class CBS
 {
 
 public:
 
-    bool solution_found;
+    bool solution_found{false};
     int num_of_agents;
     int max_nodes;
     int world_rank;

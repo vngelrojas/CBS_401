@@ -11,6 +11,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(../parlaylib/include)
+include_directories(${CMAKE_SOURCE_DIR}/protos)
 
 find_package(Boost 1.58 REQUIRED COMPONENTS program_options)
 find_package(PkgConfig)
@@ -19,6 +20,12 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 file(GLOB THIRD_PARTY "third_party/*.cpp" "third_party/*.h")
 
+
+# Add protobuf library
+find_package(Protobuf REQUIRED)
+include_directories(${PROTOBUF_INCLUDE_DIRS})
+set(PROTO_SRCS ${CMAKE_SOURCE_DIR}/protos/cbs.pb.cc)
+set(PROTO_HDRS ${CMAKE_SOURCE_DIR}/protos/cbs.pb.h)
 
 
 
@@ -48,9 +55,10 @@ target_link_libraries(ECBS_parallel
 
 find_package(MPI REQUIRED)
 
-add_executable(CBS_distributed include/CBS_distributed/main_CBS.cpp include/CBS_distributed/CBS.cpp include/CBS_distributed/CBSNode.cpp include/common.cpp)
+add_executable(CBS_distributed include/CBS_distributed/main_CBS.cpp include/CBS_distributed/CBS.cpp include/CBS_distributed/CBSNode.cpp include/common.cpp ${PROTO_SRCS})
 target_link_libraries(CBS_distributed
         ${Boost_LIBRARIES}
         yaml-cpp
         MPI::MPI_CXX
+        ${PROTOBUF_LIBRARIES}
         )

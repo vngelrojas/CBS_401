@@ -240,23 +240,23 @@ int CBS::solve() {
 
     while (!open.empty())
     {
-        // if we are master and the open list is == to max nodes, then put nodes in list to distribute in main function
-        if(world_rank == 0 && open.size() == this->max_nodes)
-        {
-            shared_ptr<CBSNode> cur_node = open.top(); open.pop();
-            nodes_to_distribute.push_back(cur_node);
-            return 0;
-        }
-        else // a worker node will check if a solution is found from another worker (non-blocking)
-        {
-            // // Check for stop signal at the start of the loop
-            // int flag;
-            // MPI_Test(&stop_request, &flag, MPI_STATUS_IGNORE);
-            // if (flag && stop_signal == 1) {
-                // std::cout << "Worker " << world_rank << " stopping execution." << std::endl;
-                // break;  // Stop processing
-            // }
-        }
+        // // if we are master and the open list is == to max nodes, then put nodes in list to distribute in main function
+        // if(world_rank == 0 && open.size() == this->max_nodes)
+        // {
+        //     shared_ptr<CBSNode> cur_node = open.top(); open.pop();
+        //     nodes_to_distribute.push_back(cur_node);
+        //     return 0;
+        // }
+        // else // a worker node will check if a solution is found from another worker (non-blocking)
+        // {
+        //     // // Check for stop signal at the start of the loop
+        //     // int flag;
+        //     // MPI_Test(&stop_request, &flag, MPI_STATUS_IGNORE);
+        //     // if (flag && stop_signal == 1) {
+        //         // std::cout << "Worker " << world_rank << " stopping execution." << std::endl;
+        //         // break;  // Stop processing
+        //     // }
+        // }
         this->cbsnode_num ++;
         shared_ptr<CBSNode> cur_node = open.top(); open.pop();
         Conflict conflict;
