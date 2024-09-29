@@ -25,6 +25,10 @@ Run (In build dir):
 ./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ```
 
+Run CBS distribute with 2 processes (In build dir)
+```bash
+mpirun -np 2 ./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+```
 
 Generate test case:
 
