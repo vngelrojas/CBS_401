@@ -2,10 +2,10 @@
 
 
 # Create a virtual environment
-python3 -m venv /workspaces/ITA-CBS_dev-main/python/myenv
+python3 -m venv /workspaces/CBS_401/python/myenv
 
 # Activate the virtual environment
-source /workspaces/ITA-CBS_dev-main/python/myenv/bin/activate
+source /workspaces/CBS_401/python/myenv/bin/activate
 
 # Install the required packages
-pip install -r /workspaces/ITA-CBS_dev-main/.devcontainer/requirements.txt
+pip install -r /workspaces/CBS_401/.devcontainer/requirements.txt
