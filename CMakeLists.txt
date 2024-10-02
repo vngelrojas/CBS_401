@@ -20,37 +20,38 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 file(GLOB THIRD_PARTY "third_party/*.cpp" "third_party/*.h")
 
-
 # Add protobuf library
 find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
-set(PROTO_SRCS ${CMAKE_SOURCE_DIR}/protos/cbs.pb.cc)
-set(PROTO_HDRS ${CMAKE_SOURCE_DIR}/protos/cbs.pb.h)
-
-
+set(PROTO_SRCS ${CMAKE_SOURCE_DIR}/protos/cbs.pb.cc ${CMAKE_SOURCE_DIR}/protos/cbs_node.pb.cc)
+set(PROTO_HDRS ${CMAKE_SOURCE_DIR}/protos/cbs.pb.h ${CMAKE_SOURCE_DIR}/protos/cbs_node.pb.h)
 
 add_executable(CBS include/CBS/main_CBS.cpp include/CBS/CBS.cpp include/CBS/CBSNode.cpp include/common.cpp)
 target_link_libraries(CBS
         ${Boost_LIBRARIES}
         yaml-cpp
+        ${PROTOBUF_LIBRARIES}
         )
 
 add_executable(CBS_parallel include/CBS_parallel/main_CBS_parallel.cpp include/CBS_parallel/CBS_parallel.cpp include/CBS_parallel/CBSNode_parallel.cpp include/common.cpp)
 target_link_libraries(CBS_parallel
         ${Boost_LIBRARIES}
         yaml-cpp
+        ${PROTOBUF_LIBRARIES}
         )
 
 add_executable(ECBS include/ECBS/main_ECBS.cpp include/ECBS/ECBS.cpp include/ECBS/ECBSNode.cpp include/common.cpp)
 target_link_libraries(ECBS
         ${Boost_LIBRARIES}
         yaml-cpp
+        ${PROTOBUF_LIBRARIES}
         )
 
 add_executable(ECBS_parallel include/ECBS_parallel/main_ECBS_parallel.cpp include/ECBS_parallel/ECBS_parallel.cpp include/ECBS_parallel/ECBSNode_parallel.cpp include/common.cpp)
 target_link_libraries(ECBS_parallel
         ${Boost_LIBRARIES}
         yaml-cpp
+        ${PROTOBUF_LIBRARIES}
         )
 
 find_package(MPI REQUIRED)
@@ -59,6 +60,7 @@ add_executable(CBS_distributed include/CBS_distributed/main_CBS.cpp include/CBS_
 target_link_libraries(CBS_distributed
         ${Boost_LIBRARIES}
         yaml-cpp
+        Threads::Threads
         MPI::MPI_CXX
         ${PROTOBUF_LIBRARIES}
         )

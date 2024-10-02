@@ -4,6 +4,7 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "CBS.hpp"
+#include "CBSNode.hpp"
 #include "../common.hpp"
 #include "CBSNode.hpp"
 #include "/workspaces/CBS_401/protos/cbs_node.pb.h"
@@ -32,6 +33,166 @@ string outputFile;
 //     PathEntry entry(state, proto_entry.fscore(), proto_entry.gscore(), proto_entry.focalscore(), parent);
 //     return entry;
 // }
+
+CBSNode initializeCBSNode() {
+    // Create a new CBSNode object
+    CBSNode cbs_node;
+
+    // Set the cost to a random value
+    cbs_node.cost = 150; // Example cost value
+
+    // Initialize the cost_matrix with hardcoded data
+    // Create a Path and add some PathEntries
+    Path path;
+    
+    // Adding random PathEntries to the Path
+    for (int i = 0; i < 3; i++) {  // Let's assume 3 path entries
+        State state(i * 10, i + 1, i + 2);  // Random values for state (time, x, y)
+        PathEntry path_entry(state, 50 + i, 25 + i, 30 + i, nullptr);
+        path.push_back(path_entry);  // Adding to the path
+    }
+
+    // Adding the path to the cost_matrix
+    cbs_node.cost_matrix.push_back(boost::make_shared<Path>(path)); // Using boost::make_shared
+
+    // Initialize the constraint_sets with hardcoded data
+    Constraints constraints;
+
+    // Add VertexConstraint
+    constraints.vertexConstraints.insert(VertexConstraint(5, 1, 2));  // Random values
+    constraints.vertexConstraints.insert(VertexConstraint(10, 3, 4, 1));  // Random values with for_who = 1
+
+    // Add EdgeConstraint
+    constraints.edgeConstraints.insert(EdgeConstraint(7, 1, 2, 3, 4));  // Random values
+    constraints.edgeConstraints.insert(EdgeConstraint(15, 5, 6, 7, 8, 2));  // Random values with for_who = 2
+
+    // Add constraints to constraint_sets
+    cbs_node.constraint_sets.push_back(boost::make_shared<Constraints>(constraints)); // Using boost::make_shared
+
+    return cbs_node;
+}
+
+CBSProto::CBSNode serializeToProtobuf(CBSNode& cbs_node) {
+    CBSProto::CBSNode proto_cbs_node;
+
+    // Add paths (cost_matrix)
+    for (const auto& path_ptr : cbs_node.cost_matrix) {
+        auto* proto_path = proto_cbs_node.add_cost_matrix();
+        if (path_ptr) {
+            // Dereference the shared_ptr to access the actual Path
+            for (const auto& entry : *path_ptr) {
+                auto* proto_entry = proto_path->add_path();
+                proto_entry->mutable_state()->set_time(entry.state.time);
+                proto_entry->mutable_state()->set_x(entry.state.x);
+                proto_entry->mutable_state()->set_y(entry.state.y);
+                proto_entry->set_fscore(entry.fScore);
+                proto_entry->set_gscore(entry.gScore);
+                proto_entry->set_focalscore(entry.focalScore);
+
+                if (entry.parent != nullptr) {
+                    auto* proto_parent = proto_entry->mutable_parent();
+                    proto_parent->mutable_state()->set_time(entry.parent->state.time);
+                    proto_parent->mutable_state()->set_x(entry.parent->state.x);
+                    proto_parent->mutable_state()->set_y(entry.parent->state.y);
+                    proto_parent->set_fscore(entry.parent->fScore);
+                    proto_parent->set_gscore(entry.parent->gScore);
+                    proto_parent->set_focalscore(entry.parent->focalScore);
+                }
+            }
+        }
+    }
+
+    // Add constraint sets
+    for (const auto& constraint_set_ptr : cbs_node.constraint_sets) {
+        auto* proto_constraints = proto_cbs_node.add_constraint_sets();
+        if (constraint_set_ptr) {
+            // Dereference the shared_ptr to access the actual Constraints
+            const auto& constraint_set = *constraint_set_ptr;
+
+            // Add vertex constraints
+            for (const auto& vertex_constraint : constraint_set.vertexConstraints) {
+                auto* proto_vertex = proto_constraints->add_vertex_constraints();
+                proto_vertex->set_time(vertex_constraint.time);
+                proto_vertex->set_x(vertex_constraint.x);
+                proto_vertex->set_y(vertex_constraint.y);
+                proto_vertex->set_for_who(vertex_constraint.for_who);
+            }
+
+            // Add edge constraints
+            for (const auto& edge_constraint : constraint_set.edgeConstraints) {
+                auto* proto_edge = proto_constraints->add_edge_constraints();
+                proto_edge->set_time(edge_constraint.time);
+                proto_edge->set_x1(edge_constraint.x1);
+                proto_edge->set_y1(edge_constraint.y1);
+                proto_edge->set_x2(edge_constraint.x2);
+                proto_edge->set_y2(edge_constraint.y2);
+                proto_edge->set_for_who(edge_constraint.for_who);
+            }
+        }
+    }
+
+    return proto_cbs_node;
+}
+void printCBSNode(const CBSProto::CBSNode& proto_cbs_node) {
+
+    // Print cost_matrix (Paths)
+    std::cout << "Cost Matrix:" << std::endl;
+    for (int i = 0; i < proto_cbs_node.cost_matrix_size(); ++i) {
+        std::cout << "  Path " << i << ":" << std::endl;
+        const auto& proto_path = proto_cbs_node.cost_matrix(i);
+        for (int j = 0; j < proto_path.path_size(); ++j) {
+            const auto& proto_entry = proto_path.path(j);
+            std::cout << "    Entry " << j << ": "
+                      << "State (time=" << proto_entry.state().time()
+                      << ", x=" << proto_entry.state().x()
+                      << ", y=" << proto_entry.state().y() << "), "
+                      << "fScore=" << proto_entry.fscore() << ", "
+                      << "gScore=" << proto_entry.gscore() << ", "
+                      << "focalScore=" << proto_entry.focalscore() << std::endl;
+
+            // Print parent entry if it exists
+            if (proto_entry.has_parent()) {
+                const auto& proto_parent = proto_entry.parent();
+                std::cout << "      Parent: State (time=" << proto_parent.state().time()
+                          << ", x=" << proto_parent.state().x()
+                          << ", y=" << proto_parent.state().y() << "), "
+                          << "fScore=" << proto_parent.fscore() << ", "
+                          << "gScore=" << proto_parent.gscore() << ", "
+                          << "focalScore=" << proto_parent.focalscore() << std::endl;
+            }
+        }
+    }
+
+    // Print constraint_sets (Constraints)
+    std::cout << "Constraint Sets:" << std::endl;
+    for (int i = 0; i < proto_cbs_node.constraint_sets_size(); ++i) {
+        const auto& proto_constraints = proto_cbs_node.constraint_sets(i);
+        std::cout << "  Constraint Set " << i << ":" << std::endl;
+
+        // Print vertex constraints
+        std::cout << "    Vertex Constraints:" << std::endl;
+        for (int j = 0; j < proto_constraints.vertex_constraints_size(); ++j) {
+            const auto& proto_vertex_constraint = proto_constraints.vertex_constraints(j);
+            std::cout << "      Time=" << proto_vertex_constraint.time()
+                      << ", x=" << proto_vertex_constraint.x()
+                      << ", y=" << proto_vertex_constraint.y()
+                      << ", for_who=" << proto_vertex_constraint.for_who() << std::endl;
+        }
+
+        // Print edge constraints
+        std::cout << "    Edge Constraints:" << std::endl;
+        for (int j = 0; j < proto_constraints.edge_constraints_size(); ++j) {
+            const auto& proto_edge_constraint = proto_constraints.edge_constraints(j);
+            std::cout << "      Time=" << proto_edge_constraint.time()
+                      << ", x1=" << proto_edge_constraint.x1()
+                      << ", y1=" << proto_edge_constraint.y1()
+                      << ", x2=" << proto_edge_constraint.x2()
+                      << ", y2=" << proto_edge_constraint.y2()
+                      << ", for_who=" << proto_edge_constraint.for_who() << std::endl;
+        }
+    }
+}
+
 
 CBSProto::CBS serializeToProtobuf(CBS& cbs) {
    CBSProto::CBS proto_cbs;
@@ -373,11 +534,13 @@ int init_map(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-    MPI_Init(0,nullptr);
+    MPI_Init(&argc, &argv);
 
      int world_rank, world_size;
      MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
      MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+     cout << "World size: " << world_size << endl; // Add this line
+
      if (init_map(argc, argv) < 0)
      {
           std::cout<< "Error Map" <<std::endl;
@@ -387,42 +550,70 @@ int main(int argc, char** argv)
      std::cout<< "Load Map Done" <<std::endl;
      if(world_rank == 0)
      {
-          CBS cbs(row_number, col_number, obstacles, goals, start_states,world_size-1,world_rank);
-          std::cout << "solution_found: " << cbs.solution_found << std::endl;
-          std::cout << "num_of_agents: " << cbs.num_of_agents << std::endl;
-          std::cout << "max_nodes: " << cbs.max_nodes << std::endl;
-          std::cout << "world_rank: " << cbs.world_rank << std::endl;
-          std::cout << "cost: " << cbs.cost << std::endl;
-          std::cout << "map_size: " << cbs.map_size << std::endl;
-          std::cout << "cbsnode_num: " << cbs.cbsnode_num << std::endl;
-          std::cout << "lowLevelExpanded: " << cbs.lowLevelExpanded << std::endl;
-          std::cout << "num_ta: " << cbs.num_ta << std::endl;
-          std::cout << "row_number: " << cbs.row_number << std::endl;
-          std::cout << "col_number: " << cbs.col_number << std::endl;
-          std::cout << "total_runtime: " << cbs.total_runtime << std::endl;
-          std::cout << "lowlevel_search_time: " << cbs.lowlevel_search_time << std::endl;
-          std::cout << "firstconflict_time: " << cbs.firstconflict_time << std::endl;
-          auto proto_cbs = serializeToProtobuf(cbs);
-          std::string serialized_cbs;
-          proto_cbs.SerializeToString(&serialized_cbs);
-          cout << "Serialized CBS size: " << serialized_cbs.size() << endl;
-          int size = serialized_cbs.size();
-          for (int target_rank = 1; target_rank < world_size; ++target_rank) {
-                MPI_Send(&size, 1, MPI_INT, target_rank, 0, MPI_COMM_WORLD);
-                MPI_Send(serialized_cbs.c_str(), size, MPI_CHAR, target_rank, 0, MPI_COMM_WORLD);
-          }
+            /*CBS cbs(row_number, col_number, obstacles, goals, start_states,world_size-1,world_rank);
+
+            std::cout << "solution_found: " << cbs.solution_found << std::endl;
+            std::cout << "num_of_agents: " << cbs.num_of_agents << std::endl;
+            std::cout << "max_nodes: " << cbs.max_nodes << std::endl;
+            std::cout << "world_rank: " << cbs.world_rank << std::endl;
+            std::cout << "cost: " << cbs.cost << std::endl;
+            std::cout << "map_size: " << cbs.map_size << std::endl;
+            std::cout << "cbsnode_num: " << cbs.cbsnode_num << std::endl;
+            std::cout << "lowLevelExpanded: " << cbs.lowLevelExpanded << std::endl;
+            std::cout << "num_ta: " << cbs.num_ta << std::endl;
+            std::cout << "row_number: " << cbs.row_number << std::endl;
+            std::cout << "col_number: " << cbs.col_number << std::endl;
+            std::cout << "total_runtime: " << cbs.total_runtime << std::endl;
+            std::cout << "lowlevel_search_time: " << cbs.lowlevel_search_time << std::endl;
+            std::cout << "firstconflict_time: " << cbs.firstconflict_time << std::endl;
+            auto proto_cbs = serializeToProtobuf(cbs);
+
+            std::string serialized_cbs;
+            proto_cbs.SerializeToString(&serialized_cbs);
+            cout << "Serialized CBS size: " << serialized_cbs.size() << endl;
+            int size = serialized_cbs.size();
+            for (int target_rank = 1; target_rank < world_size; ++target_rank) {
+                    MPI_Send(&size, 1, MPI_INT, target_rank, 0, MPI_COMM_WORLD);
+                    MPI_Send(serialized_cbs.c_str(), size, MPI_CHAR, target_rank, 0, MPI_COMM_WORLD);
+            }*/
+
+            CBSNode cbs_node = initializeCBSNode();
+            cout << "Original CBS Node:" << endl;
+            
+            auto proto_cbs_node = serializeToProtobuf(cbs_node);
+            printCBSNode(proto_cbs_node);
+            std::string serialized_cbs_node;
+            proto_cbs_node.SerializeToString(&serialized_cbs_node);
+            cout << "Serialized CBS Node size: " << serialized_cbs_node.size() << endl;
+            int node_size = serialized_cbs_node.size();
+            for (int target_rank = 1; target_rank < world_size; ++target_rank) {
+
+                MPI_Send(&node_size, 1, MPI_INT, target_rank, 0, MPI_COMM_WORLD);
+                MPI_Send(serialized_cbs_node.c_str(), node_size, MPI_CHAR, target_rank, 0, MPI_COMM_WORLD);
+            }
+            cout << "Complete Send" << endl;
      }
      else
-     {
-          // Receive the size of the serialized protobuf message
-          int size;
-          MPI_Recv(&size, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+     {  
+            // Receive the size of the serialized protobuf message
+            int size;
+            MPI_Recv(&size, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-          // Receive the serialized protobuf message
-          std::vector<char> buffer(size);
-          MPI_Recv(buffer.data(), size, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            // Receive the serialized protobuf message
+            std::vector<char> buffer(size);
+            MPI_Recv(buffer.data(), size, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-          // Deserialize the protobuf message
+            CBSProto::CBSNode proto_cbs_node;
+            if (!proto_cbs_node.ParseFromArray(buffer.data(), size)) {
+                std::cerr << "Failed to parse CBS protobuf message." << std::endl;
+                MPI_Finalize();
+                return -1;
+            }
+           
+            cout << "Resulting CBS Node:" << endl;
+            printCBSNode(proto_cbs_node);
+
+          /*// Deserialize the protobuf message
           CBSProto::CBS proto_cbs;
           if (!proto_cbs.ParseFromArray(buffer.data(), size)) {
                 std::cerr << "Failed to parse CBS protobuf message." << std::endl;
@@ -471,6 +662,7 @@ int main(int argc, char** argv)
           std::cout << "total_runtime: " << cbs.total_runtime << std::endl;
           std::cout << "lowlevel_search_time: " << cbs.lowlevel_search_time << std::endl;
           std::cout << "firstconflict_time: " << cbs.firstconflict_time << std::endl;
+        */
      }
 
      MPI_Finalize();
