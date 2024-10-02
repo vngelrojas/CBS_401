@@ -133,63 +133,108 @@ CBSProto::CBSNode serializeToProtobuf(CBSNode& cbs_node) {
 
     return proto_cbs_node;
 }
-void printCBSNode(const CBSProto::CBSNode& proto_cbs_node) {
-
+void printCBSNode(const CBSNode& cbs_node) {
     // Print cost_matrix (Paths)
     std::cout << "Cost Matrix:" << std::endl;
-    for (int i = 0; i < proto_cbs_node.cost_matrix_size(); ++i) {
+    for (size_t i = 0; i < cbs_node.cost_matrix.size(); ++i) {
         std::cout << "  Path " << i << ":" << std::endl;
-        const auto& proto_path = proto_cbs_node.cost_matrix(i);
-        for (int j = 0; j < proto_path.path_size(); ++j) {
-            const auto& proto_entry = proto_path.path(j);
-            std::cout << "    Entry " << j << ": "
-                      << "State (time=" << proto_entry.state().time()
-                      << ", x=" << proto_entry.state().x()
-                      << ", y=" << proto_entry.state().y() << "), "
-                      << "fScore=" << proto_entry.fscore() << ", "
-                      << "gScore=" << proto_entry.gscore() << ", "
-                      << "focalScore=" << proto_entry.focalscore() << std::endl;
+        const auto& path_ptr = cbs_node.cost_matrix[i];
+        if (path_ptr) {
+            for (size_t j = 0; j < path_ptr->size(); ++j) {
+                const auto& entry = (*path_ptr)[j];
+                std::cout << "    Entry " << j << ": "
+                          << "State (time=" << entry.state.time
+                          << ", x=" << entry.state.x
+                          << ", y=" << entry.state.y << "), "
+                          << "fScore=" << entry.fScore << ", "
+                          << "gScore=" << entry.gScore << ", "
+                          << "focalScore=" << entry.focalScore << std::endl;
 
-            // Print parent entry if it exists
-            if (proto_entry.has_parent()) {
-                const auto& proto_parent = proto_entry.parent();
-                std::cout << "      Parent: State (time=" << proto_parent.state().time()
-                          << ", x=" << proto_parent.state().x()
-                          << ", y=" << proto_parent.state().y() << "), "
-                          << "fScore=" << proto_parent.fscore() << ", "
-                          << "gScore=" << proto_parent.gscore() << ", "
-                          << "focalScore=" << proto_parent.focalscore() << std::endl;
+                // Print parent entry if it exists
+                if (entry.parent) {
+                    const auto& parent = entry.parent;
+                    std::cout << "      Parent: State (time=" << parent->state.time
+                              << ", x=" << parent->state.x
+                              << ", y=" << parent->state.y << "), "
+                              << "fScore=" << parent->fScore << ", "
+                              << "gScore=" << parent->gScore << ", "
+                              << "focalScore=" << parent->focalScore << std::endl;
+                }
             }
         }
     }
 
     // Print constraint_sets (Constraints)
     std::cout << "Constraint Sets:" << std::endl;
-    for (int i = 0; i < proto_cbs_node.constraint_sets_size(); ++i) {
-        const auto& proto_constraints = proto_cbs_node.constraint_sets(i);
+    for (size_t i = 0; i < cbs_node.constraint_sets.size(); ++i) {
+        const auto& constraints_ptr = cbs_node.constraint_sets[i];
         std::cout << "  Constraint Set " << i << ":" << std::endl;
 
-        // Print vertex constraints
-        std::cout << "    Vertex Constraints:" << std::endl;
-        for (int j = 0; j < proto_constraints.vertex_constraints_size(); ++j) {
-            const auto& proto_vertex_constraint = proto_constraints.vertex_constraints(j);
-            std::cout << "      Time=" << proto_vertex_constraint.time()
-                      << ", x=" << proto_vertex_constraint.x()
-                      << ", y=" << proto_vertex_constraint.y()
-                      << ", for_who=" << proto_vertex_constraint.for_who() << std::endl;
+        if (constraints_ptr) {
+            const auto& constraints = *constraints_ptr;
+
+            // Print vertex constraints
+            std::cout << "    Vertex Constraints:" << std::endl;
+            for (const auto& vertex_constraint : constraints.vertexConstraints) {
+                std::cout << "      Time=" << vertex_constraint.time
+                          << ", x=" << vertex_constraint.x
+                          << ", y=" << vertex_constraint.y
+                          << ", for_who=" << vertex_constraint.for_who << std::endl;
+            }
+
+            // Print edge constraints
+            std::cout << "    Edge Constraints:" << std::endl;
+            for (const auto& edge_constraint : constraints.edgeConstraints) {
+                std::cout << "      Time=" << edge_constraint.time
+                          << ", x1=" << edge_constraint.x1
+                          << ", y1=" << edge_constraint.y1
+                          << ", x2=" << edge_constraint.x2
+                          << ", y2=" << edge_constraint.y2
+                          << ", for_who=" << edge_constraint.for_who << std::endl;
+            }
+        }
+    }
+}
+
+void convertProtoToCBSNode(const CBSProto::CBSNode& proto_cbs_node, CBSNode& cbs_node) {
+    // Convert path entries
+    for (int i = 0; i < proto_cbs_node.cost_matrix_size(); ++i) {
+        const auto& proto_path = proto_cbs_node.cost_matrix(i);
+        auto path = boost::make_shared<Path>();
+        for (int j = 0; j < proto_path.path_size(); ++j) {
+            const CBSProto::CBSNode::PathEntry& proto_entry = proto_path.path(j);
+            PathEntry entry;
+            entry.state.time = proto_entry.state().time();
+            entry.state.x = proto_entry.state().x();
+            entry.state.y = proto_entry.state().y();
+            entry.fScore = proto_entry.fscore();
+            entry.gScore = proto_entry.gscore();
+            entry.focalScore = proto_entry.focalscore();
+            path->push_back(entry);
+        }
+        cbs_node.cost_matrix.push_back(path);
+    }
+
+    // Convert constraint sets
+    for (int i = 0; i < proto_cbs_node.constraint_sets_size(); ++i) {
+        const CBSProto::CBSNode::Constraints& proto_constraint_set = proto_cbs_node.constraint_sets(i);
+        Constraints constraint_set;
+
+        // Convert vertex constraints
+        for (int j = 0; j < proto_constraint_set.vertex_constraints_size(); ++j) {
+            const CBSProto::CBSNode::Constraints::VertexConstraint& proto_vc = proto_constraint_set.vertex_constraints(j);
+            VertexConstraint vc(proto_vc.time(), proto_vc.x(), proto_vc.y(), proto_vc.for_who());
+            constraint_set.vertexConstraints.insert(vc);
         }
 
-        // Print edge constraints
-        std::cout << "    Edge Constraints:" << std::endl;
-        for (int j = 0; j < proto_constraints.edge_constraints_size(); ++j) {
-            const auto& proto_edge_constraint = proto_constraints.edge_constraints(j);
-            std::cout << "      Time=" << proto_edge_constraint.time()
-                      << ", x1=" << proto_edge_constraint.x1()
-                      << ", y1=" << proto_edge_constraint.y1()
-                      << ", x2=" << proto_edge_constraint.x2()
-                      << ", y2=" << proto_edge_constraint.y2()
-                      << ", for_who=" << proto_edge_constraint.for_who() << std::endl;
+        // Convert edge constraints
+        for (int j = 0; j < proto_constraint_set.edge_constraints_size(); ++j) {
+            const CBSProto::CBSNode::Constraints::EdgeConstraint& proto_ec = proto_constraint_set.edge_constraints(j);
+            EdgeConstraint ec(proto_ec.time(),  proto_ec.x1(), proto_ec.y1(), proto_ec.x2(), proto_ec.y2(), proto_ec.for_who());
+            constraint_set.edgeConstraints.insert(ec);
         }
+
+        cbs_node.constraint_sets.push_back(boost::make_shared<Constraints>(constraint_set));
     }
 }
 
@@ -579,9 +624,9 @@ int main(int argc, char** argv)
 
             CBSNode cbs_node = initializeCBSNode();
             cout << "Original CBS Node:" << endl;
-            
+            printCBSNode(cbs_node);
             auto proto_cbs_node = serializeToProtobuf(cbs_node);
-            printCBSNode(proto_cbs_node);
+            
             std::string serialized_cbs_node;
             proto_cbs_node.SerializeToString(&serialized_cbs_node);
             cout << "Serialized CBS Node size: " << serialized_cbs_node.size() << endl;
@@ -611,7 +656,9 @@ int main(int argc, char** argv)
             }
            
             cout << "Resulting CBS Node:" << endl;
-            printCBSNode(proto_cbs_node);
+            CBSNode cbs_node;
+            convertProtoToCBSNode(proto_cbs_node, cbs_node);
+            printCBSNode(cbs_node);
 
           /*// Deserialize the protobuf message
           CBSProto::CBS proto_cbs;
