@@ -51,9 +51,7 @@ CBS::CBS(int row_number, int col_number, unordered_set<Location>& obstacles,
     this->cbsnode_num = 0;
     this->lowLevelExpanded = 0;
     this->num_ta = 0;
-    cout << "In constructor max_nodes: " << max_nodes << endl;
     this->max_nodes = max_nodes;
-    cout << "this->max_nodes: " << this->max_nodes << endl;
     this->world_rank = world_rank;
 
     this->map2d_obstacle.resize(this->row_number, vector<int>(this->col_number, 0));
@@ -245,27 +243,29 @@ int CBS::solve(shared_ptr<CBSNode> root_node) {
 
     // Non-blocking receive for stop signal
     MPI_Irecv(&stop_signal, 1, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &stop_request);
-    cout << "In solve this->max_nodes: " << this->max_nodes << endl;
-    cout << "In solve rank is: " << world_rank << endl;
+    cout << "In solve, worker: " << world_rank << endl;
     while (!open.empty())
     {
         // if we are master and the open list is == to max nodes, then put nodes in list to distribute in main function
         if(world_rank == 0 && open.size() == this->max_nodes)
         {
             cout << "I am master and I have " << open.size() << " nodes to distribute" << endl;
-            shared_ptr<CBSNode> cur_node = open.top(); open.pop();
-            nodes_to_distribute.push_back(cur_node);
+            while(!open.empty())
+            {
+                shared_ptr<CBSNode> cur_node = open.top(); open.pop();
+                nodes_to_distribute.push_back(cur_node);
+            }
             return 0;
         }
         else // a worker node will check if a solution is found from another worker (non-blocking)
         {
-            // // Check for stop signal at the start of the loop
-            // int flag;
-            // MPI_Test(&stop_request, &flag, MPI_STATUS_IGNORE);
-            // if (flag && stop_signal == 1) {
-            //     std::cout << "Worker " << world_rank << " stopping execution." << std::endl;
-            //     break;  // Stop processing
-            // }
+            // Check for stop signal at the start of the loop
+            int flag;
+            MPI_Test(&stop_request, &flag, MPI_STATUS_IGNORE);
+            if (flag && stop_signal == 1) {
+                std::cout << "Worker " << world_rank << " stopping execution." << std::endl;
+                return 0; 
+            }
         }
         this->cbsnode_num ++;
         shared_ptr<CBSNode> cur_node = open.top(); open.pop();
@@ -288,6 +288,9 @@ int CBS::solve(shared_ptr<CBSNode> root_node) {
             this->constraint_sets = cur_node->constraint_sets;
 
             cout << " I am worker " << world_rank << " and I found a solution" << endl;
+            // Send stop signal to all other workers using broadcast
+            stop_signal = 1;
+            MPI_Bcast(&stop_signal, 1, MPI_INT, world_rank, MPI_COMM_WORLD);
             return true;
         }
         

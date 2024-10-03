@@ -364,9 +364,8 @@ int main(int argc, char** argv) {
     int world_rank, world_size;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-    std::cout<< "Load Map Done" <<std::endl;
-    cout << "world size: " << world_size << endl;
     CBS cbs(row_number, col_number, obstacles, goals, start_states,world_size - 1,world_rank);
+    std::cout<< "Worker " << world_rank << " init done" <<std::endl;
     if(world_rank == 0)
     {
         // cbs.clear();
@@ -383,7 +382,8 @@ int main(int argc, char** argv) {
             MPI_Send(&node_size, 1, MPI_INT, target_rank, 0, MPI_COMM_WORLD);
             MPI_Send(serialized_cbs_node.c_str(), node_size, MPI_CHAR, target_rank, 0, MPI_COMM_WORLD);
             target_rank++;
-        }       
+        }     
+        MPI_Finalize();  
     }
     else
     {
@@ -407,8 +407,8 @@ int main(int argc, char** argv) {
         cbs.total_timer.reset();
         cbs.solve(sharedNode);
         cbs.total_timer.stop();
-        cout << "Total runtime: " << cbs.total_timer.elapsedSeconds() << endl;
-        
+        cout << "Worker " << world_rank <<" Total runtime: " << cbs.total_timer.elapsedSeconds() << endl;
+        MPI_Finalize();
 
     }
 
