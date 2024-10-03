@@ -38,7 +38,7 @@ public:
     void clear();
     ~CBS();
    
-    int solve();
+    int solve(shared_ptr<CBSNode> root_node = nullptr);
     int heuristic(int x1, int y1, int agent_idx);
     bool searchNodeIsValid(shared_ptr<Constraints>& agent_constraint_set, const State& new_state, const State& org_state);
 

@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(Windows) Launch",
+            "type": "cppdbg",  // Change from lldb to cppdbg for GDB or cppvsdbg for MSVC
+            "request": "launch",
+            "program": "${workspaceFolder}/build/main_CBS",
+            "args": ["-i", "../map_file/debug_cbs_data.yaml", "-o", "../outputs/output.yaml"],  
+            "cwd": "${workspaceFolder}/build",
+            "stopAtEntry": true,  // Optional: Will stop the debugger at the entry point
+        }, 
+        {
+            "name": "(macOS) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}",  //
+            "args": ["-i", "../map_file/debug_cbs_data.yaml", "-o", "../outputs/output.yaml"],
+            "cwd": "${workspaceFolder}/build",
+            "stopAtEntry": false,
+            "MIMode": "lldb",  // LLDB is the default debugger for macOS
+            "preLaunchTask": "build"
+        }
+    ],
+    "preLaunchTask": {
+        "label": "build",
+        "type": "shell",
+        "command": "cmake --build ${workspaceFolder}/build"
+    }
+}
