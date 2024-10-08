@@ -96,6 +96,7 @@
         "__debug": "cpp",
         "__nullptr": "cpp",
         "__string": "cpp",
-        "__tuple": "cpp"
+        "__tuple": "cpp",
+        "xstring": "cpp"
     }
 }
