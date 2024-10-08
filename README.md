@@ -14,6 +14,7 @@ cmake --build . --target CBS_parallel
 cmake --build . --target ECBS
 cmake --build . --target ECBS_parallel
 cmake --build . --target CBS_distributed
+cmake --build . --target ECBS_distributed
 ```
 
 Run (In build dir):
