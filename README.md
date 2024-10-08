@@ -30,6 +30,11 @@ Run CBS distribute with 2 processes (In build dir)
 ```bash
 mpirun -np 2 ./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ```
+work in progress: Run ECBS distribute with 2 processes (In build dir)
+```bash
+mpirun -np 2 ./ECBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+```
+
 
 Generate test case:
 
