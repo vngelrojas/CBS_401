@@ -20,6 +20,9 @@
 #include <filesystem>
 #include <unordered_set>
 #include <queue>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 #include <boost/heap/pairing_heap.hpp>
 #include <boost/unordered_set.hpp>
@@ -330,10 +333,10 @@ struct PathEntry {
     shared_ptr<PathEntry> parent;
 
     PathEntry() {}
-    PathEntry(State state, int fScore, int gScore, shared_ptr<PathEntry> parent)
+    PathEntry(State state, int fScore, int gScore, shared_ptr<PathEntry> parent = nullptr)
             : state(state), fScore(fScore), gScore(gScore), parent(parent) {}
 
-    PathEntry(State state, int fScore, int gScore, int focalScore, shared_ptr<PathEntry> parent)
+    PathEntry(State state, int fScore, int gScore, int focalScore, shared_ptr<PathEntry> parent = nullptr)
             : state(state), fScore(fScore), gScore(gScore), focalScore(focalScore), parent(parent) {}
 };
 

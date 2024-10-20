@@ -12,19 +12,20 @@ class ECBS
 
 public:
 
-
-    boost::atomic<bool> solution_found;
+    bool solution_found{false};
     int agent_n;
+    int max_nodes;
+    int world_rank;
     vector<State> start_states;
     unordered_set<Location> obstacles;
     vector<Location> goals;
     vector<vector<int> > map2d_obstacle;
     unordered_map<int, vector<vector<int> > > prior_hmap;
+    unordered_set<State, boost::hash<State> > closedSet;
     vector<shared_ptr<Path > > out_solution;
     int cost, map_size, cbsnode_num, lowLevelExpanded, num_ta;
     int row_number, col_number;
     float l_weight;
-    std::mutex m;
 
 
     Timer total_timer, lowlevel_search_timer, firstconflict_timer, focal_score_timer, newnode_timer, conflict_num_timer;
@@ -32,11 +33,11 @@ public:
 
     ~ECBS();
     ECBS(int row_number, int col_number, unordered_set<Location>& obstacles,
-           vector<Location>& goals, vector<State>& startStates, float l_weight);
+           vector<Location>& goals, vector<State>& startStates, float l_weight, int max_nodes,int world_rank);
     void clear();
     int solve();
     int heuristic(int x1, int y1, int agent_idx);
-    bool searchNodeIsValid(shared_ptr<Constraints>&  agent_constraint_set, const State& new_state, const State& org_state, unordered_set<State, boost::hash<State> > *closedSet);
+    bool searchNodeIsValid(shared_ptr<Constraints>& agent_constraint_set, const State& new_state, const State& org_state);
 
     shared_ptr<Path> findPath_a_star_eps(vector<shared_ptr<Path > >& cost_matrix, shared_ptr<Constraints>& agent_constraint_set, int agent_idx, vector<int >& fmin);
     shared_ptr<Path> findPath_a_star_eps2(vector<shared_ptr<Path > >& cost_matrix, shared_ptr<Constraints>& agent_constraint_set, int agent_idx, vector<int >& fmin);
@@ -68,9 +69,6 @@ public:
             boost::heap::compare<FocalPathEntryCompare> >
             low_focalSet_t;
     using FocalPathEntryHandle = low_focalSet_t::handle_type;
-
-    
-    
 
 };
 

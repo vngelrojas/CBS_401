@@ -4,6 +4,7 @@
 
 #include "CBS.hpp"
 #include "CBSNode.hpp"
+#include <mpi.h>
 
 
 CBS::~CBS() = default;
@@ -25,6 +26,7 @@ void CBS::clear() {
     this->cbsnode_num = 0;
     this->lowLevelExpanded = 0;
     this->num_ta = 0;
+    max_nodes = 0;
 }
 
 class PairCompare {
@@ -36,7 +38,7 @@ public:
 
 
 CBS::CBS(int row_number, int col_number, unordered_set<Location>& obstacles,
-               vector<Location>& goals, vector<State>& start_states) {
+               vector<Location>& goals, vector<State>& start_states,int max_nodes,int world_rank) {
     this->row_number = row_number;
     this->col_number = col_number;
     this->map_size = row_number * col_number;
@@ -49,6 +51,8 @@ CBS::CBS(int row_number, int col_number, unordered_set<Location>& obstacles,
     this->cbsnode_num = 0;
     this->lowLevelExpanded = 0;
     this->num_ta = 0;
+    this->max_nodes = max_nodes;
+    this->world_rank = world_rank;
 
     this->map2d_obstacle.resize(this->row_number, vector<int>(this->col_number, 0));
     for (auto obstacle : obstacles) {
@@ -213,8 +217,14 @@ shared_ptr<Path> CBS::findPath_a_star(shared_ptr<Constraints>& agent_constraint_
 }
 
 
-int CBS::solve() {
-    shared_ptr<CBSNode> start_node(new CBSNode());
+int CBS::solve(shared_ptr<CBSNode> root_node) {
+     shared_ptr<CBSNode> start_node;
+    if (root_node == nullptr) {
+        start_node = shared_ptr<CBSNode> ( new CBSNode());
+    }
+    else {
+        start_node = root_node;
+    }
     // Create intial cost matrix
     start_node->create_cost_matrix(this);
     this->first_cost_matrix = start_node->cost_matrix;
@@ -227,8 +237,36 @@ int CBS::solve() {
 
     open.push(start_node);
 
+    // Buffer for the stop signal
+    int stop_signal = 0;
+    MPI_Request stop_request;
+
+    // Non-blocking receive for stop signal
+    MPI_Irecv(&stop_signal, 1, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &stop_request);
+    cout << "In solve, worker: " << world_rank << endl;
     while (!open.empty())
     {
+        // if we are master and the open list is == to max nodes, then put nodes in list to distribute in main function
+        if(world_rank == 0 && open.size() == this->max_nodes)
+        {
+            cout << "I am master and I have " << open.size() << " nodes to distribute" << endl;
+            while(!open.empty())
+            {
+                shared_ptr<CBSNode> cur_node = open.top(); open.pop();
+                nodes_to_distribute.push_back(cur_node);
+            }
+            return 0;
+        }
+        else // a worker node will check if a solution is found from another worker (non-blocking)
+        {
+            // Check for stop signal at the start of the loop
+            int flag;
+            MPI_Test(&stop_request, &flag, MPI_STATUS_IGNORE);
+            if (flag && stop_signal == 1) {
+                std::cout << "Worker " << world_rank << " stopping execution." << std::endl;
+                return 0; 
+            }
+        }
         this->cbsnode_num ++;
         shared_ptr<CBSNode> cur_node = open.top(); open.pop();
         Conflict conflict;
@@ -240,6 +278,7 @@ int CBS::solve() {
         // If no conflicts in the cost matrix, then we have a solution
         if (done)
         {
+            cout << "I am worker " << world_rank << " and I found a solution" << endl;
             std::cout << "done; cost: " << cur_node->cost << std::endl;
             this->out_solution = cur_node->cost_matrix;
             if (!check_ans_valid(this->out_solution))
@@ -247,6 +286,11 @@ int CBS::solve() {
             this->cost = cur_node->cost;
             this->solution_found = true;
             this->constraint_sets = cur_node->constraint_sets;
+
+            cout << " I am worker " << world_rank << " and I found a solution" << endl;
+            // Send stop signal to all other workers using broadcast
+            stop_signal = 1;
+            MPI_Bcast(&stop_signal, 1, MPI_INT, world_rank, MPI_COMM_WORLD);
             return true;
         }
         
@@ -260,8 +304,6 @@ int CBS::solve() {
             shared_ptr<CBSNode> new_node;
 
             // Idk what the point of this if/else is
-            //i think the forloop only runs twice and 0th iteration creates a new node
-            //while the 1th iteration only updates the existing node so we dont waste memory
             if (cur_i == 1) // Make new node point to same node as cur_node
                 new_node = cur_node;
             else  // make a deep copy of the current node
