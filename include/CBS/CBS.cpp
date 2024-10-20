@@ -260,6 +260,8 @@ int CBS::solve() {
             shared_ptr<CBSNode> new_node;
 
             // Idk what the point of this if/else is
+            //i think the forloop only runs twice and 0th iteration creates a new node
+            //while the 1th iteration only updates the existing node so we dont waste memory
             if (cur_i == 1) // Make new node point to same node as cur_node
                 new_node = cur_node;
             else  // make a deep copy of the current node

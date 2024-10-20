@@ -7,7 +7,8 @@
 
 #include "ECBS_parallel.hpp"
 #include "../dynamic_hungarian_assignment.hpp"
-
+    
+class ECBS;
 class ECBSNode{
 
 
@@ -15,13 +16,13 @@ public:
 
     ECBSNode();
     explicit ECBSNode(shared_ptr<ECBSNode> curnode);
-
     void create_cost_matrix(ECBS* pInstance);
     bool update_cost_matrix(ECBS* pInstance, int agent_id);
     int get_LB();
 
 
     int cost, LB, focal_score;
+    bool in_focal = false;
     Conflict first_conflict;
     vector<int > fmin;
     vector<shared_ptr<Path > > cost_matrix;
@@ -60,6 +61,7 @@ using ECBSNodeLBHandle = high_LBSet_t::handle_type;
 struct compareFocalHeuristic {
     bool operator()(const ECBSNodeHandle& h1, const ECBSNodeHandle& h2) const {
         // Our heap is a maximum heap, so we invert the comperator function here
+    
         if ((*h1)->focal_score != (*h2)->focal_score) {
             return (*h1)->focal_score > (*h2)->focal_score;
         }

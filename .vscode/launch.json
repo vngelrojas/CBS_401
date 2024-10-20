@@ -9,7 +9,8 @@
             "name": "(Windows) Launch",
             "type": "cppdbg",  // Change from lldb to cppdbg for GDB or cppvsdbg for MSVC
             "request": "launch",
-            "program": "${workspaceFolder}/build/main_CBS",
+            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}",
+
             "args": ["-i", "../map_file/debug_cbs_data.yaml", "-o", "../outputs/output.yaml"],  
             "cwd": "${workspaceFolder}/build",
             "stopAtEntry": true,  // Optional: Will stop the debugger at the entry point
@@ -31,4 +32,5 @@
         "type": "shell",
         "command": "cmake --build ${workspaceFolder}/build"
     }
+
 }
