@@ -13,6 +13,8 @@ cmake --build . --target CBS
 cmake --build . --target CBS_parallel
 cmake --build . --target ECBS
 cmake --build . --target ECBS_parallel
+cmake --build . --target CBS_distributed
+cmake --build . --target ECBS_distributed
 ```
 
 Run (In build dir):
@@ -21,7 +23,18 @@ Run (In build dir):
 ./CBS_parallel -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ./ECBS -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ./ECBS_parallel -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ```
+
+Run CBS distribute with 2 processes (In build dir)
+```bash
+mpirun -np 2 ./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+```
+work in progress: Run ECBS distribute with 2 processes (In build dir)
+```bash
+mpirun -np 2 ./ECBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+```
+
 
 Generate test case:
 

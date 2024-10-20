@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/devcontainers/cpp:1-ubuntu-24.04
 
 ARG REINSTALL_CMAKE_VERSION_FROM_SOURCE="3.22.2"
+ARG PROTOBUF_VERSION=3.17.3
 
-# Optionally install the cmake for vcpkg 
+# Optionally install the cmake for vcpkg
 COPY ./reinstall-cmake.sh /tmp/
-
 
 RUN apt-get update && apt-get install -y dos2unix
 
@@ -13,6 +13,19 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
     fi && \
     rm -f /tmp/reinstall-cmake.sh
 
+# Install dependencies for protobuf
+RUN apt-get update && apt-get install -y autoconf automake libtool curl make g++ unzip
+
+# Download, build, and install protobuf
+RUN curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-cpp-${PROTOBUF_VERSION}.tar.gz && \
+    tar -xzf protobuf-cpp-${PROTOBUF_VERSION}.tar.gz && \
+    cd protobuf-${PROTOBUF_VERSION} && \
+    ./configure && \
+    make && \
+    sudo make install && \
+    sudo ldconfig && \
+    cd .. && \
+    rm -rf protobuf-${PROTOBUF_VERSION} protobuf-cpp-${PROTOBUF_VERSION}.tar.gz
 
 # Clone and install ParlayLib
 RUN git clone https://github.com/cmuparlay/parlaylib.git /tmp/parlaylib \
@@ -37,7 +50,7 @@ RUN git clone https://github.com/jbeder/yaml-cpp.git /tmp/yaml-cpp \
     && cd / \
     && rm -rf /tmp/yaml-cpp
 
-#Google Test
+# Google Test
 RUN git clone https://github.com/google/googletest.git /tmp/googletest \
     && cd /tmp/googletest \
     && mkdir build \
@@ -60,7 +73,13 @@ RUN git clone https://github.com/google/benchmark.git /tmp/benchmark \
     && cd / \
     && rm -rf /tmp/benchmark
 
-# Python and env thing
+# Python and env setup
 RUN sudo apt-get update && sudo apt-get install -y python3 python3-pip
 RUN python3 --version && pip3 --version
 RUN sudo apt install -y python3.12-venv
+
+# OpenMPI Installation
+RUN sudo apt-get update && sudo apt-get install -y openmpi-bin openmpi-doc libopenmpi-dev
+
+# Verify OpenMPI installation
+RUN mpirun --version

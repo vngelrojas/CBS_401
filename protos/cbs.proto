@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package CBSProto;
+
+message CBS{
+    message Location{
+        int32 x = 1;
+        int32 y = 2;
+    }   
+    message State{
+        int32 time = 1;
+        int32 x = 2;
+        int32 y = 3;
+    }
+
+    int32 num_of_rows = 1;
+    int32 num_of_cols = 2;
+    int32 world_size = 3;
+    int32 world_rank = 4;
+    repeated Location obstacles = 5;
+    repeated Location goals = 6;
+    repeated State start_states = 7;
+
+}
+
+
+
+/*
+
+ CBS cbs(row_number, col_number, obstacles, goals, start_states,world_size-1,world_rank);
+
+*/

@@ -107,7 +107,11 @@ int main(int argc, char** argv) {
         cbs.solve();
         cbs.total_timer.stop();
         cbs.total_runtime = cbs.total_timer.elapsedSeconds();
-        if (cbs.solution_found) break;
+        if (cbs.solution_found)
+        {
+            cout << "Solution found in " << cbs.total_runtime << " seconds" << endl;
+            break;
+        }
     }
     std::ofstream out(outputFile);
     out << "statistics:" << std::endl;
