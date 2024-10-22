@@ -4,6 +4,14 @@
 	"name": "C++",
 	"build": {
 		"dockerfile": "Dockerfile"
+	},
+	"postCreateCommand": "./.devcontainer/getPythonReqs.sh",
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"python.pythonPath": "/workspaces/CBS_401/python/myenv/bin/python"
+			}
+		}
 	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.

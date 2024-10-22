@@ -42,6 +42,9 @@ Generate test case:
 # please check generate_data_for_exp1.py/generate_data_for_exp2.py
 # there are some config in it
 
+# to activate python env run this first
+source /workspaces/CBS_401/python/myenv/bin/activate 
+
 # in root dir:
 python python/generate_data_for_exp2.py --map_path map_file/Boston_0_256.map --output_dir map_file/Paper_boston_256_256_060 --common_ratio 0.6
 ```
