@@ -83,3 +83,6 @@ RUN sudo apt-get update && sudo apt-get install -y openmpi-bin openmpi-doc libop
 
 # Verify OpenMPI installation
 RUN mpirun --version
+
+# Install tkinter - might be safe to delete this
+RUN sudo apt-get update && sudo apt-get install -y python3-tk
