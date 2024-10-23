@@ -297,7 +297,7 @@ int CBS::solve(shared_ptr<CBSNode> root_node) {
             // Send stop signal to all other workers using broadcast
             stop_signal = 1;
            
-                for (int i = 1; i < world_size; i++) {
+                for (int i = 0; i < world_size; i++) {
                     if (i != world_rank) { // Don't send to yourself
                     cout << "Sending to " << i << endl;
                         MPI_Send(&stop_signal, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
