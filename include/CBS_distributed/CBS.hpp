@@ -17,6 +17,7 @@ public:
     int num_of_agents;
     int max_nodes;
     int world_rank;
+    int world_size;
     vector<shared_ptr<CBSNode>> nodes_to_distribute;
     vector<State> start_states;
     unordered_set<Location> obstacles;
