@@ -20,7 +20,7 @@ from typing import Tuple, List
 
 DEFAULT_INPUT_PATH = Path("../map_file/debug_cbs_data.yaml") # temp holder
 BASE_OUTPUT_DIR = Path("../outputs")
-DEFAULT_TIMEOUT_DURATION = 5  # seconds
+DEFAULT_TIMEOUT_DURATION = 13  # seconds
 
 SUCCESS_FILES: List[str] = []
 FAILED_FILES: List[str] = []
