@@ -1,5 +1,23 @@
 FROM mcr.microsoft.com/devcontainers/cpp:1-ubuntu-24.04
 
+# Use the base image for C++
+FROM mcr.microsoft.com/devcontainers/cpp:1-ubuntu-24.04
+
+# Add the Intel oneAPI repository and install Intel VTune Profiler
+RUN apt-get update && \
+    apt-get install -y wget gnupg && \
+    cd /tmp && \
+    wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB && \
+    apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB && \
+    rm GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB && \
+    echo "deb https://apt.repos.intel.com/oneapi all main" | tee /etc/apt/sources.list.d/oneAPI.list && \
+    apt-get update && \
+    apt-get install -y intel-oneapi-vtune && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set up environment variables for VTune
+RUN echo "source /opt/intel/oneapi/vtune/latest/env/vars.sh" >> /etc/bash.bashrc
+
 ARG REINSTALL_CMAKE_VERSION_FROM_SOURCE="3.22.2"
 ARG PROTOBUF_VERSION=3.17.3
 
