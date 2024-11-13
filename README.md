@@ -35,6 +35,18 @@ work in progress: Run ECBS distribute with 2 processes (In build dir)
 mpirun -np 2 ./ECBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ```
 
+Run Vtune Profiling
+
+Peformance Snapshots:
+Below is an example 
+```
+vtune -collect performance-snapshot -r cbs_parallel_snapshot ./CBS_parallel -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+```
+Below saves the report to an html file
+```
+vtune -report summary -r cbs_parallel_snapshot -format html -report-output cbs_parallel_report.html
+```
+
 
 Generate test case:
 
