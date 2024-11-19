@@ -3,28 +3,35 @@
 '''
 # run.py - A script to manage CMake build commands and execute built binaries with categorized outputs.
 # NOTE: Activate environment first, look at readme.md
+#       cd into run_script folder
 #       run: python run.py configure 
-#       now you can do: python run.py <COMMAND> -i ../map_file/<FILE FOLDER>/ -c
+#       now you can do: python run.py <COMMAND> -i ../map_file/<FILE FOLDER>/ -c -w <NUMBER>
 #       -c is to run all of the files in the directory given
+#       -w is optional and is only for ECBS command. Number can be anywhere from 1.0 to 1.2
 #
-#       Note: And when pushing only put the run.py file no need for the other stuff in run_script folder
+#       Example: python run.py ECBS -i ../map_file/Boston_0_256_020/ -c -w 1.02
+#
+#       Note: When pushing to github only put py files. No need for the other stuff in run_script folder
 '''
 
 import argparse
 import os
 import sys
 import subprocess
-import shutil
 from pathlib import Path
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
 DEFAULT_INPUT_PATH = Path("../map_file/debug_cbs_data.yaml") # temp holder
 BASE_OUTPUT_DIR = Path("../outputs")
 DEFAULT_TIMEOUT_DURATION = 13  # seconds
 
+# Global Lists to Track File Statuses
 SUCCESS_FILES: List[str] = []
 FAILED_FILES: List[str] = []
 SKIPPED_FILES: List[str] = []
+
+# Define ECBS-related commands (Only 'ECBS' for -w option. Add more later)
+ECBS_COMMANDS = {"ECBS"}
 
 def usage():
     parser = argparse.ArgumentParser(
@@ -62,6 +69,12 @@ def usage():
         default=DEFAULT_TIMEOUT_DURATION,
         help=f"Set the timeout duration in seconds (default is {DEFAULT_TIMEOUT_DURATION} seconds)."
     )
+    parser.add_argument(
+        "-w", "--weight",
+        type=float,
+        default=None,
+        help="Optional weight parameter for ECBS command (e.g., -w 1.02). Applicable only to ECBS."
+    )
     return parser.parse_args()
 
 def ensure_input_path(input_path: Path):
@@ -71,9 +84,10 @@ def ensure_input_path(input_path: Path):
 
 def derive_output_path(cmd: str, input_file: Path) -> Path:
     base_input_dir = Path("../map_file")
-    if base_input_dir in input_file.parents:
+    try:
         relative_path = input_file.relative_to(base_input_dir)
-    else:
+    except ValueError:
+        # If input_file is not under base_input_dir
         relative_path = input_file.name
 
     if input_file.is_file():
@@ -96,22 +110,33 @@ def ensure_output_directory(output_file: Path):
             print(f"Error: Failed to create output directory '{output_dir}': {e}")
             sys.exit(1)
 
-def build_and_execute_single(target_name: str, executable: str, file_path: Path, timeout_duration: int) -> bool:
+def build_and_execute_single(target_name: str, executable: str, file_path: Path, timeout_duration: int, weight: Optional[float] = None) -> bool:
     derived_output = derive_output_path(target_name, file_path)
     ensure_output_directory(derived_output)
 
     print(f"Building target: {target_name} for file: {file_path}")
-    build_result = subprocess.run(["cmake", "--build", ".", "--target", target_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    
+    build_result = subprocess.run(
+        ["cmake", "--build", ".", "--target", target_name],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+
     if build_result.returncode != 0:
         print(f"Error: {target_name} build failed for '{file_path}'.")
         FAILED_FILES.append(f"{file_path} (Build Failed)")
         return False
 
-    print(f"Executing: ./{executable} -i \"{file_path}\" -o \"{derived_output}\" with a timeout of {timeout_duration} sec.")
+    # Construct the execution command
+    exec_command = [f"./{executable}", "-i", str(file_path), "-o", str(derived_output)]
+    
+    # Append -w <NUMBER> for applicable commands (only ECBS atm)
+    if weight is not None:
+        exec_command.extend(["-w", str(weight)])
+
+    print(f"Executing: {' '.join(exec_command)} with a timeout of {timeout_duration} sec.")
     try:
         subprocess.run(
-            [f"./{executable}", "-i", str(file_path), "-o", str(derived_output)],
+            exec_command,
             timeout=timeout_duration,
             check=True
         )
@@ -123,7 +148,7 @@ def build_and_execute_single(target_name: str, executable: str, file_path: Path,
         SKIPPED_FILES.append(f"{file_path} (Timeout)")
         return True
     except subprocess.CalledProcessError:
-        print(f"'{file_path}' failed. Look at execution.log for details.")
+        print(f"'{file_path}' failed.")
         FAILED_FILES.append(f"{file_path} (Execution Failed)")
         return False
 
@@ -135,7 +160,7 @@ def build_and_execute_batch(target_name: str, executable: str, directory_path: P
         sys.exit(1)
 
     for file in yaml_files:
-        success = build_and_execute_single(target_name, executable, file, timeout_duration)
+        success = build_and_execute_single(target_name, executable, file, timeout_duration, weight)
         if not success:
             print(f"Error encountered with file '{file}'.")
             if continue_on_failure:
@@ -145,13 +170,13 @@ def build_and_execute_batch(target_name: str, executable: str, directory_path: P
                 print("Stopping further processing due to failure.")
                 break
 
-def handle_commands(target_name: str, executable: str, input_path: Path, timeout_duration: int, continue_on_failure: bool):
+def handle_commands(target_name: str, executable: str, input_path: Path, timeout_duration: int, continue_on_failure: bool, weight: Optional[float] = None):
     if input_path.is_dir():
         print(f"Input path '{input_path}' is a directory. Processing all .yaml files inside.")
-        build_and_execute_batch(target_name, executable, input_path, timeout_duration, continue_on_failure)
+        build_and_execute_batch(target_name, executable, input_path, timeout_duration, continue_on_failure, weight)
     elif input_path.is_file():
         print(f"Input path '{input_path}' is a file. Processing it.")
-        build_and_execute_single(target_name, executable, input_path, timeout_duration)
+        build_and_execute_single(target_name, executable, input_path, timeout_duration, weight)
     else:
         print(f"Error: '{input_path}' isn't a file or a directory.")
         sys.exit(1)
@@ -174,14 +199,22 @@ def main():
     input_path = Path(args.input)
     continue_on_failure = args.cont
     timeout_duration = args.timeout
- 
+    weight = args.weight
     ensure_input_path(input_path)
 
+    # Validate -w usage: only for ECBS
+    if weight is not None and command not in ECBS_COMMANDS:
+        print(f"Error: The '-w' option is only applicable to the ECBS command atm. Command '{command}' does not support '-w'.")
+        sys.exit(1)
     if command == "configure":
         print("Running: cmake ..")
         try:
             with open("build_config.log", "w") as log_file:
-                result = subprocess.run(["cmake", ".."], stdout=log_file, stderr=subprocess.STDOUT)
+                result = subprocess.run(
+                    ["cmake", ".."],
+                    stdout=log_file,
+                    stderr=subprocess.STDOUT
+                )
             if result.returncode != 0:
                 print("Error: Configuration failed.")
                 sys.exit(1)
@@ -194,7 +227,7 @@ def main():
             print(f"Error: Invalid command '{command}'.")
             usage()
         
-        handle_commands(target, executable, input_path, timeout_duration, continue_on_failure)
+        handle_commands(target, executable, input_path, timeout_duration, continue_on_failure, weight)
 
     print("\nSummary:")
     print(f"Successful: {len(SUCCESS_FILES)}")
