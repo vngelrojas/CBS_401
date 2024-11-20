@@ -152,7 +152,7 @@ def build_and_execute_single(target_name: str, executable: str, file_path: Path,
         FAILED_FILES.append(f"{file_path} (Execution Failed)")
         return False
 
-def build_and_execute_batch(target_name: str, executable: str, directory_path: Path, timeout_duration: int, continue_on_failure: bool):
+def build_and_execute_batch(target_name: str, executable: str, directory_path: Path, timeout_duration: int, continue_on_failure: bool, weight: Optional[float] = None):
     yaml_files = list(directory_path.glob("*.yaml"))
     
     if not yaml_files:
