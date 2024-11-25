@@ -7,10 +7,10 @@
 #include "CBSNode.hpp"
 #include "../common.hpp"
 #include "CBSNode.hpp"
-#include "/workspaces/CBS_401/protos/cbs_node.pb.h"
+#include "../../protos/cbs_node.pb.h"
 #include <mpi.h>
 // #include "../../protos/cbs.pb.h"
-#include "/workspaces/CBS_401/protos/cbs.pb.h"
+#include "../../protos/cbs.pb.h"
 namespace po = boost::program_options;
 
 unordered_set<Location> obstacles;
