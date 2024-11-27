@@ -14,6 +14,8 @@ The following packages must be installed on all systems in the cluster:
 
 Ensure that the same versions of the above packages are installed on every system.
 
+NOTE: For simplicity, the following steps assume that all firewalls are turned off. This makes it easier to work with openMPI. Additional steps will be required if there is a firewall.
+
 ## Step 1: Configure Your Hosts File
 
 To simplify communication between the machines in your cluster, you can assign hostnames to the IP addresses of each node. This eliminates the need to type in the IP addresses every time.
