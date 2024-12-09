@@ -73,4 +73,20 @@ python python/PlanViz/script/plan_viz.py --map  map_file/Boston_0_256.map --plan
 ```
 
 
+Profiling can be done using Vtune or the default profiling tool in CLion. Please note that if you are on Windows OS, the profiling tool will not work on CLion. Vtune can be used, however, CLion is suggested for this project. Below are the steps to run Vtune. 
+
+Run Vtune Profiling
+Peformance Snapshots:
+Below is an example 
+```
+vtune -collect performance-snapshot -r cbs_parallel_snapshot ./CBS_parallel -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
+```
+Below saves the report to an html file
+```
+vtune -report summary -r cbs_parallel_snapshot -format html -report-output cbs_parallel_report.html
+```
+
+If you would like to have a more detailed report about which function calls are being made at a significantly higher rate you can also run a hotspots report by replacing `performance-snapshot` with `hotspots`
+
+
 Thank @MinakoOikawa (twitter id) for providing the correct dynamic hungarian implementation.

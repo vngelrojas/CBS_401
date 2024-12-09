@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<html><style>
+        .metric-name {
+        font-weight: 600;
+        min-width: 14em;
+        display: inline-block;
+        }
+
+        .metric-value {
+        margin-left: 1em;
+        color: #336;
+        }
+
+        .metric-value-with-issue {
+        margin-left: 1em;
+        color: #C33;
+        }
+
+        li {
+        list-style-type: none;
+        }
+
+        ul {
+        margin-left: 1.5em;
+        padding-left: 0em;
+        }
+
+        body {
+        margin: 0;
+        paddind: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #336;
+        }
+
+        pre {
+        white-space:pre-wrap;
+        max-width: 40em;
+        color: #633;
+        }
+
+        .issue {
+        border-left: 3px solid #C33;
+        padding: 0.3em 0.3em 0.3em 1em;
+        }
+
+        table {
+        margin: 0 1.5em;
+        }
+
+        th, td {
+        text-align: left;
+        }
+
+        td {
+        color: #333;
+        }
+
+        th {
+        border-bottom: 2px solid #336;
+        font-weight: 600;
+        }
+
+        .table-value {
+        margin-right: 1.5em;
+        }
+
+        .brand {
+        background-color: #0071c5;
+        padding: 0.5em 1.5em;
+        width: 100%;
+        color: white;
+        font-weight: 600;
+        }
+
+        .recommendation-placeholder {
+        background-color: #eaecee;
+        padding: 1em;
+        }
+
+        .recommendation-placeholder p {
+        font-weight: 600;
+        margin: 0;
+        }
+
+        .recommendation {
+        border-left: 3px solid #bbb;
+        padding: 0.3em 0.3em 0.3em 1em;
+        margin: 0 0 0 1.5em;
+        }
+
+        .recommendation-metric {
+        font-weight: 600;
+        min-width: 14em;
+        display: inline-block;
+        margin: 0 0 0 1.5em;
+        }
+
+      </style><body><div class="brand">Intel<sup>&reg;</sup> VTune<sup>&trade;</sup> Profiler 2025.0.0 pre-release</div><div class="recommendation-placeholder"><p>Recommendations:</p><span class="recommendation-metric">Increase execution time:  </span><pre class="recommendation">Application execution time is too short. Metrics data may be unreliable. Consider increasing your application execution time.</pre><span class="recommendation-metric">Hotspots: Start with Hotspots analysis to understand the efficiency of your algorithm.</span><pre class="recommendation">Use Hotspots analysis to identify the most time consuming functions. Drill down to see the time spent on every line of code.</pre><span class="recommendation-metric">Microarchitecture Exploration: There is low microarchitecture usage (0.9%) of available hardware resources.  of Pipeline Slots</span><pre class="recommendation">Run Microarchitecture Exploration analysis to analyze CPU microarchitecture bottlenecks that can affect application performance.</pre><span class="recommendation-metric">Memory Access: The Memory Bound metric is high  (27.0%). A significant fraction of execution pipeline slots could be stalled due to demand memory load and stores.  of Pipeline Slots</span><pre class="recommendation">Use Memory Access analysis to measure metrics that can identify memory access issues.</pre><span class="recommendation-metric">Threading: There is poor utilization of logical CPU cores (36.3%) in your application. </span><pre class="recommendation"> Use Threading to explore more opportunities to increase parallelism in your application.</pre></div><ul><li><span class="metric-name">Elapsed Time:
+        </span><span class="metric-value-with-issue">0.552s<div class="issues"><pre class="issue">Application execution time is too short. Metrics data may be unreliable. Consider reducing the sampling interval or increasing your application execution time.</pre></div></span><ul><li><span class="metric-name">IPC:
+        </span><span class="metric-value-with-issue">0.888<div class="issues"><pre class="issue">The IPC may be too low. This could be caused by issues such as memory stalls, instruction starvation, branch misprediction or long latency instructions. Explore the other hardware-related metrics to identify what is causing low IPC.</pre></div></span></li></ul><ul><li><span class="metric-name">SP GFLOPS:
+        </span><span class="metric-value">0.000</span></li></ul><ul><li><span class="metric-name">DP GFLOPS:
+        </span><span class="metric-value">0.001</span></li></ul><ul><li><span class="metric-name">x87 GFLOPS:
+        </span><span class="metric-value">0.012</span></li></ul><ul><li><span class="metric-name">Average CPU Frequency:
+        </span><span class="metric-value">3.790 GHz</span></li></ul></li></ul><ul><li><span class="metric-name">Logical Core Utilization:
+        </span><span class="metric-value-with-issue">36.3% (4.354 out of 12)<div class="issues"><pre class="issue">The metric value is low, which may signal a poor logical CPU cores utilization. Consider improving physical core utilization as the first step and then look at opportunities to utilize logical cores, which in some cases can improve processor throughput and overall performance of multi-threaded applications.</pre></div></span><ul><li><span class="metric-name">Physical Core Utilization:
+        </span><span class="metric-value-with-issue">70.9% (4.252 out of 6)<div class="issues"><pre class="issue">The metric value is low, which may signal a poor physical CPU cores utilization caused by:
+    - load imbalance
+    - threading runtime overhead
+    - contended synchronization
+    - thread/process underutilization
+    - incorrect affinity that utilizes logical cores instead of physical cores
+Run the HPC Performance Characterization analysis to estimate the efficiency of MPI and OpenMP parallelism or run the Locks and Waits analysis to identify parallel bottlenecks for other parallel runtimes.</pre></div></span></li></ul></li></ul><ul><li><span class="metric-name">Microarchitecture Usage:
+        </span><span class="metric-value-with-issue">0.9% of Pipeline Slots<div class="issues"><pre class="issue">You code efficiency on this platform is too low.
+
+Possible cause: memory stalls, instruction starvation, branch misprediction or long latency instructions.
+
+Next steps: Run Microarchitecture Exploration analysis to identify the cause of the low microarchitecture usage efficiency.</pre></div></span><ul><li><span class="metric-name">Retiring:
+        </span><span class="metric-value">0.9% of Pipeline Slots</span></li></ul><ul><li><span class="metric-name">Front-End Bound:
+        </span><span class="metric-value">8.8% of Pipeline Slots</span></li></ul><ul><li><span class="metric-name">Bad Speculation:
+        </span><span class="metric-value-with-issue">19.4% of Pipeline Slots<div class="issues"><pre class="issue">A significant proportion of pipeline slots containing useful work are being cancelled. This can be caused by mispredicting branches or by machine clears. Note that this metric value may be highlighted due to Branch Resteers issue.</pre></div></span></li></ul><ul><li><span class="metric-name">Back-End Bound:
+        </span><span class="metric-value-with-issue">70.8% of Pipeline Slots<div class="issues"><pre class="issue">A significant portion of pipeline slots are remaining empty. When operations take too long in the back-end, they introduce bubbles in the pipeline that ultimately cause fewer pipeline slots containing useful work to be retired per cycle than the machine is capable to support. This opportunity cost results in slower execution. Long-latency operations like divides and memory operations can cause this, as can too many operations being directed to a single execution port (for example, more multiply operations arriving in the back-end per cycle than the execution unit can support).</pre></div></span><ul><li><span class="metric-name">Memory Bound:
+        </span><span class="metric-value-with-issue">27.0% of Pipeline Slots<div class="issues"><pre class="issue">The metric value is high. This can indicate that the significant fraction of execution pipeline slots could be stalled due to demand memory load and stores. Use Memory Access analysis to have the metric breakdown by memory hierarchy, memory bandwidth information, correlation by memory objects.</pre></div></span><ul><li><span class="metric-name">L1 Bound:
+        </span><span class="metric-value-with-issue">5.8% of Clockticks<div class="issues"><pre class="issue">This metric shows how often machine was stalled without missing the L1 data cache. The L1 cache typically has the shortest latency. However, in certain cases like loads blocked on older stores, a load might suffer a high latency even though it is being satisfied by the L1. Note that this metric value may be highlighted due to DTLB Overhead or Cycles of 1 Port Utilized issues.</pre></div></span><ul><li><span class="metric-name">DTLB Overhead:
+        </span><span class="metric-value-with-issue">100.0% of Clockticks<div class="issues"><pre class="issue">Issue: A significant portion of cycles is being spent handling first-level data TLB misses.
+
+Tips:
+
+1.  As with ordinary data caching, focus on improving data locality and reducing the working-set size to minimize the DTLB overhead.
+
+2. Consider using profile-guided optimization (PGO) to collocate frequently-used data on the same page.
+
+3. Try using larger page sizes for large amounts of frequently-used data.</pre></div></span><ul><li><span class="metric-name">Load STLB Hit:
+        </span><span class="metric-value-with-issue">100.0% of Clockticks<div class="issues"><pre class="issue">In significant fraction of cycles the (first level) DTLB was missed by load accesses, that later on hit in second-level TLB (STLB).</pre></div></span></li></ul><ul><li><span class="metric-name">Load STLB Miss:
+        </span><span class="metric-value">0.4% of Clockticks</span></li></ul></li></ul><ul><li><span class="metric-name">Loads Blocked by Store Forwarding:
+        </span><span class="metric-value">0.0% of Clockticks</span></li></ul><ul><li><span class="metric-name">Lock Latency:
+        </span><span class="metric-value">0.0% of Clockticks</span></li></ul><ul><li><span class="metric-name">Split Loads:
+        </span><span class="metric-value">0.0% of Clockticks</span></li></ul><ul><li><span class="metric-name">4K Aliasing:
+        </span><span class="metric-value">0.0% of Clockticks</span></li></ul><ul><li><span class="metric-name">FB Full:
+        </span><span class="metric-value">0.2% of Clockticks</span></li></ul></li></ul><ul><li><span class="metric-name">L2 Bound:
+        </span><span class="metric-value">0.8% of Clockticks</span></li></ul><ul><li><span class="metric-name">L3 Bound:
+        </span><span class="metric-value">2.2% of Clockticks</span><ul><li><span class="metric-name">Contested Accesses:
+        </span><span class="metric-value">0.9% of Clockticks</span></li></ul><ul><li><span class="metric-name">Data Sharing:
+        </span><span class="metric-value">0.7% of Clockticks</span></li></ul><ul><li><span class="metric-name">L3 Latency:
+        </span><span class="metric-value">2.1% of Clockticks</span></li></ul><ul><li><span class="metric-name">SQ Full:
+        </span><span class="metric-value">0.0% of Clockticks</span></li></ul></li></ul><ul><li><span class="metric-name">DRAM Bound:
+        </span><span class="metric-value">2.1% of Clockticks</span><ul><li><span class="metric-name">Memory Bandwidth:
+        </span><span class="metric-value">6.8% of Clockticks</span></li></ul><ul><li><span class="metric-name">Memory Latency:
+        </span><span class="metric-value">21.5% of Clockticks</span></li></ul></li></ul><ul><li><span class="metric-name">Store Bound:
+        </span><span class="metric-value">0.0% of Clockticks</span><ul><li><span class="metric-name">Store Latency:
+        </span><span class="metric-value">0.0% of Clockticks</span></li></ul><ul><li><span class="metric-name">Split Stores:
+        </span><span class="metric-value">0.0%</span></li></ul><ul><li><span class="metric-name">DTLB Store Overhead:
+        </span><span class="metric-value">0.2% of Clockticks</span><ul><li><span class="metric-name">Store STLB Hit:
+        </span><span class="metric-value">0.2% of Clockticks</span></li></ul><ul><li><span class="metric-name">Store STLB Miss:
+        </span><span class="metric-value">0.0% of Clockticks</span></li></ul></li></ul></li></ul></li></ul><ul><li><span class="metric-name">Core Bound:
+        </span><span class="metric-value-with-issue">43.9% of Pipeline Slots<div class="issues"><pre class="issue">This metric represents how much Core non-memory issues were of a bottleneck. Shortage in hardware compute resources, or dependencies software's instructions are both categorized under Core Bound. Hence it may indicate the machine ran out of an OOO resources, certain execution units are overloaded or dependencies in program's data- or instruction- flow are limiting the performance (e.g. FP-chained long-latency arithmetic operations).</pre></div></span></li></ul></li></ul></li></ul><ul><li><span class="metric-name">Memory Bound:
+        </span><span class="metric-value-with-issue">27.0% of Pipeline Slots<div class="issues"><pre class="issue">The metric value is high. This can indicate that the significant fraction of execution pipeline slots could be stalled due to demand memory load and stores. Use Memory Access analysis to have the metric breakdown by memory hierarchy, memory bandwidth information, correlation by memory objects.</pre></div></span><ul><li><span class="metric-name">Cache Bound:
+        </span><span class="metric-value">8.8% of Clockticks</span></li></ul><ul><li><span class="metric-name">DRAM Bound:
+        </span><span class="metric-value">2.1% of Clockticks</span></li></ul></li></ul><ul><li><span class="metric-name">Vectorization:
+        </span><span class="metric-value">0.0% of Packed FP Operations</span><ul><li><span class="metric-name">Instruction Mix:
+        </span><span class="metric-value"/><ul><li><span class="metric-name">SP FLOPs:
+        </span><span class="metric-value">0.1% of uOps</span><ul><li><span class="metric-name">Packed:
+        </span><span class="metric-value">0.0% from SP FP</span><ul><li><span class="metric-name">128-bit:
+        </span><span class="metric-value">0.0% from SP FP</span></li></ul><ul><li><span class="metric-name">256-bit:
+        </span><span class="metric-value">0.0% from SP FP</span></li></ul></li></ul><ul><li><span class="metric-name">Scalar:
+        </span><span class="metric-value">100.0% from SP FP</span></li></ul></li></ul><ul><li><span class="metric-name">DP FLOPs:
+        </span><span class="metric-value">0.1% of uOps</span><ul><li><span class="metric-name">Packed:
+        </span><span class="metric-value">0.0% from DP FP</span><ul><li><span class="metric-name">128-bit:
+        </span><span class="metric-value">0.0% from DP FP</span></li></ul><ul><li><span class="metric-name">256-bit:
+        </span><span class="metric-value">0.0% from DP FP</span></li></ul></li></ul><ul><li><span class="metric-name">Scalar:
+        </span><span class="metric-value">100.0% from DP FP</span></li></ul></li></ul><ul><li><span class="metric-name">x87 FLOPs:
+        </span><span class="metric-value">2.0% of uOps</span></li></ul><ul><li><span class="metric-name">Non-FP:
+        </span><span class="metric-value">97.8% of uOps</span></li></ul></li></ul><ul><li><span class="metric-name">FP Arith/Mem Rd Instr. Ratio:
+        </span><span class="metric-value">0.006</span></li></ul><ul><li><span class="metric-name">FP Arith/Mem Wr Instr. Ratio:
+        </span><span class="metric-value">0.017</span></li></ul></li></ul><ul><li><span class="metric-name">Collection and Platform Info:
+        </span><span class="metric-value"/><ul><li><span class="metric-name">Application Command Line:
+        </span><span class="metric-value">./ECBS_parallel "-i" "../map_file/debug_cbs_data.yaml" "-o" "../outputs/output.yaml" </span></li></ul><ul><li><span class="metric-name">Operating System:
+        </span><span class="metric-value">5.15.167.4-microsoft-standard-WSL2 DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=24.04
+DISTRIB_CODENAME=noble
+DISTRIB_DESCRIPTION="Ubuntu 24.04.1 LTS"</span></li></ul><ul><li><span class="metric-name">Computer Name:
+        </span><span class="metric-value">6de535193de4</span></li></ul><ul><li><span class="metric-name">Result Size:
+        </span><span class="metric-value">3.6 MB </span></li></ul><ul><li><span class="metric-name">Collection start time:
+        </span><span class="metric-value">22:05:42 13/11/2024 UTC</span></li></ul><ul><li><span class="metric-name">Collection stop time:
+        </span><span class="metric-value">22:05:42 13/11/2024 UTC</span></li></ul><ul><li><span class="metric-name">Collector Type:
+        </span><span class="metric-value">Driverless Perf per-process counting</span></li></ul><ul><li><span class="metric-name">CPU:
+        </span><span class="metric-value"/><ul><li><span class="metric-name">Name:
+        </span><span class="metric-value">Intel(R) microarchitecture code named Coffeelake</span></li></ul><ul><li><span class="metric-name">Frequency:
+        </span><span class="metric-value">2.592 GHz</span></li></ul><ul><li><span class="metric-name">Logical CPU Count:
+        </span><span class="metric-value">12</span></li></ul><ul><li><span class="metric-name">Cache Allocation Technology:
+        </span><span class="metric-value"/><ul><li><span class="metric-name">Level 2 capability:
+        </span><span class="metric-value">not detected</span></li></ul><ul><li><span class="metric-name">Level 3 capability:
+        </span><span class="metric-value">not detected</span></li></ul></li></ul></li></ul></li></ul></body></html>
+

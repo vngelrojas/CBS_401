@@ -16,212 +16,232 @@
 #include <google/protobuf/port_def.inc>
 
 PROTOBUF_PRAGMA_INIT_SEG
+
+namespace _pb = ::PROTOBUF_NAMESPACE_ID;
+namespace _pbi = _pb::internal;
+
 namespace CBSProto {
-constexpr CBSNode_Location::CBSNode_Location(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : x_(0)
-  , y_(0){}
+PROTOBUF_CONSTEXPR CBSNode_Location::CBSNode_Location(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.x_)*/0
+  , /*decltype(_impl_.y_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CBSNode_LocationDefaultTypeInternal {
-  constexpr CBSNode_LocationDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR CBSNode_LocationDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~CBSNode_LocationDefaultTypeInternal() {}
   union {
     CBSNode_Location _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CBSNode_LocationDefaultTypeInternal _CBSNode_Location_default_instance_;
-constexpr CBSNode_State::CBSNode_State(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : time_(0)
-  , x_(0)
-  , y_(0){}
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CBSNode_LocationDefaultTypeInternal _CBSNode_Location_default_instance_;
+PROTOBUF_CONSTEXPR CBSNode_State::CBSNode_State(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.time_)*/0
+  , /*decltype(_impl_.x_)*/0
+  , /*decltype(_impl_.y_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CBSNode_StateDefaultTypeInternal {
-  constexpr CBSNode_StateDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR CBSNode_StateDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~CBSNode_StateDefaultTypeInternal() {}
   union {
     CBSNode_State _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CBSNode_StateDefaultTypeInternal _CBSNode_State_default_instance_;
-constexpr CBSNode_Constraints_VertexConstraint::CBSNode_Constraints_VertexConstraint(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : time_(0)
-  , x_(0)
-  , y_(0)
-  , for_who_(0){}
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CBSNode_StateDefaultTypeInternal _CBSNode_State_default_instance_;
+PROTOBUF_CONSTEXPR CBSNode_Constraints_VertexConstraint::CBSNode_Constraints_VertexConstraint(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.time_)*/0
+  , /*decltype(_impl_.x_)*/0
+  , /*decltype(_impl_.y_)*/0
+  , /*decltype(_impl_.for_who_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CBSNode_Constraints_VertexConstraintDefaultTypeInternal {
-  constexpr CBSNode_Constraints_VertexConstraintDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR CBSNode_Constraints_VertexConstraintDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~CBSNode_Constraints_VertexConstraintDefaultTypeInternal() {}
   union {
     CBSNode_Constraints_VertexConstraint _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CBSNode_Constraints_VertexConstraintDefaultTypeInternal _CBSNode_Constraints_VertexConstraint_default_instance_;
-constexpr CBSNode_Constraints_EdgeConstraint::CBSNode_Constraints_EdgeConstraint(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : time_(0)
-  , x1_(0)
-  , y1_(0)
-  , x2_(0)
-  , y2_(0)
-  , for_who_(0){}
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CBSNode_Constraints_VertexConstraintDefaultTypeInternal _CBSNode_Constraints_VertexConstraint_default_instance_;
+PROTOBUF_CONSTEXPR CBSNode_Constraints_EdgeConstraint::CBSNode_Constraints_EdgeConstraint(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.time_)*/0
+  , /*decltype(_impl_.x1_)*/0
+  , /*decltype(_impl_.y1_)*/0
+  , /*decltype(_impl_.x2_)*/0
+  , /*decltype(_impl_.y2_)*/0
+  , /*decltype(_impl_.for_who_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CBSNode_Constraints_EdgeConstraintDefaultTypeInternal {
-  constexpr CBSNode_Constraints_EdgeConstraintDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR CBSNode_Constraints_EdgeConstraintDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~CBSNode_Constraints_EdgeConstraintDefaultTypeInternal() {}
   union {
     CBSNode_Constraints_EdgeConstraint _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CBSNode_Constraints_EdgeConstraintDefaultTypeInternal _CBSNode_Constraints_EdgeConstraint_default_instance_;
-constexpr CBSNode_Constraints::CBSNode_Constraints(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : vertex_constraints_()
-  , edge_constraints_(){}
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CBSNode_Constraints_EdgeConstraintDefaultTypeInternal _CBSNode_Constraints_EdgeConstraint_default_instance_;
+PROTOBUF_CONSTEXPR CBSNode_Constraints::CBSNode_Constraints(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.vertex_constraints_)*/{}
+  , /*decltype(_impl_.edge_constraints_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CBSNode_ConstraintsDefaultTypeInternal {
-  constexpr CBSNode_ConstraintsDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR CBSNode_ConstraintsDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~CBSNode_ConstraintsDefaultTypeInternal() {}
   union {
     CBSNode_Constraints _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CBSNode_ConstraintsDefaultTypeInternal _CBSNode_Constraints_default_instance_;
-constexpr CBSNode_PathEntry::CBSNode_PathEntry(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : state_(nullptr)
-  , parent_(nullptr)
-  , fscore_(0)
-  , gscore_(0)
-  , focalscore_(0){}
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CBSNode_ConstraintsDefaultTypeInternal _CBSNode_Constraints_default_instance_;
+PROTOBUF_CONSTEXPR CBSNode_PathEntry::CBSNode_PathEntry(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.state_)*/nullptr
+  , /*decltype(_impl_.parent_)*/nullptr
+  , /*decltype(_impl_.fscore_)*/0
+  , /*decltype(_impl_.gscore_)*/0
+  , /*decltype(_impl_.focalscore_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CBSNode_PathEntryDefaultTypeInternal {
-  constexpr CBSNode_PathEntryDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR CBSNode_PathEntryDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~CBSNode_PathEntryDefaultTypeInternal() {}
   union {
     CBSNode_PathEntry _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CBSNode_PathEntryDefaultTypeInternal _CBSNode_PathEntry_default_instance_;
-constexpr CBSNode_Path::CBSNode_Path(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : path_(){}
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CBSNode_PathEntryDefaultTypeInternal _CBSNode_PathEntry_default_instance_;
+PROTOBUF_CONSTEXPR CBSNode_Path::CBSNode_Path(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.path_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CBSNode_PathDefaultTypeInternal {
-  constexpr CBSNode_PathDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR CBSNode_PathDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~CBSNode_PathDefaultTypeInternal() {}
   union {
     CBSNode_Path _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CBSNode_PathDefaultTypeInternal _CBSNode_Path_default_instance_;
-constexpr CBSNode::CBSNode(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : cost_matrix_()
-  , constraint_sets_(){}
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CBSNode_PathDefaultTypeInternal _CBSNode_Path_default_instance_;
+PROTOBUF_CONSTEXPR CBSNode::CBSNode(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.cost_matrix_)*/{}
+  , /*decltype(_impl_.constraint_sets_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CBSNodeDefaultTypeInternal {
-  constexpr CBSNodeDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR CBSNodeDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~CBSNodeDefaultTypeInternal() {}
   union {
     CBSNode _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CBSNodeDefaultTypeInternal _CBSNode_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CBSNodeDefaultTypeInternal _CBSNode_default_instance_;
 }  // namespace CBSProto
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_cbs_5fnode_2eproto[8];
-static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_cbs_5fnode_2eproto = nullptr;
-static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_cbs_5fnode_2eproto = nullptr;
+static ::_pb::Metadata file_level_metadata_cbs_5fnode_2eproto[8];
+static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_cbs_5fnode_2eproto = nullptr;
+static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_cbs_5fnode_2eproto = nullptr;
 
-const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_cbs_5fnode_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+const uint32_t TableStruct_cbs_5fnode_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Location, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Location, x_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Location, y_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Location, _impl_.x_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Location, _impl_.y_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_State, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_State, time_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_State, x_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_State, y_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_State, _impl_.time_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_State, _impl_.x_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_State, _impl_.y_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_VertexConstraint, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_VertexConstraint, time_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_VertexConstraint, x_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_VertexConstraint, y_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_VertexConstraint, for_who_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_VertexConstraint, _impl_.time_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_VertexConstraint, _impl_.x_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_VertexConstraint, _impl_.y_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_VertexConstraint, _impl_.for_who_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, time_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, x1_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, y1_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, x2_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, y2_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, for_who_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, _impl_.time_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, _impl_.x1_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, _impl_.y1_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, _impl_.x2_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, _impl_.y2_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints_EdgeConstraint, _impl_.for_who_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints, vertex_constraints_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints, edge_constraints_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints, _impl_.vertex_constraints_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Constraints, _impl_.edge_constraints_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, state_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, fscore_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, gscore_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, focalscore_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, parent_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, _impl_.state_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, _impl_.fscore_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, _impl_.gscore_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, _impl_.focalscore_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_PathEntry, _impl_.parent_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Path, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Path, path_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode_Path, _impl_.path_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode, cost_matrix_),
-  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode, constraint_sets_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode, _impl_.cost_matrix_),
+  PROTOBUF_FIELD_OFFSET(::CBSProto::CBSNode, _impl_.constraint_sets_),
 };
-static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::CBSProto::CBSNode_Location)},
-  { 7, -1, sizeof(::CBSProto::CBSNode_State)},
-  { 15, -1, sizeof(::CBSProto::CBSNode_Constraints_VertexConstraint)},
-  { 24, -1, sizeof(::CBSProto::CBSNode_Constraints_EdgeConstraint)},
-  { 35, -1, sizeof(::CBSProto::CBSNode_Constraints)},
-  { 42, -1, sizeof(::CBSProto::CBSNode_PathEntry)},
-  { 52, -1, sizeof(::CBSProto::CBSNode_Path)},
-  { 58, -1, sizeof(::CBSProto::CBSNode)},
+static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  { 0, -1, -1, sizeof(::CBSProto::CBSNode_Location)},
+  { 8, -1, -1, sizeof(::CBSProto::CBSNode_State)},
+  { 17, -1, -1, sizeof(::CBSProto::CBSNode_Constraints_VertexConstraint)},
+  { 27, -1, -1, sizeof(::CBSProto::CBSNode_Constraints_EdgeConstraint)},
+  { 39, -1, -1, sizeof(::CBSProto::CBSNode_Constraints)},
+  { 47, -1, -1, sizeof(::CBSProto::CBSNode_PathEntry)},
+  { 58, -1, -1, sizeof(::CBSProto::CBSNode_Path)},
+  { 65, -1, -1, sizeof(::CBSProto::CBSNode)},
 };
 
-static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CBSProto::_CBSNode_Location_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CBSProto::_CBSNode_State_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CBSProto::_CBSNode_Constraints_VertexConstraint_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CBSProto::_CBSNode_Constraints_EdgeConstraint_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CBSProto::_CBSNode_Constraints_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CBSProto::_CBSNode_PathEntry_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CBSProto::_CBSNode_Path_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::CBSProto::_CBSNode_default_instance_),
+static const ::_pb::Message* const file_default_instances[] = {
+  &::CBSProto::_CBSNode_Location_default_instance_._instance,
+  &::CBSProto::_CBSNode_State_default_instance_._instance,
+  &::CBSProto::_CBSNode_Constraints_VertexConstraint_default_instance_._instance,
+  &::CBSProto::_CBSNode_Constraints_EdgeConstraint_default_instance_._instance,
+  &::CBSProto::_CBSNode_Constraints_default_instance_._instance,
+  &::CBSProto::_CBSNode_PathEntry_default_instance_._instance,
+  &::CBSProto::_CBSNode_Path_default_instance_._instance,
+  &::CBSProto::_CBSNode_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_cbs_5fnode_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -246,19 +266,21 @@ const char descriptor_table_protodef_cbs_5fnode_2eproto[] PROTOBUF_SECTION_VARIA
   "\001 \003(\0132\033.CBSProto.CBSNode.PathEntryb\006prot"
   "o3"
   ;
-static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_cbs_5fnode_2eproto_once;
-const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_cbs_5fnode_2eproto = {
-  false, false, 762, descriptor_table_protodef_cbs_5fnode_2eproto, "cbs_node.proto", 
-  &descriptor_table_cbs_5fnode_2eproto_once, nullptr, 0, 8,
-  schemas, file_default_instances, TableStruct_cbs_5fnode_2eproto::offsets,
-  file_level_metadata_cbs_5fnode_2eproto, file_level_enum_descriptors_cbs_5fnode_2eproto, file_level_service_descriptors_cbs_5fnode_2eproto,
+static ::_pbi::once_flag descriptor_table_cbs_5fnode_2eproto_once;
+const ::_pbi::DescriptorTable descriptor_table_cbs_5fnode_2eproto = {
+    false, false, 762, descriptor_table_protodef_cbs_5fnode_2eproto,
+    "cbs_node.proto",
+    &descriptor_table_cbs_5fnode_2eproto_once, nullptr, 0, 8,
+    schemas, file_default_instances, TableStruct_cbs_5fnode_2eproto::offsets,
+    file_level_metadata_cbs_5fnode_2eproto, file_level_enum_descriptors_cbs_5fnode_2eproto,
+    file_level_service_descriptors_cbs_5fnode_2eproto,
 };
-PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable* descriptor_table_cbs_5fnode_2eproto_getter() {
+PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_cbs_5fnode_2eproto_getter() {
   return &descriptor_table_cbs_5fnode_2eproto;
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_cbs_5fnode_2eproto(&descriptor_table_cbs_5fnode_2eproto);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_cbs_5fnode_2eproto(&descriptor_table_cbs_5fnode_2eproto);
 namespace CBSProto {
 
 // ===================================================================
@@ -270,124 +292,129 @@ class CBSNode_Location::_Internal {
 CBSNode_Location::CBSNode_Location(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:CBSProto.CBSNode.Location)
 }
 CBSNode_Location::CBSNode_Location(const CBSNode_Location& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CBSNode_Location* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.x_){}
+    , decltype(_impl_.y_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&x_, &from.x_,
-    static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-    reinterpret_cast<char*>(&x_)) + sizeof(y_));
+  ::memcpy(&_impl_.x_, &from._impl_.x_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.y_) -
+    reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.y_));
   // @@protoc_insertion_point(copy_constructor:CBSProto.CBSNode.Location)
 }
 
-inline void CBSNode_Location::SharedCtor() {
-::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&x_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-    reinterpret_cast<char*>(&x_)) + sizeof(y_));
+inline void CBSNode_Location::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.x_){0}
+    , decltype(_impl_.y_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 CBSNode_Location::~CBSNode_Location() {
   // @@protoc_insertion_point(destructor:CBSProto.CBSNode.Location)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void CBSNode_Location::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void CBSNode_Location::ArenaDtor(void* object) {
-  CBSNode_Location* _this = reinterpret_cast< CBSNode_Location* >(object);
-  (void)_this;
-}
-void CBSNode_Location::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void CBSNode_Location::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void CBSNode_Location::Clear() {
 // @@protoc_insertion_point(message_clear_start:CBSProto.CBSNode.Location)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&x_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&x_)) + sizeof(y_));
+  ::memset(&_impl_.x_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.y_) -
+      reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.y_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CBSNode_Location::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* CBSNode_Location::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // int32 x = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          x_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.x_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 y = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          y_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.y_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag == 0) || ((tag & 7) == 4)) {
-          CHK_(ptr);
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* CBSNode_Location::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* CBSNode_Location::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:CBSProto.CBSNode.Location)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // int32 x = 1;
   if (this->_internal_x() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_x(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_x(), target);
   }
 
   // int32 y = 2;
   if (this->_internal_y() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_y(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_y(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:CBSProto.CBSNode.Location)
@@ -398,59 +425,45 @@ size_t CBSNode_Location::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CBSProto.CBSNode.Location)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // int32 x = 1;
   if (this->_internal_x() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_x());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_x());
   }
 
   // int32 y = 2;
   if (this->_internal_y() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_y());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_y());
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CBSNode_Location::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     CBSNode_Location::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CBSNode_Location::GetClassData() const { return &_class_data_; }
 
-void CBSNode_Location::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
-  static_cast<CBSNode_Location *>(to)->MergeFrom(
-      static_cast<const CBSNode_Location &>(from));
-}
 
-
-void CBSNode_Location::MergeFrom(const CBSNode_Location& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Location)
-  GOOGLE_DCHECK_NE(&from, this);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+void CBSNode_Location::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CBSNode_Location*>(&to_msg);
+  auto& from = static_cast<const CBSNode_Location&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Location)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (from._internal_x() != 0) {
-    _internal_set_x(from._internal_x());
+    _this->_internal_set_x(from._internal_x());
   }
   if (from._internal_y() != 0) {
-    _internal_set_y(from._internal_y());
+    _this->_internal_set_y(from._internal_y());
   }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void CBSNode_Location::CopyFrom(const CBSNode_Location& from) {
@@ -468,15 +481,15 @@ void CBSNode_Location::InternalSwap(CBSNode_Location* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CBSNode_Location, y_)
-      + sizeof(CBSNode_Location::y_)
-      - PROTOBUF_FIELD_OFFSET(CBSNode_Location, x_)>(
-          reinterpret_cast<char*>(&x_),
-          reinterpret_cast<char*>(&other->x_));
+      PROTOBUF_FIELD_OFFSET(CBSNode_Location, _impl_.y_)
+      + sizeof(CBSNode_Location::_impl_.y_)
+      - PROTOBUF_FIELD_OFFSET(CBSNode_Location, _impl_.x_)>(
+          reinterpret_cast<char*>(&_impl_.x_),
+          reinterpret_cast<char*>(&other->_impl_.x_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CBSNode_Location::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_cbs_5fnode_2eproto_getter, &descriptor_table_cbs_5fnode_2eproto_once,
       file_level_metadata_cbs_5fnode_2eproto[0]);
 }
@@ -490,137 +503,145 @@ class CBSNode_State::_Internal {
 CBSNode_State::CBSNode_State(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:CBSProto.CBSNode.State)
 }
 CBSNode_State::CBSNode_State(const CBSNode_State& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CBSNode_State* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.time_){}
+    , decltype(_impl_.x_){}
+    , decltype(_impl_.y_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&time_, &from.time_,
-    static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-    reinterpret_cast<char*>(&time_)) + sizeof(y_));
+  ::memcpy(&_impl_.time_, &from._impl_.time_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.y_) -
+    reinterpret_cast<char*>(&_impl_.time_)) + sizeof(_impl_.y_));
   // @@protoc_insertion_point(copy_constructor:CBSProto.CBSNode.State)
 }
 
-inline void CBSNode_State::SharedCtor() {
-::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&time_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-    reinterpret_cast<char*>(&time_)) + sizeof(y_));
+inline void CBSNode_State::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.time_){0}
+    , decltype(_impl_.x_){0}
+    , decltype(_impl_.y_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 CBSNode_State::~CBSNode_State() {
   // @@protoc_insertion_point(destructor:CBSProto.CBSNode.State)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void CBSNode_State::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void CBSNode_State::ArenaDtor(void* object) {
-  CBSNode_State* _this = reinterpret_cast< CBSNode_State* >(object);
-  (void)_this;
-}
-void CBSNode_State::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void CBSNode_State::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void CBSNode_State::Clear() {
 // @@protoc_insertion_point(message_clear_start:CBSProto.CBSNode.State)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&time_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&time_)) + sizeof(y_));
+  ::memset(&_impl_.time_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.y_) -
+      reinterpret_cast<char*>(&_impl_.time_)) + sizeof(_impl_.y_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CBSNode_State::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* CBSNode_State::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // int32 time = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 x = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          x_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.x_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 y = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          y_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.y_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag == 0) || ((tag & 7) == 4)) {
-          CHK_(ptr);
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* CBSNode_State::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* CBSNode_State::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:CBSProto.CBSNode.State)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // int32 time = 1;
   if (this->_internal_time() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_time(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_time(), target);
   }
 
   // int32 x = 2;
   if (this->_internal_x() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_x(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_x(), target);
   }
 
   // int32 y = 3;
   if (this->_internal_y() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_y(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_y(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:CBSProto.CBSNode.State)
@@ -631,69 +652,53 @@ size_t CBSNode_State::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CBSProto.CBSNode.State)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // int32 time = 1;
   if (this->_internal_time() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_time());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_time());
   }
 
   // int32 x = 2;
   if (this->_internal_x() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_x());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_x());
   }
 
   // int32 y = 3;
   if (this->_internal_y() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_y());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_y());
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CBSNode_State::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     CBSNode_State::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CBSNode_State::GetClassData() const { return &_class_data_; }
 
-void CBSNode_State::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
-  static_cast<CBSNode_State *>(to)->MergeFrom(
-      static_cast<const CBSNode_State &>(from));
-}
 
-
-void CBSNode_State::MergeFrom(const CBSNode_State& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.State)
-  GOOGLE_DCHECK_NE(&from, this);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+void CBSNode_State::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CBSNode_State*>(&to_msg);
+  auto& from = static_cast<const CBSNode_State&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.State)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (from._internal_time() != 0) {
-    _internal_set_time(from._internal_time());
+    _this->_internal_set_time(from._internal_time());
   }
   if (from._internal_x() != 0) {
-    _internal_set_x(from._internal_x());
+    _this->_internal_set_x(from._internal_x());
   }
   if (from._internal_y() != 0) {
-    _internal_set_y(from._internal_y());
+    _this->_internal_set_y(from._internal_y());
   }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void CBSNode_State::CopyFrom(const CBSNode_State& from) {
@@ -711,15 +716,15 @@ void CBSNode_State::InternalSwap(CBSNode_State* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CBSNode_State, y_)
-      + sizeof(CBSNode_State::y_)
-      - PROTOBUF_FIELD_OFFSET(CBSNode_State, time_)>(
-          reinterpret_cast<char*>(&time_),
-          reinterpret_cast<char*>(&other->time_));
+      PROTOBUF_FIELD_OFFSET(CBSNode_State, _impl_.y_)
+      + sizeof(CBSNode_State::_impl_.y_)
+      - PROTOBUF_FIELD_OFFSET(CBSNode_State, _impl_.time_)>(
+          reinterpret_cast<char*>(&_impl_.time_),
+          reinterpret_cast<char*>(&other->_impl_.time_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CBSNode_State::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_cbs_5fnode_2eproto_getter, &descriptor_table_cbs_5fnode_2eproto_once,
       file_level_metadata_cbs_5fnode_2eproto[1]);
 }
@@ -733,150 +738,161 @@ class CBSNode_Constraints_VertexConstraint::_Internal {
 CBSNode_Constraints_VertexConstraint::CBSNode_Constraints_VertexConstraint(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:CBSProto.CBSNode.Constraints.VertexConstraint)
 }
 CBSNode_Constraints_VertexConstraint::CBSNode_Constraints_VertexConstraint(const CBSNode_Constraints_VertexConstraint& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CBSNode_Constraints_VertexConstraint* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.time_){}
+    , decltype(_impl_.x_){}
+    , decltype(_impl_.y_){}
+    , decltype(_impl_.for_who_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&time_, &from.time_,
-    static_cast<size_t>(reinterpret_cast<char*>(&for_who_) -
-    reinterpret_cast<char*>(&time_)) + sizeof(for_who_));
+  ::memcpy(&_impl_.time_, &from._impl_.time_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.for_who_) -
+    reinterpret_cast<char*>(&_impl_.time_)) + sizeof(_impl_.for_who_));
   // @@protoc_insertion_point(copy_constructor:CBSProto.CBSNode.Constraints.VertexConstraint)
 }
 
-inline void CBSNode_Constraints_VertexConstraint::SharedCtor() {
-::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&time_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&for_who_) -
-    reinterpret_cast<char*>(&time_)) + sizeof(for_who_));
+inline void CBSNode_Constraints_VertexConstraint::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.time_){0}
+    , decltype(_impl_.x_){0}
+    , decltype(_impl_.y_){0}
+    , decltype(_impl_.for_who_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 CBSNode_Constraints_VertexConstraint::~CBSNode_Constraints_VertexConstraint() {
   // @@protoc_insertion_point(destructor:CBSProto.CBSNode.Constraints.VertexConstraint)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void CBSNode_Constraints_VertexConstraint::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void CBSNode_Constraints_VertexConstraint::ArenaDtor(void* object) {
-  CBSNode_Constraints_VertexConstraint* _this = reinterpret_cast< CBSNode_Constraints_VertexConstraint* >(object);
-  (void)_this;
-}
-void CBSNode_Constraints_VertexConstraint::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void CBSNode_Constraints_VertexConstraint::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void CBSNode_Constraints_VertexConstraint::Clear() {
 // @@protoc_insertion_point(message_clear_start:CBSProto.CBSNode.Constraints.VertexConstraint)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&time_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&for_who_) -
-      reinterpret_cast<char*>(&time_)) + sizeof(for_who_));
+  ::memset(&_impl_.time_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.for_who_) -
+      reinterpret_cast<char*>(&_impl_.time_)) + sizeof(_impl_.for_who_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CBSNode_Constraints_VertexConstraint::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* CBSNode_Constraints_VertexConstraint::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // int32 time = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 x = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          x_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.x_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 y = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          y_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.y_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 for_who = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
-          for_who_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.for_who_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag == 0) || ((tag & 7) == 4)) {
-          CHK_(ptr);
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* CBSNode_Constraints_VertexConstraint::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* CBSNode_Constraints_VertexConstraint::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:CBSProto.CBSNode.Constraints.VertexConstraint)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // int32 time = 1;
   if (this->_internal_time() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_time(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_time(), target);
   }
 
   // int32 x = 2;
   if (this->_internal_x() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_x(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_x(), target);
   }
 
   // int32 y = 3;
   if (this->_internal_y() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_y(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_y(), target);
   }
 
   // int32 for_who = 4;
   if (this->_internal_for_who() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_for_who(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_for_who(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:CBSProto.CBSNode.Constraints.VertexConstraint)
@@ -887,79 +903,61 @@ size_t CBSNode_Constraints_VertexConstraint::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CBSProto.CBSNode.Constraints.VertexConstraint)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // int32 time = 1;
   if (this->_internal_time() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_time());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_time());
   }
 
   // int32 x = 2;
   if (this->_internal_x() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_x());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_x());
   }
 
   // int32 y = 3;
   if (this->_internal_y() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_y());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_y());
   }
 
   // int32 for_who = 4;
   if (this->_internal_for_who() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_for_who());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_for_who());
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CBSNode_Constraints_VertexConstraint::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     CBSNode_Constraints_VertexConstraint::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CBSNode_Constraints_VertexConstraint::GetClassData() const { return &_class_data_; }
 
-void CBSNode_Constraints_VertexConstraint::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
-  static_cast<CBSNode_Constraints_VertexConstraint *>(to)->MergeFrom(
-      static_cast<const CBSNode_Constraints_VertexConstraint &>(from));
-}
 
-
-void CBSNode_Constraints_VertexConstraint::MergeFrom(const CBSNode_Constraints_VertexConstraint& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Constraints.VertexConstraint)
-  GOOGLE_DCHECK_NE(&from, this);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+void CBSNode_Constraints_VertexConstraint::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CBSNode_Constraints_VertexConstraint*>(&to_msg);
+  auto& from = static_cast<const CBSNode_Constraints_VertexConstraint&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Constraints.VertexConstraint)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (from._internal_time() != 0) {
-    _internal_set_time(from._internal_time());
+    _this->_internal_set_time(from._internal_time());
   }
   if (from._internal_x() != 0) {
-    _internal_set_x(from._internal_x());
+    _this->_internal_set_x(from._internal_x());
   }
   if (from._internal_y() != 0) {
-    _internal_set_y(from._internal_y());
+    _this->_internal_set_y(from._internal_y());
   }
   if (from._internal_for_who() != 0) {
-    _internal_set_for_who(from._internal_for_who());
+    _this->_internal_set_for_who(from._internal_for_who());
   }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void CBSNode_Constraints_VertexConstraint::CopyFrom(const CBSNode_Constraints_VertexConstraint& from) {
@@ -977,15 +975,15 @@ void CBSNode_Constraints_VertexConstraint::InternalSwap(CBSNode_Constraints_Vert
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CBSNode_Constraints_VertexConstraint, for_who_)
-      + sizeof(CBSNode_Constraints_VertexConstraint::for_who_)
-      - PROTOBUF_FIELD_OFFSET(CBSNode_Constraints_VertexConstraint, time_)>(
-          reinterpret_cast<char*>(&time_),
-          reinterpret_cast<char*>(&other->time_));
+      PROTOBUF_FIELD_OFFSET(CBSNode_Constraints_VertexConstraint, _impl_.for_who_)
+      + sizeof(CBSNode_Constraints_VertexConstraint::_impl_.for_who_)
+      - PROTOBUF_FIELD_OFFSET(CBSNode_Constraints_VertexConstraint, _impl_.time_)>(
+          reinterpret_cast<char*>(&_impl_.time_),
+          reinterpret_cast<char*>(&other->_impl_.time_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CBSNode_Constraints_VertexConstraint::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_cbs_5fnode_2eproto_getter, &descriptor_table_cbs_5fnode_2eproto_once,
       file_level_metadata_cbs_5fnode_2eproto[2]);
 }
@@ -999,176 +997,193 @@ class CBSNode_Constraints_EdgeConstraint::_Internal {
 CBSNode_Constraints_EdgeConstraint::CBSNode_Constraints_EdgeConstraint(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:CBSProto.CBSNode.Constraints.EdgeConstraint)
 }
 CBSNode_Constraints_EdgeConstraint::CBSNode_Constraints_EdgeConstraint(const CBSNode_Constraints_EdgeConstraint& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CBSNode_Constraints_EdgeConstraint* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.time_){}
+    , decltype(_impl_.x1_){}
+    , decltype(_impl_.y1_){}
+    , decltype(_impl_.x2_){}
+    , decltype(_impl_.y2_){}
+    , decltype(_impl_.for_who_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&time_, &from.time_,
-    static_cast<size_t>(reinterpret_cast<char*>(&for_who_) -
-    reinterpret_cast<char*>(&time_)) + sizeof(for_who_));
+  ::memcpy(&_impl_.time_, &from._impl_.time_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.for_who_) -
+    reinterpret_cast<char*>(&_impl_.time_)) + sizeof(_impl_.for_who_));
   // @@protoc_insertion_point(copy_constructor:CBSProto.CBSNode.Constraints.EdgeConstraint)
 }
 
-inline void CBSNode_Constraints_EdgeConstraint::SharedCtor() {
-::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&time_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&for_who_) -
-    reinterpret_cast<char*>(&time_)) + sizeof(for_who_));
+inline void CBSNode_Constraints_EdgeConstraint::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.time_){0}
+    , decltype(_impl_.x1_){0}
+    , decltype(_impl_.y1_){0}
+    , decltype(_impl_.x2_){0}
+    , decltype(_impl_.y2_){0}
+    , decltype(_impl_.for_who_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 CBSNode_Constraints_EdgeConstraint::~CBSNode_Constraints_EdgeConstraint() {
   // @@protoc_insertion_point(destructor:CBSProto.CBSNode.Constraints.EdgeConstraint)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void CBSNode_Constraints_EdgeConstraint::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void CBSNode_Constraints_EdgeConstraint::ArenaDtor(void* object) {
-  CBSNode_Constraints_EdgeConstraint* _this = reinterpret_cast< CBSNode_Constraints_EdgeConstraint* >(object);
-  (void)_this;
-}
-void CBSNode_Constraints_EdgeConstraint::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void CBSNode_Constraints_EdgeConstraint::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void CBSNode_Constraints_EdgeConstraint::Clear() {
 // @@protoc_insertion_point(message_clear_start:CBSProto.CBSNode.Constraints.EdgeConstraint)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&time_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&for_who_) -
-      reinterpret_cast<char*>(&time_)) + sizeof(for_who_));
+  ::memset(&_impl_.time_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.for_who_) -
+      reinterpret_cast<char*>(&_impl_.time_)) + sizeof(_impl_.for_who_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CBSNode_Constraints_EdgeConstraint::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* CBSNode_Constraints_EdgeConstraint::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // int32 time = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 x1 = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          x1_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.x1_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 y1 = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          y1_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.y1_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 x2 = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
-          x2_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.x2_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 y2 = 5;
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
-          y2_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.y2_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 for_who = 6;
       case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
-          for_who_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.for_who_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag == 0) || ((tag & 7) == 4)) {
-          CHK_(ptr);
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* CBSNode_Constraints_EdgeConstraint::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* CBSNode_Constraints_EdgeConstraint::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:CBSProto.CBSNode.Constraints.EdgeConstraint)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // int32 time = 1;
   if (this->_internal_time() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_time(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_time(), target);
   }
 
   // int32 x1 = 2;
   if (this->_internal_x1() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_x1(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_x1(), target);
   }
 
   // int32 y1 = 3;
   if (this->_internal_y1() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_y1(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_y1(), target);
   }
 
   // int32 x2 = 4;
   if (this->_internal_x2() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_x2(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_x2(), target);
   }
 
   // int32 y2 = 5;
   if (this->_internal_y2() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_y2(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_y2(), target);
   }
 
   // int32 for_who = 6;
   if (this->_internal_for_who() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(6, this->_internal_for_who(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(6, this->_internal_for_who(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:CBSProto.CBSNode.Constraints.EdgeConstraint)
@@ -1179,99 +1194,77 @@ size_t CBSNode_Constraints_EdgeConstraint::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CBSProto.CBSNode.Constraints.EdgeConstraint)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // int32 time = 1;
   if (this->_internal_time() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_time());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_time());
   }
 
   // int32 x1 = 2;
   if (this->_internal_x1() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_x1());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_x1());
   }
 
   // int32 y1 = 3;
   if (this->_internal_y1() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_y1());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_y1());
   }
 
   // int32 x2 = 4;
   if (this->_internal_x2() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_x2());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_x2());
   }
 
   // int32 y2 = 5;
   if (this->_internal_y2() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_y2());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_y2());
   }
 
   // int32 for_who = 6;
   if (this->_internal_for_who() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_for_who());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_for_who());
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CBSNode_Constraints_EdgeConstraint::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     CBSNode_Constraints_EdgeConstraint::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CBSNode_Constraints_EdgeConstraint::GetClassData() const { return &_class_data_; }
 
-void CBSNode_Constraints_EdgeConstraint::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
-  static_cast<CBSNode_Constraints_EdgeConstraint *>(to)->MergeFrom(
-      static_cast<const CBSNode_Constraints_EdgeConstraint &>(from));
-}
 
-
-void CBSNode_Constraints_EdgeConstraint::MergeFrom(const CBSNode_Constraints_EdgeConstraint& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Constraints.EdgeConstraint)
-  GOOGLE_DCHECK_NE(&from, this);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+void CBSNode_Constraints_EdgeConstraint::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CBSNode_Constraints_EdgeConstraint*>(&to_msg);
+  auto& from = static_cast<const CBSNode_Constraints_EdgeConstraint&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Constraints.EdgeConstraint)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (from._internal_time() != 0) {
-    _internal_set_time(from._internal_time());
+    _this->_internal_set_time(from._internal_time());
   }
   if (from._internal_x1() != 0) {
-    _internal_set_x1(from._internal_x1());
+    _this->_internal_set_x1(from._internal_x1());
   }
   if (from._internal_y1() != 0) {
-    _internal_set_y1(from._internal_y1());
+    _this->_internal_set_y1(from._internal_y1());
   }
   if (from._internal_x2() != 0) {
-    _internal_set_x2(from._internal_x2());
+    _this->_internal_set_x2(from._internal_x2());
   }
   if (from._internal_y2() != 0) {
-    _internal_set_y2(from._internal_y2());
+    _this->_internal_set_y2(from._internal_y2());
   }
   if (from._internal_for_who() != 0) {
-    _internal_set_for_who(from._internal_for_who());
+    _this->_internal_set_for_who(from._internal_for_who());
   }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void CBSNode_Constraints_EdgeConstraint::CopyFrom(const CBSNode_Constraints_EdgeConstraint& from) {
@@ -1289,15 +1282,15 @@ void CBSNode_Constraints_EdgeConstraint::InternalSwap(CBSNode_Constraints_EdgeCo
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CBSNode_Constraints_EdgeConstraint, for_who_)
-      + sizeof(CBSNode_Constraints_EdgeConstraint::for_who_)
-      - PROTOBUF_FIELD_OFFSET(CBSNode_Constraints_EdgeConstraint, time_)>(
-          reinterpret_cast<char*>(&time_),
-          reinterpret_cast<char*>(&other->time_));
+      PROTOBUF_FIELD_OFFSET(CBSNode_Constraints_EdgeConstraint, _impl_.for_who_)
+      + sizeof(CBSNode_Constraints_EdgeConstraint::_impl_.for_who_)
+      - PROTOBUF_FIELD_OFFSET(CBSNode_Constraints_EdgeConstraint, _impl_.time_)>(
+          reinterpret_cast<char*>(&_impl_.time_),
+          reinterpret_cast<char*>(&other->_impl_.time_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CBSNode_Constraints_EdgeConstraint::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_cbs_5fnode_2eproto_getter, &descriptor_table_cbs_5fnode_2eproto_once,
       file_level_metadata_cbs_5fnode_2eproto[3]);
 }
@@ -1310,67 +1303,72 @@ class CBSNode_Constraints::_Internal {
 
 CBSNode_Constraints::CBSNode_Constraints(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  vertex_constraints_(arena),
-  edge_constraints_(arena) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:CBSProto.CBSNode.Constraints)
 }
 CBSNode_Constraints::CBSNode_Constraints(const CBSNode_Constraints& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      vertex_constraints_(from.vertex_constraints_),
-      edge_constraints_(from.edge_constraints_) {
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CBSNode_Constraints* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.vertex_constraints_){from._impl_.vertex_constraints_}
+    , decltype(_impl_.edge_constraints_){from._impl_.edge_constraints_}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:CBSProto.CBSNode.Constraints)
 }
 
-inline void CBSNode_Constraints::SharedCtor() {
+inline void CBSNode_Constraints::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.vertex_constraints_){arena}
+    , decltype(_impl_.edge_constraints_){arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 CBSNode_Constraints::~CBSNode_Constraints() {
   // @@protoc_insertion_point(destructor:CBSProto.CBSNode.Constraints)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void CBSNode_Constraints::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.vertex_constraints_.~RepeatedPtrField();
+  _impl_.edge_constraints_.~RepeatedPtrField();
 }
 
-void CBSNode_Constraints::ArenaDtor(void* object) {
-  CBSNode_Constraints* _this = reinterpret_cast< CBSNode_Constraints* >(object);
-  (void)_this;
-}
-void CBSNode_Constraints::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void CBSNode_Constraints::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void CBSNode_Constraints::Clear() {
 // @@protoc_insertion_point(message_clear_start:CBSProto.CBSNode.Constraints)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  vertex_constraints_.Clear();
-  edge_constraints_.Clear();
+  _impl_.vertex_constraints_.Clear();
+  _impl_.edge_constraints_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CBSNode_Constraints::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* CBSNode_Constraints::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // repeated .CBSProto.CBSNode.Constraints.VertexConstraint vertex_constraints = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -1378,11 +1376,12 @@ const char* CBSNode_Constraints::_InternalParse(const char* ptr, ::PROTOBUF_NAME
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // repeated .CBSProto.CBSNode.Constraints.EdgeConstraint edge_constraints = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -1390,55 +1389,56 @@ const char* CBSNode_Constraints::_InternalParse(const char* ptr, ::PROTOBUF_NAME
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag == 0) || ((tag & 7) == 4)) {
-          CHK_(ptr);
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* CBSNode_Constraints::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* CBSNode_Constraints::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:CBSProto.CBSNode.Constraints)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // repeated .CBSProto.CBSNode.Constraints.VertexConstraint vertex_constraints = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_vertex_constraints_size()); i < n; i++) {
-    target = stream->EnsureSpace(target);
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_vertex_constraints_size()); i < n; i++) {
+    const auto& repfield = this->_internal_vertex_constraints(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, this->_internal_vertex_constraints(i), target, stream);
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   // repeated .CBSProto.CBSNode.Constraints.EdgeConstraint edge_constraints = 2;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_edge_constraints_size()); i < n; i++) {
-    target = stream->EnsureSpace(target);
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_edge_constraints_size()); i < n; i++) {
+    const auto& repfield = this->_internal_edge_constraints(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(2, this->_internal_edge_constraints(i), target, stream);
+        InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:CBSProto.CBSNode.Constraints)
@@ -1449,55 +1449,45 @@ size_t CBSNode_Constraints::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CBSProto.CBSNode.Constraints)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated .CBSProto.CBSNode.Constraints.VertexConstraint vertex_constraints = 1;
   total_size += 1UL * this->_internal_vertex_constraints_size();
-  for (const auto& msg : this->vertex_constraints_) {
+  for (const auto& msg : this->_impl_.vertex_constraints_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
   // repeated .CBSProto.CBSNode.Constraints.EdgeConstraint edge_constraints = 2;
   total_size += 1UL * this->_internal_edge_constraints_size();
-  for (const auto& msg : this->edge_constraints_) {
+  for (const auto& msg : this->_impl_.edge_constraints_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CBSNode_Constraints::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     CBSNode_Constraints::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CBSNode_Constraints::GetClassData() const { return &_class_data_; }
 
-void CBSNode_Constraints::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
-  static_cast<CBSNode_Constraints *>(to)->MergeFrom(
-      static_cast<const CBSNode_Constraints &>(from));
-}
 
-
-void CBSNode_Constraints::MergeFrom(const CBSNode_Constraints& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Constraints)
-  GOOGLE_DCHECK_NE(&from, this);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+void CBSNode_Constraints::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CBSNode_Constraints*>(&to_msg);
+  auto& from = static_cast<const CBSNode_Constraints&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Constraints)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  vertex_constraints_.MergeFrom(from.vertex_constraints_);
-  edge_constraints_.MergeFrom(from.edge_constraints_);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.vertex_constraints_.MergeFrom(from._impl_.vertex_constraints_);
+  _this->_impl_.edge_constraints_.MergeFrom(from._impl_.edge_constraints_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void CBSNode_Constraints::CopyFrom(const CBSNode_Constraints& from) {
@@ -1514,12 +1504,12 @@ bool CBSNode_Constraints::IsInitialized() const {
 void CBSNode_Constraints::InternalSwap(CBSNode_Constraints* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  vertex_constraints_.InternalSwap(&other->vertex_constraints_);
-  edge_constraints_.InternalSwap(&other->edge_constraints_);
+  _impl_.vertex_constraints_.InternalSwap(&other->_impl_.vertex_constraints_);
+  _impl_.edge_constraints_.InternalSwap(&other->_impl_.edge_constraints_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CBSNode_Constraints::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_cbs_5fnode_2eproto_getter, &descriptor_table_cbs_5fnode_2eproto_once,
       file_level_metadata_cbs_5fnode_2eproto[4]);
 }
@@ -1534,196 +1524,204 @@ class CBSNode_PathEntry::_Internal {
 
 const ::CBSProto::CBSNode_State&
 CBSNode_PathEntry::_Internal::state(const CBSNode_PathEntry* msg) {
-  return *msg->state_;
+  return *msg->_impl_.state_;
 }
 const ::CBSProto::CBSNode_PathEntry&
 CBSNode_PathEntry::_Internal::parent(const CBSNode_PathEntry* msg) {
-  return *msg->parent_;
+  return *msg->_impl_.parent_;
 }
 CBSNode_PathEntry::CBSNode_PathEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:CBSProto.CBSNode.PathEntry)
 }
 CBSNode_PathEntry::CBSNode_PathEntry(const CBSNode_PathEntry& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CBSNode_PathEntry* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.state_){nullptr}
+    , decltype(_impl_.parent_){nullptr}
+    , decltype(_impl_.fscore_){}
+    , decltype(_impl_.gscore_){}
+    , decltype(_impl_.focalscore_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_state()) {
-    state_ = new ::CBSProto::CBSNode_State(*from.state_);
-  } else {
-    state_ = nullptr;
+    _this->_impl_.state_ = new ::CBSProto::CBSNode_State(*from._impl_.state_);
   }
   if (from._internal_has_parent()) {
-    parent_ = new ::CBSProto::CBSNode_PathEntry(*from.parent_);
-  } else {
-    parent_ = nullptr;
+    _this->_impl_.parent_ = new ::CBSProto::CBSNode_PathEntry(*from._impl_.parent_);
   }
-  ::memcpy(&fscore_, &from.fscore_,
-    static_cast<size_t>(reinterpret_cast<char*>(&focalscore_) -
-    reinterpret_cast<char*>(&fscore_)) + sizeof(focalscore_));
+  ::memcpy(&_impl_.fscore_, &from._impl_.fscore_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.focalscore_) -
+    reinterpret_cast<char*>(&_impl_.fscore_)) + sizeof(_impl_.focalscore_));
   // @@protoc_insertion_point(copy_constructor:CBSProto.CBSNode.PathEntry)
 }
 
-inline void CBSNode_PathEntry::SharedCtor() {
-::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&state_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&focalscore_) -
-    reinterpret_cast<char*>(&state_)) + sizeof(focalscore_));
+inline void CBSNode_PathEntry::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.state_){nullptr}
+    , decltype(_impl_.parent_){nullptr}
+    , decltype(_impl_.fscore_){0}
+    , decltype(_impl_.gscore_){0}
+    , decltype(_impl_.focalscore_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 CBSNode_PathEntry::~CBSNode_PathEntry() {
   // @@protoc_insertion_point(destructor:CBSProto.CBSNode.PathEntry)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void CBSNode_PathEntry::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete state_;
-  if (this != internal_default_instance()) delete parent_;
+  if (this != internal_default_instance()) delete _impl_.state_;
+  if (this != internal_default_instance()) delete _impl_.parent_;
 }
 
-void CBSNode_PathEntry::ArenaDtor(void* object) {
-  CBSNode_PathEntry* _this = reinterpret_cast< CBSNode_PathEntry* >(object);
-  (void)_this;
-}
-void CBSNode_PathEntry::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void CBSNode_PathEntry::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void CBSNode_PathEntry::Clear() {
 // @@protoc_insertion_point(message_clear_start:CBSProto.CBSNode.PathEntry)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  if (GetArenaForAllocation() == nullptr && state_ != nullptr) {
-    delete state_;
+  if (GetArenaForAllocation() == nullptr && _impl_.state_ != nullptr) {
+    delete _impl_.state_;
   }
-  state_ = nullptr;
-  if (GetArenaForAllocation() == nullptr && parent_ != nullptr) {
-    delete parent_;
+  _impl_.state_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.parent_ != nullptr) {
+    delete _impl_.parent_;
   }
-  parent_ = nullptr;
-  ::memset(&fscore_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&focalscore_) -
-      reinterpret_cast<char*>(&fscore_)) + sizeof(focalscore_));
+  _impl_.parent_ = nullptr;
+  ::memset(&_impl_.fscore_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.focalscore_) -
+      reinterpret_cast<char*>(&_impl_.fscore_)) + sizeof(_impl_.focalscore_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CBSNode_PathEntry::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* CBSNode_PathEntry::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // .CBSProto.CBSNode.State state = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_state(), ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 fScore = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          fscore_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.fscore_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 gScore = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          gscore_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.gscore_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 focalScore = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
-          focalscore_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.focalscore_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // .CBSProto.CBSNode.PathEntry parent = 5;
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_parent(), ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag == 0) || ((tag & 7) == 4)) {
-          CHK_(ptr);
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* CBSNode_PathEntry::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* CBSNode_PathEntry::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:CBSProto.CBSNode.PathEntry)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // .CBSProto.CBSNode.State state = 1;
   if (this->_internal_has_state()) {
-    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        1, _Internal::state(this), target, stream);
+      InternalWriteMessage(1, _Internal::state(this),
+        _Internal::state(this).GetCachedSize(), target, stream);
   }
 
   // int32 fScore = 2;
   if (this->_internal_fscore() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_fscore(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_fscore(), target);
   }
 
   // int32 gScore = 3;
   if (this->_internal_gscore() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_gscore(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_gscore(), target);
   }
 
   // int32 focalScore = 4;
   if (this->_internal_focalscore() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_focalscore(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_focalscore(), target);
   }
 
   // .CBSProto.CBSNode.PathEntry parent = 5;
   if (this->_internal_has_parent()) {
-    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        5, _Internal::parent(this), target, stream);
+      InternalWriteMessage(5, _Internal::parent(this),
+        _Internal::parent(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:CBSProto.CBSNode.PathEntry)
@@ -1734,7 +1732,7 @@ size_t CBSNode_PathEntry::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CBSProto.CBSNode.PathEntry)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
@@ -1742,81 +1740,67 @@ size_t CBSNode_PathEntry::ByteSizeLong() const {
   if (this->_internal_has_state()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *state_);
+        *_impl_.state_);
   }
 
   // .CBSProto.CBSNode.PathEntry parent = 5;
   if (this->_internal_has_parent()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *parent_);
+        *_impl_.parent_);
   }
 
   // int32 fScore = 2;
   if (this->_internal_fscore() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_fscore());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_fscore());
   }
 
   // int32 gScore = 3;
   if (this->_internal_gscore() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_gscore());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_gscore());
   }
 
   // int32 focalScore = 4;
   if (this->_internal_focalscore() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_focalscore());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_focalscore());
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CBSNode_PathEntry::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     CBSNode_PathEntry::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CBSNode_PathEntry::GetClassData() const { return &_class_data_; }
 
-void CBSNode_PathEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
-  static_cast<CBSNode_PathEntry *>(to)->MergeFrom(
-      static_cast<const CBSNode_PathEntry &>(from));
-}
 
-
-void CBSNode_PathEntry::MergeFrom(const CBSNode_PathEntry& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.PathEntry)
-  GOOGLE_DCHECK_NE(&from, this);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+void CBSNode_PathEntry::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CBSNode_PathEntry*>(&to_msg);
+  auto& from = static_cast<const CBSNode_PathEntry&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.PathEntry)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (from._internal_has_state()) {
-    _internal_mutable_state()->::CBSProto::CBSNode_State::MergeFrom(from._internal_state());
+    _this->_internal_mutable_state()->::CBSProto::CBSNode_State::MergeFrom(
+        from._internal_state());
   }
   if (from._internal_has_parent()) {
-    _internal_mutable_parent()->::CBSProto::CBSNode_PathEntry::MergeFrom(from._internal_parent());
+    _this->_internal_mutable_parent()->::CBSProto::CBSNode_PathEntry::MergeFrom(
+        from._internal_parent());
   }
   if (from._internal_fscore() != 0) {
-    _internal_set_fscore(from._internal_fscore());
+    _this->_internal_set_fscore(from._internal_fscore());
   }
   if (from._internal_gscore() != 0) {
-    _internal_set_gscore(from._internal_gscore());
+    _this->_internal_set_gscore(from._internal_gscore());
   }
   if (from._internal_focalscore() != 0) {
-    _internal_set_focalscore(from._internal_focalscore());
+    _this->_internal_set_focalscore(from._internal_focalscore());
   }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void CBSNode_PathEntry::CopyFrom(const CBSNode_PathEntry& from) {
@@ -1834,15 +1818,15 @@ void CBSNode_PathEntry::InternalSwap(CBSNode_PathEntry* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CBSNode_PathEntry, focalscore_)
-      + sizeof(CBSNode_PathEntry::focalscore_)
-      - PROTOBUF_FIELD_OFFSET(CBSNode_PathEntry, state_)>(
-          reinterpret_cast<char*>(&state_),
-          reinterpret_cast<char*>(&other->state_));
+      PROTOBUF_FIELD_OFFSET(CBSNode_PathEntry, _impl_.focalscore_)
+      + sizeof(CBSNode_PathEntry::_impl_.focalscore_)
+      - PROTOBUF_FIELD_OFFSET(CBSNode_PathEntry, _impl_.state_)>(
+          reinterpret_cast<char*>(&_impl_.state_),
+          reinterpret_cast<char*>(&other->_impl_.state_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CBSNode_PathEntry::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_cbs_5fnode_2eproto_getter, &descriptor_table_cbs_5fnode_2eproto_once,
       file_level_metadata_cbs_5fnode_2eproto[5]);
 }
@@ -1855,64 +1839,68 @@ class CBSNode_Path::_Internal {
 
 CBSNode_Path::CBSNode_Path(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  path_(arena) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:CBSProto.CBSNode.Path)
 }
 CBSNode_Path::CBSNode_Path(const CBSNode_Path& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      path_(from.path_) {
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CBSNode_Path* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.path_){from._impl_.path_}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:CBSProto.CBSNode.Path)
 }
 
-inline void CBSNode_Path::SharedCtor() {
+inline void CBSNode_Path::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.path_){arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 CBSNode_Path::~CBSNode_Path() {
   // @@protoc_insertion_point(destructor:CBSProto.CBSNode.Path)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void CBSNode_Path::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.path_.~RepeatedPtrField();
 }
 
-void CBSNode_Path::ArenaDtor(void* object) {
-  CBSNode_Path* _this = reinterpret_cast< CBSNode_Path* >(object);
-  (void)_this;
-}
-void CBSNode_Path::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void CBSNode_Path::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void CBSNode_Path::Clear() {
 // @@protoc_insertion_point(message_clear_start:CBSProto.CBSNode.Path)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  path_.Clear();
+  _impl_.path_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CBSNode_Path::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* CBSNode_Path::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // repeated .CBSProto.CBSNode.PathEntry path = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -1920,47 +1908,48 @@ const char* CBSNode_Path::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag == 0) || ((tag & 7) == 4)) {
-          CHK_(ptr);
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* CBSNode_Path::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* CBSNode_Path::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:CBSProto.CBSNode.Path)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // repeated .CBSProto.CBSNode.PathEntry path = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_path_size()); i < n; i++) {
-    target = stream->EnsureSpace(target);
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_path_size()); i < n; i++) {
+    const auto& repfield = this->_internal_path(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, this->_internal_path(i), target, stream);
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:CBSProto.CBSNode.Path)
@@ -1971,47 +1960,37 @@ size_t CBSNode_Path::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CBSProto.CBSNode.Path)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated .CBSProto.CBSNode.PathEntry path = 1;
   total_size += 1UL * this->_internal_path_size();
-  for (const auto& msg : this->path_) {
+  for (const auto& msg : this->_impl_.path_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CBSNode_Path::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     CBSNode_Path::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CBSNode_Path::GetClassData() const { return &_class_data_; }
 
-void CBSNode_Path::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
-  static_cast<CBSNode_Path *>(to)->MergeFrom(
-      static_cast<const CBSNode_Path &>(from));
-}
 
-
-void CBSNode_Path::MergeFrom(const CBSNode_Path& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Path)
-  GOOGLE_DCHECK_NE(&from, this);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+void CBSNode_Path::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CBSNode_Path*>(&to_msg);
+  auto& from = static_cast<const CBSNode_Path&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode.Path)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  path_.MergeFrom(from.path_);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.path_.MergeFrom(from._impl_.path_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void CBSNode_Path::CopyFrom(const CBSNode_Path& from) {
@@ -2028,11 +2007,11 @@ bool CBSNode_Path::IsInitialized() const {
 void CBSNode_Path::InternalSwap(CBSNode_Path* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  path_.InternalSwap(&other->path_);
+  _impl_.path_.InternalSwap(&other->_impl_.path_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CBSNode_Path::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_cbs_5fnode_2eproto_getter, &descriptor_table_cbs_5fnode_2eproto_once,
       file_level_metadata_cbs_5fnode_2eproto[6]);
 }
@@ -2045,67 +2024,72 @@ class CBSNode::_Internal {
 
 CBSNode::CBSNode(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  cost_matrix_(arena),
-  constraint_sets_(arena) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:CBSProto.CBSNode)
 }
 CBSNode::CBSNode(const CBSNode& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      cost_matrix_(from.cost_matrix_),
-      constraint_sets_(from.constraint_sets_) {
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CBSNode* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.cost_matrix_){from._impl_.cost_matrix_}
+    , decltype(_impl_.constraint_sets_){from._impl_.constraint_sets_}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:CBSProto.CBSNode)
 }
 
-inline void CBSNode::SharedCtor() {
+inline void CBSNode::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.cost_matrix_){arena}
+    , decltype(_impl_.constraint_sets_){arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 CBSNode::~CBSNode() {
   // @@protoc_insertion_point(destructor:CBSProto.CBSNode)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void CBSNode::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.cost_matrix_.~RepeatedPtrField();
+  _impl_.constraint_sets_.~RepeatedPtrField();
 }
 
-void CBSNode::ArenaDtor(void* object) {
-  CBSNode* _this = reinterpret_cast< CBSNode* >(object);
-  (void)_this;
-}
-void CBSNode::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void CBSNode::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void CBSNode::Clear() {
 // @@protoc_insertion_point(message_clear_start:CBSProto.CBSNode)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  cost_matrix_.Clear();
-  constraint_sets_.Clear();
+  _impl_.cost_matrix_.Clear();
+  _impl_.constraint_sets_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CBSNode::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* CBSNode::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // repeated .CBSProto.CBSNode.Path cost_matrix = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -2113,11 +2097,12 @@ const char* CBSNode::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // repeated .CBSProto.CBSNode.Constraints constraint_sets = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -2125,55 +2110,56 @@ const char* CBSNode::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag == 0) || ((tag & 7) == 4)) {
-          CHK_(ptr);
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* CBSNode::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* CBSNode::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:CBSProto.CBSNode)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // repeated .CBSProto.CBSNode.Path cost_matrix = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_cost_matrix_size()); i < n; i++) {
-    target = stream->EnsureSpace(target);
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_cost_matrix_size()); i < n; i++) {
+    const auto& repfield = this->_internal_cost_matrix(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, this->_internal_cost_matrix(i), target, stream);
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   // repeated .CBSProto.CBSNode.Constraints constraint_sets = 2;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_constraint_sets_size()); i < n; i++) {
-    target = stream->EnsureSpace(target);
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_constraint_sets_size()); i < n; i++) {
+    const auto& repfield = this->_internal_constraint_sets(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(2, this->_internal_constraint_sets(i), target, stream);
+        InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:CBSProto.CBSNode)
@@ -2184,55 +2170,45 @@ size_t CBSNode::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CBSProto.CBSNode)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated .CBSProto.CBSNode.Path cost_matrix = 1;
   total_size += 1UL * this->_internal_cost_matrix_size();
-  for (const auto& msg : this->cost_matrix_) {
+  for (const auto& msg : this->_impl_.cost_matrix_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
   // repeated .CBSProto.CBSNode.Constraints constraint_sets = 2;
   total_size += 1UL * this->_internal_constraint_sets_size();
-  for (const auto& msg : this->constraint_sets_) {
+  for (const auto& msg : this->_impl_.constraint_sets_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CBSNode::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     CBSNode::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CBSNode::GetClassData() const { return &_class_data_; }
 
-void CBSNode::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message&from) {
-  static_cast<CBSNode *>(to)->MergeFrom(
-      static_cast<const CBSNode &>(from));
-}
 
-
-void CBSNode::MergeFrom(const CBSNode& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode)
-  GOOGLE_DCHECK_NE(&from, this);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+void CBSNode::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CBSNode*>(&to_msg);
+  auto& from = static_cast<const CBSNode&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CBSProto.CBSNode)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  cost_matrix_.MergeFrom(from.cost_matrix_);
-  constraint_sets_.MergeFrom(from.constraint_sets_);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.cost_matrix_.MergeFrom(from._impl_.cost_matrix_);
+  _this->_impl_.constraint_sets_.MergeFrom(from._impl_.constraint_sets_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void CBSNode::CopyFrom(const CBSNode& from) {
@@ -2249,12 +2225,12 @@ bool CBSNode::IsInitialized() const {
 void CBSNode::InternalSwap(CBSNode* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  cost_matrix_.InternalSwap(&other->cost_matrix_);
-  constraint_sets_.InternalSwap(&other->constraint_sets_);
+  _impl_.cost_matrix_.InternalSwap(&other->_impl_.cost_matrix_);
+  _impl_.constraint_sets_.InternalSwap(&other->_impl_.constraint_sets_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CBSNode::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_cbs_5fnode_2eproto_getter, &descriptor_table_cbs_5fnode_2eproto_once,
       file_level_metadata_cbs_5fnode_2eproto[7]);
 }
@@ -2262,28 +2238,36 @@ void CBSNode::InternalSwap(CBSNode* other) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace CBSProto
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Location* Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Location >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Location*
+Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Location >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CBSProto::CBSNode_Location >(arena);
 }
-template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_State* Arena::CreateMaybeMessage< ::CBSProto::CBSNode_State >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_State*
+Arena::CreateMaybeMessage< ::CBSProto::CBSNode_State >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CBSProto::CBSNode_State >(arena);
 }
-template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Constraints_VertexConstraint* Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Constraints_VertexConstraint >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Constraints_VertexConstraint*
+Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Constraints_VertexConstraint >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CBSProto::CBSNode_Constraints_VertexConstraint >(arena);
 }
-template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Constraints_EdgeConstraint* Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Constraints_EdgeConstraint >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Constraints_EdgeConstraint*
+Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Constraints_EdgeConstraint >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CBSProto::CBSNode_Constraints_EdgeConstraint >(arena);
 }
-template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Constraints* Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Constraints >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Constraints*
+Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Constraints >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CBSProto::CBSNode_Constraints >(arena);
 }
-template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_PathEntry* Arena::CreateMaybeMessage< ::CBSProto::CBSNode_PathEntry >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_PathEntry*
+Arena::CreateMaybeMessage< ::CBSProto::CBSNode_PathEntry >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CBSProto::CBSNode_PathEntry >(arena);
 }
-template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Path* Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Path >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode_Path*
+Arena::CreateMaybeMessage< ::CBSProto::CBSNode_Path >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CBSProto::CBSNode_Path >(arena);
 }
-template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode* Arena::CreateMaybeMessage< ::CBSProto::CBSNode >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::CBSProto::CBSNode*
+Arena::CreateMaybeMessage< ::CBSProto::CBSNode >(Arena* arena) {
   return Arena::CreateMessageInternal< ::CBSProto::CBSNode >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE

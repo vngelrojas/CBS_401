@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/angel/Desktop/2024-2025/Fall 2024/CSCI 401/New copy/CBS_401/include/CBS_distributed",
+      "program": "/Users/angel/Desktop/2024-2025/Fall 2024/CSCI 401/New copy/CBS_401/include/CBS_distributed/build/Debug/outDebug"
+    }
+  ]
+}

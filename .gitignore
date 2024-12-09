@@ -6,7 +6,7 @@ build/*
 python/PlanViz/*
 python/PlanViz
 tmp_*
-outputs/*
+# outputs/*
 .idea/*
 # map_file/*
 map_file2/*

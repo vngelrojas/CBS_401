@@ -78,6 +78,9 @@ RUN sudo apt-get update && sudo apt-get install -y python3 python3-pip
 RUN python3 --version && pip3 --version
 RUN sudo apt install -y python3.12-venv
 
+# Python MatPlotLib Installatino
+RUN sudo apt-get install python3-matplotlib
+
 # OpenMPI Installation
 RUN sudo apt-get update && sudo apt-get install -y openmpi-bin openmpi-doc libopenmpi-dev
 

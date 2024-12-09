@@ -2,16 +2,19 @@
 
 '''
 # run.py - A script to manage CMake build commands and execute built binaries with categorized outputs.
-# NOTE: Activate environment first, look at readme.md
-#       cd into run_script folder
-#       run: python run.py configure 
-#       now you can do: python run.py <COMMAND> -i ../map_file/<FILE FOLDER>/ -c -w <NUMBER>
-#       -c is to run all of the files in the directory given
-#       -w is optional and is only for ECBS command. Number can be anywhere from 1.0 to 1.2
+#          A summary page will me output into 'summary.txt'
+# NOTE: - Activate environment first.
+#               - if not activated try `source /workspaces/CBS_401/python/myenv/bin/activate` 
+#       - cd into run_script folder
+#       - run: `python run.py configure`
+#       - now you can do:
+#               - `python run.py <COMMAND> -i ../map_file/<FILE FOLDER NAME>/ -c -w <NUMBER>`
+#       - Extra Info:
+#           -c is to run all of the files in the directory given
+#           -w is optional and is only for ECBS command. Number can be anywhere from 1.0 to 1.2
+#           -t can be used to set the timeout duration in seconds
 #
 #       Example: python run.py ECBS -i ../map_file/Boston_0_256_020/ -c -w 1.02
-#
-#       Note: When pushing to github only put py files. No need for the other stuff in run_script folder
 '''
 
 import argparse
@@ -31,7 +34,7 @@ FAILED_FILES: List[str] = []
 SKIPPED_FILES: List[str] = []
 
 # Define ECBS-related commands (Only 'ECBS' for -w option. Add more later)
-ECBS_COMMANDS = {"ECBS"}
+ECBS_COMMANDS = {"ECBS","ECBS-p"}
 
 def usage():
     parser = argparse.ArgumentParser(
@@ -73,7 +76,7 @@ def usage():
         "-w", "--weight",
         type=float,
         default=None,
-        help="Optional weight parameter for ECBS command (e.g., -w 1.02). Applicable only to ECBS."
+        help="Optional weight parameter for ECBS command (e.g., -w 1.02)."
     )
     return parser.parse_args()
 
@@ -129,7 +132,7 @@ def build_and_execute_single(target_name: str, executable: str, file_path: Path,
     # Construct the execution command
     exec_command = [f"./{executable}", "-i", str(file_path), "-o", str(derived_output)]
     
-    # Append -w <NUMBER> for applicable commands (only ECBS atm)
+    # Append -w <NUMBER> for applicable commands
     if weight is not None:
         exec_command.extend(["-w", str(weight)])
 
@@ -191,6 +194,43 @@ def map_command_to_target(cmd: str) -> Tuple[str, str]:
         "ECBS-d": ("ECBS_distributed", "ECBS_distributed"),
     }
     return mapping.get(cmd, ("", ""))
+    
+def write_summary(target_name: str, input_path: Path, timeout_duration: int):
+    # Derive the summary file path based on the input directory or file
+    if input_path.is_dir():
+        summary_file_path = BASE_OUTPUT_DIR / input_path.name / "summary.txt"
+    else:
+        summary_file_path = derive_output_path(target_name, input_path).parent / "summary.txt"
+
+    # Ensure the directory for the summary file exists
+    summary_file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Write summary to the summary file
+    with open(summary_file_path, "w") as summary_file:
+        # Write command and timeout details at the top
+        summary_file.write("Execution Summary:\n")
+        summary_file.write(f"Command: {target_name}\n")
+        summary_file.write(f"Timeout Duration: {timeout_duration} seconds\n\n")
+
+        SUCCESS_FILES.sort()
+        FAILED_FILES.sort()
+        SKIPPED_FILES.sort()
+
+        summary_file.write("Summary:\n")
+        summary_file.write(f"Successful: {len(SUCCESS_FILES)}\n")
+        for f in SUCCESS_FILES:
+            summary_file.write(f"  - {f}\n")
+
+        summary_file.write(f"\nFailed: {len(FAILED_FILES)}\n")
+        for f in FAILED_FILES:
+            summary_file.write(f"  - {f}\n")
+
+        summary_file.write(f"\nSkipped: {len(SKIPPED_FILES)}\n")
+        for f in SKIPPED_FILES:
+            summary_file.write(f"  - {f}\n")
+
+    print(f"Summary written to: {summary_file_path}")
+
 
 def main():
     args = usage()
@@ -204,8 +244,9 @@ def main():
 
     # Validate -w usage: only for ECBS
     if weight is not None and command not in ECBS_COMMANDS:
-        print(f"Error: The '-w' option is only applicable to the ECBS command atm. Command '{command}' does not support '-w'.")
+        print(f" Command '{command}' does not support '-w'.")
         sys.exit(1)
+
     if command == "configure":
         print("Running: cmake ..")
         try:
@@ -222,25 +263,15 @@ def main():
             print(f"Error during configuration: {e}")
             sys.exit(1)
     else:
-        target, executable = map_command_to_target(command) # target - build target in cmake, executable - output binary
+        target, executable = map_command_to_target(command)
         if not target or not executable:
             print(f"Error: Invalid command '{command}'.")
             usage()
-        
+
         handle_commands(target, executable, input_path, timeout_duration, continue_on_failure, weight)
 
-    print("\nSummary:")
-    print(f"Successful: {len(SUCCESS_FILES)}")
-    for f in SUCCESS_FILES:
-        print(f"  - {f}")
-    
-    print(f"\nFailed: {len(FAILED_FILES)}")
-    for f in FAILED_FILES:
-        print(f"  - {f}")
-    
-    print(f"\nSkipped: {len(SKIPPED_FILES)}")
-    for f in SKIPPED_FILES:
-        print(f"  - {f}")
+    # Write the summary to the derived directory
+    write_summary(command, input_path, timeout_duration)
 
     if FAILED_FILES:
         sys.exit(1)
