@@ -12,6 +12,7 @@
 #       - Extra Info:
 #           -c is to run all of the files in the directory given
 #           -w is optional and is only for ECBS command. Number can be anywhere from 1.0 to 1.2
+#           -t can be used to set the timeout duration in seconds
 #
 #       Example: python run.py ECBS -i ../map_file/Boston_0_256_020/ -c -w 1.02
 '''
