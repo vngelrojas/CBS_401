@@ -29,7 +29,6 @@ def main():
     # Argument parser
     parser = argparse.ArgumentParser(description="Generate horizontal overlapping bar plots from data in a file.")
     parser.add_argument("filename", type=str, help="Path to the input file containing the data")
-    parser.add_argument("--output", type=str, default="sorted_fully_overlapping_plot.png", help="Output file name for the plot (default: sorted_fully_overlapping_plot.png)")
     args = parser.parse_args()
 
     # Read data from the file
@@ -67,15 +66,12 @@ def main():
     # Adding labels and title
     plt.ylabel('Weights (w)', fontsize=12)
     plt.xlabel('Time (seconds)', fontsize=12)
-    plt.title('Comparison of Runtime Metrics Sorted by Slower Time', fontsize=14)
+    plt.title(f'Runtime Analysis {args.filename}', fontsize=14)
     plt.yticks(y, weights)
     plt.legend(loc='upper right', fontsize=10)
     plt.grid(axis='x', linestyle='--', alpha=1)
 
-    # Save and show plot
     plt.tight_layout()
-    plt.savefig(args.output)
-    print(f"Plot saved as {args.output}")
     plt.show()
 
 if __name__ == "__main__":
