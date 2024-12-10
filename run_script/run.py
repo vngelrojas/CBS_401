@@ -33,7 +33,7 @@ SUCCESS_FILES: List[str] = []
 FAILED_FILES: List[str] = []
 SKIPPED_FILES: List[str] = []
 
-# Define ECBS-related commands (Only 'ECBS' for -w option. Add more later)
+# Define ECBS-related commands that allow weights
 ECBS_COMMANDS = {"ECBS","ECBS-p"}
 
 def usage():
@@ -195,11 +195,13 @@ def map_command_to_target(cmd: str) -> Tuple[str, str]:
     }
     return mapping.get(cmd, ("", ""))
     
-def write_summary(target_name: str, input_path: Path, timeout_duration: int):
-    # Derive the summary file path based on the input directory or file
+def write_summary(target_name: str, input_path: Path, timeout_duration: int, weight: Optional[float] = None):
+    # Derive the summary file path based on the target command and input path
     if input_path.is_dir():
-        summary_file_path = BASE_OUTPUT_DIR / input_path.name / "summary.txt"
+        # Place the summary in the same directory as the test results
+        summary_file_path = BASE_OUTPUT_DIR / input_path.name / target_name / "summary.txt"
     else:
+        # Place the summary in the same directory as the specific test result
         summary_file_path = derive_output_path(target_name, input_path).parent / "summary.txt"
 
     # Ensure the directory for the summary file exists
@@ -207,15 +209,18 @@ def write_summary(target_name: str, input_path: Path, timeout_duration: int):
 
     # Write summary to the summary file
     with open(summary_file_path, "w") as summary_file:
-        # Write command and timeout details at the top
         summary_file.write("Execution Summary:\n")
         summary_file.write(f"Command: {target_name}\n")
-        summary_file.write(f"Timeout Duration: {timeout_duration} seconds\n\n")
+        summary_file.write(f"Timeout Duration: {timeout_duration} seconds\n")
+        if weight is not None:
+            summary_file.write(f"Weight: {weight}\n")
+        summary_file.write("\n")
 
         SUCCESS_FILES.sort()
         FAILED_FILES.sort()
         SKIPPED_FILES.sort()
 
+        # Write the success, failed, and skipped files summary
         summary_file.write("Summary:\n")
         summary_file.write(f"Successful: {len(SUCCESS_FILES)}\n")
         for f in SUCCESS_FILES:
@@ -271,7 +276,7 @@ def main():
         handle_commands(target, executable, input_path, timeout_duration, continue_on_failure, weight)
 
     # Write the summary to the derived directory
-    write_summary(command, input_path, timeout_duration)
+    write_summary(command, input_path, timeout_duration, weight)
 
     if FAILED_FILES:
         sys.exit(1)
