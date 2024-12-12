@@ -26,6 +26,19 @@ Run (In build dir):
 ./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
 ```
 
+Run Batch Tests:
+```bash
+cd run_script
+#runs cmake and builds targets
+python run.py configure
+#select target algorithm and run batch tests on its files
+python run.py <COMMAND> -i ../map_file/<FILE FOLDER NAME>/ -c -w <NUMBER>
+#       -c is to run all of the files in the directory given
+#       -w is optional, number can be anywhere from 1.0 to 1.2
+#       -t can be used to set the timeout duration in seconds
+#       Example: python run.py ECBS-p -i ../map_file/Boston_0_256_020/ -c -w 1.02
+```
+
 Run CBS distribute with 2 processes (In build dir)
 ```bash
 mpirun -np 2 ./CBS_distributed -i ../map_file/debug_cbs_data.yaml -o ../outputs/output.yaml
